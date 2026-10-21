@@ -326,10 +326,21 @@ class DesignTracker {
 
           <div class="card-footer-actions">
             <div class="link-buttons-group">
+              <button class="btn-card-case-study" data-action="case-study" title="Preview UX Case Study">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span>Case Study</span>
+              </button>
+              <button class="btn-card-case-study btn-card-download-study" data-action="download-doc" title="Download Case Study (.doc)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download (.doc)</span>
+              </button>
               ${figmaLink}
               ${postLink}
             </div>
             <div class="card-manage-btns">
+              <button class="btn-card-icon" data-action="download-doc" title="Download Word Case Study (.doc)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
               <button class="btn-card-icon" data-action="view-details" title="View Challenge Information">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               </button>
@@ -351,6 +362,26 @@ class DesignTracker {
       const id = card.dataset.id;
       const design = this.designs.find(d => d.id === id);
       if (!design) return;
+
+      // Case study preview action
+      card.querySelector('[data-action="case-study"]')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.app && window.app.openCaseStudyModal) {
+          window.app.openCaseStudyModal(design);
+        }
+      });
+
+      // Download Word document action
+      card.querySelectorAll('[data-action="download-doc"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (window.app && window.app.downloadCaseStudyWordDoc) {
+            window.app.downloadCaseStudyWordDoc(design);
+          } else if (window.UXCaseStudyEngine) {
+            window.UXCaseStudyEngine.downloadWordDocument(design);
+          }
+        });
+      });
 
       // View details action
       card.querySelector('[data-action="view-details"]')?.addEventListener('click', (e) => {
