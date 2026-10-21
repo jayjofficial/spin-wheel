@@ -83,16 +83,14 @@ class App {
     } catch (e) {}
 
     const themeMetadata = {
-      linear: { icon: '⚡', label: 'Linear', name: 'Linear Studio' },
-      editorial: { icon: '📜', label: 'Editorial', name: 'Nordic Editorial' },
-      spatial: { icon: '🫧', label: 'Spatial', name: 'Apple Spatial' },
-      arcade: { icon: '🕹️', label: 'Arcade', name: 'Neo-Arcade' }
+      linear: { label: 'Linear', name: 'Linear Studio' },
+      editorial: { label: 'Editorial', name: 'Nordic Editorial' },
+      spatial: { label: 'Spatial', name: 'Apple Spatial' },
+      arcade: { label: 'Arcade', name: 'Neo-Arcade' }
     };
 
     const meta = themeMetadata[this.currentTheme] || themeMetadata.linear;
-    const iconEl = document.getElementById('theme-current-icon');
     const labelEl = document.getElementById('theme-current-label');
-    if (iconEl) iconEl.textContent = meta.icon;
     if (labelEl) labelEl.textContent = meta.label;
 
     // Highlight active option in menu
@@ -120,7 +118,7 @@ class App {
     this.renderActiveTopicsMiniList();
 
     if (showToast) {
-      this.showToast(`Switched aesthetic to ${meta.name} ✨`, 'info');
+      this.showToast(`Switched aesthetic to ${meta.name}`, 'info');
       if (window.soundEngine) window.soundEngine.playPop();
     }
   }
@@ -186,73 +184,65 @@ class App {
     }
   }
 
-  // --- Fullscreen Studio Mode ---
+  // --- Fullscreen & Theater Mode ---
   initFullscreen() {
     const stageCard = document.getElementById('wheel-stage-card');
     const headerToggleBtn = document.getElementById('btn-fullscreen-toggle');
     const stageToggleBtn = document.getElementById('btn-stage-fullscreen');
     const exitBtn = document.getElementById('btn-exit-fullscreen');
 
-    const toggleFullscreen = () => {
-      const isCurrentlyFullscreen = document.fullscreenElement || document.body.classList.contains('fullscreen-active');
-
-      if (!isCurrentlyFullscreen) {
-        // Enter Fullscreen
-        document.body.classList.add('fullscreen-active');
-        if (stageCard) stageCard.classList.add('fullscreen-active');
-
-        // Request browser native fullscreen if available
-        const targetElement = stageCard || document.documentElement;
-        if (targetElement.requestFullscreen) {
-          targetElement.requestFullscreen().catch(() => {});
-        } else if (targetElement.webkitRequestFullscreen) {
-          targetElement.webkitRequestFullscreen();
-        }
-
-        // Notify wheel to resize for crisp theater view
-        setTimeout(() => {
-          if (this.wheel) this.wheel.setupDPI();
-        }, 120);
-
-        this.showToast('Full Screen Roulette active. Press Esc or F to exit.', 'info');
+    // 1. Header Button: Toggles Website Fullscreen (document.documentElement)
+    const toggleWebsiteFullscreen = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
       } else {
-        // Exit Fullscreen
-        document.body.classList.remove('fullscreen-active');
-        if (stageCard) stageCard.classList.remove('fullscreen-active');
-
-        if (document.fullscreenElement) {
-          if (document.exitFullscreen) {
-            document.exitFullscreen().catch(() => {});
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          }
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
         }
-
-        setTimeout(() => {
-          if (this.wheel) this.wheel.setupDPI();
-        }, 120);
       }
     };
 
-    if (headerToggleBtn) headerToggleBtn.addEventListener('click', toggleFullscreen);
-    if (stageToggleBtn) stageToggleBtn.addEventListener('click', toggleFullscreen);
-    if (exitBtn) exitBtn.addEventListener('click', toggleFullscreen);
+    if (headerToggleBtn) {
+      headerToggleBtn.addEventListener('click', toggleWebsiteFullscreen);
+    }
 
-    // Sync on native fullscreen exit
-    const handleFullscreenChange = () => {
-      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        document.body.classList.remove('fullscreen-active');
-        if (stageCard) stageCard.classList.remove('fullscreen-active');
-        setTimeout(() => {
-          if (this.wheel) this.wheel.setupDPI();
-        }, 120);
+    // 2. Stage Card Button: Toggles Wheel Theater Overlay
+    const toggleTheaterMode = () => {
+      if (!stageCard) return;
+      const isTheater = stageCard.classList.contains('theater-mode');
+      stageCard.classList.toggle('theater-mode', !isTheater);
+      setTimeout(() => this.wheel?.setupDPI(), 100);
+      if (!isTheater) {
+        this.showToast('Wheel theater mode active. Press Esc to exit.', 'info');
       }
+    };
+
+    if (stageToggleBtn) {
+      stageToggleBtn.addEventListener('click', toggleTheaterMode);
+    }
+
+    if (exitBtn) {
+      exitBtn.addEventListener('click', () => {
+        if (stageCard) stageCard.classList.remove('theater-mode');
+        setTimeout(() => this.wheel?.setupDPI(), 100);
+      });
+    }
+
+    // 3. Sync icon & state when fullscreen changes
+    const handleFullscreenChange = () => {
+      const isFS = !!document.fullscreenElement;
+      if (headerToggleBtn) {
+        headerToggleBtn.innerHTML = isFS
+          ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>`
+          : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>`;
+      }
+      setTimeout(() => this.wheel?.setupDPI(), 100);
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
-    // Keyboard shortcut F for fullscreen toggle
+    // 4. Keyboard Shortcut: 'F' toggles website fullscreen
     window.addEventListener('keydown', (e) => {
       if (e.key === 'f' || e.key === 'F') {
         const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
@@ -261,7 +251,7 @@ class App {
         if (openModal) return;
 
         e.preventDefault();
-        toggleFullscreen();
+        toggleWebsiteFullscreen();
       }
     });
   }
@@ -329,7 +319,7 @@ class App {
       this.renderSimilarTopicsList(similar, val);
 
       input.value = '';
-      this.showToast(`✨ Added "${val}" to the roulette!`, 'success');
+      this.showToast(`Added "${val}" to the roulette!`, 'success');
       if (window.soundEngine) window.soundEngine.playPop();
     };
 
@@ -399,7 +389,7 @@ class App {
         this.renderActiveTopicsMiniList();
 
         addBtn.classList.add('added');
-        addBtn.innerHTML = '✓';
+        addBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
         addBtn.disabled = true;
 
         this.showToast(`Added challenge to wheel!`, 'success');
@@ -441,20 +431,26 @@ class App {
 
     list.innerHTML = topics.map((t, idx) => {
       const chipColor = themeCfg ? themeCfg.palette[idx % themeCfg.palette.length] : (t.color || '#3b82f6');
-      const topicIcon = t.icon || (window.resolveTopicVisuals ? window.resolveTopicVisuals(t.text).icon : '🎯');
+      const visuals = window.resolveTopicVisuals ? window.resolveTopicVisuals(t) : { iconKey: t.iconKey || 'spark' };
+      const iconSVG = window.getTopicIconSVG ? window.getTopicIconSVG(visuals.iconKey, 14) : '';
+      const eyeIcon = t.active !== false 
+        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+      const removeIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
       return `
       <div class="active-topic-chip" style="opacity: ${t.active !== false ? '1' : '0.45'};">
         <div class="topic-chip-left">
           <span class="color-indicator" style="background-color: ${chipColor};"></span>
-          <span class="topic-chip-icon" title="${this.escapeHTML(t.category || '')}">${topicIcon}</span>
+          <span class="topic-chip-icon" title="${this.escapeHTML(t.category || '')}">${iconSVG}</span>
           <span class="topic-name" title="${this.escapeHTML(t.text)}">${this.escapeHTML(t.text)}</span>
         </div>
         <div class="topic-chip-actions">
           <button class="btn-chip-action" data-action="toggle-active" data-id="${t.id}" title="${t.active !== false ? 'Disable' : 'Enable'}">
-            ${t.active !== false ? '👁️' : '🕶️'}
+            ${eyeIcon}
           </button>
           <button class="btn-chip-action" data-action="delete-topic" data-id="${t.id}" title="Remove">
-            ✕
+            ${removeIcon}
           </button>
         </div>
       </div>
@@ -560,7 +556,7 @@ class App {
         const d = dateInput.value;
         if (d) {
           const wData = StorageManager.getISOWeekData(d);
-          if (weekIndicator) weekIndicator.textContent = `📆 ${wData.weekString}`;
+          if (weekIndicator) weekIndicator.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${wData.weekString}`;
         }
       });
     }
@@ -628,7 +624,7 @@ class App {
     dateInput.value = initialData?.date ? initialData.date.split('T')[0] : todayStr;
 
     const wData = StorageManager.getISOWeekData(dateInput.value);
-    if (weekIndicator) weekIndicator.textContent = `📆 ${wData.weekString}`;
+    if (weekIndicator) weekIndicator.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${wData.weekString}`;
 
     if (initialData) {
       titleInput.value = initialData.title || '';
@@ -646,7 +642,7 @@ class App {
 
     const modalTitle = document.getElementById('modal-design-form-title');
     if (modalTitle) {
-      modalTitle.textContent = initialData?.id ? '✏️ Edit Design Entry' : '🎨 Log Design to Weekly Archive';
+      modalTitle.textContent = initialData?.id ? 'Edit Design Entry' : 'Log Design to Weekly Archive';
     }
 
     this.openModal('modal-design-form');
@@ -703,7 +699,7 @@ class App {
           const blob = items[i].getAsFile();
           if (blob) {
             this.processImageFile(blob);
-            this.showToast('📋 Image pasted from clipboard!', 'success');
+            this.showToast('Image pasted from clipboard!', 'success');
             break;
           }
         }
@@ -787,7 +783,7 @@ class App {
     await window.storageManager.saveDesign(designRecord);
 
     this.closeModal('modal-design-form');
-    this.showToast(`✨ Saved to ${weekData.weekString}!`, 'success');
+    this.showToast(`Saved to ${weekData.weekString}!`, 'success');
 
     // Switch to tracker tab and refresh
     this.switchTab('tracker');
@@ -890,12 +886,12 @@ class App {
     if (syncBtn) {
       syncBtn.addEventListener('click', async () => {
         const origHTML = syncBtn.innerHTML;
-        syncBtn.innerHTML = '<span>⏳ Syncing to Cloud...</span>';
+        syncBtn.innerHTML = '<span>Syncing to Cloud...</span>';
         syncBtn.disabled = true;
 
         try {
           const res = await window.convexManager.syncLocalToCloud();
-          this.showToast(`☁️ Synced ${res.designsSynced} designs & topics to Convex!`, 'success');
+          this.showToast(`Synced ${res.designsSynced} designs & topics to Convex!`, 'success');
           if (window.soundEngine) window.soundEngine.playPop();
         } catch (e) {
           this.showToast(`Sync notice: ${e.message || 'Please check Convex connection'}`, 'info');
@@ -910,12 +906,12 @@ class App {
     if (fetchBtn) {
       fetchBtn.addEventListener('click', async () => {
         const origHTML = fetchBtn.innerHTML;
-        fetchBtn.innerHTML = '<span>⏳ Pulling from Cloud...</span>';
+        fetchBtn.innerHTML = '<span>Pulling from Cloud...</span>';
         fetchBtn.disabled = true;
 
         try {
           await window.designTracker.refresh();
-          this.showToast('✅ Pulled latest data from Convex Cloud!', 'success');
+          this.showToast('Pulled latest data from Convex Cloud!', 'success');
           if (window.soundEngine) window.soundEngine.playPop();
         } catch (e) {
           this.showToast('Could not reach cloud, using cached local data', 'info');
@@ -955,49 +951,60 @@ class App {
       groups[cat].push(t);
     });
 
-    const categoryIcons = {
-      'AI & Travel': '✈️',
-      'Fintech': '💳',
-      'Fintech & Web3': '🪙',
-      'E-Commerce': '🛍️',
-      'E-Commerce & Fashion': '👗',
-      'Health & Wellness': '🧘',
-      'Health & Fitness': '⚡',
-      'IoT & Smart Living': '💡',
-      'Luxury & 3D': '💎',
-      'Portfolio': '🎨',
-      'Enterprise SaaS': '🛡️',
-      'Productivity': '📋',
-      'Productivity & SaaS': '📊',
-      'Food & Beverage': '☕',
-      'Entertainment & Audio': '🎵',
-      'Travel & Hospitality': '🌍',
-      'AI & Spatial Computing': '🤖',
-      'Custom Influence': '✨',
-      'Custom Challenge': '🎯'
+    const categoryKeyMap = {
+      'AI & Travel': 'plane',
+      'Fintech': 'card',
+      'Fintech & Web3': 'card',
+      'E-Commerce': 'package',
+      'E-Commerce & Fashion': 'package',
+      'Health & Wellness': 'zen',
+      'Health & Fitness': 'activity',
+      'IoT & Smart Living': 'bolt',
+      'Luxury & 3D': 'watch',
+      'Portfolio': 'layout',
+      'Enterprise SaaS': 'shield',
+      'Productivity': 'pen',
+      'Productivity & SaaS': 'pen',
+      'Food & Beverage': 'coffee',
+      'Entertainment & Audio': 'spark',
+      'Travel & Hospitality': 'plane',
+      'AI & Spatial Computing': 'bot',
+      'Custom Influence': 'spark',
+      'Custom Challenge': 'spark'
     };
 
-    container.innerHTML = Object.entries(groups).map(([cat, list]) => `
+    container.innerHTML = Object.entries(groups).map(([cat, list]) => {
+      const iconKey = categoryKeyMap[cat] || 'spark';
+      const catSVG = window.getTopicIconSVG ? window.getTopicIconSVG(iconKey, 16) : '';
+
+      return `
       <div class="category-card">
         <div class="category-card-header">
           <div class="category-title-group">
-            <span class="category-emoji">${categoryIcons[cat] || '💡'}</span>
+            <span class="category-icon-wrapper" style="display: inline-flex; align-items: center; color: var(--primary);">${catSVG}</span>
             <span class="category-name">${this.escapeHTML(cat)}</span>
           </div>
           <span class="category-items-count">${list.length} item${list.length === 1 ? '' : 's'}</span>
         </div>
         <div class="category-topic-list">
-          ${list.map(t => `
+          ${list.map(t => {
+            const activeIcon = t.active !== false
+              ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+              : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>`;
+
+            return `
             <div class="matrix-topic-row">
               <span style="color: ${t.active !== false ? 'var(--text-main)' : 'var(--text-dim)'};">${this.escapeHTML(t.text)}</span>
               <button class="btn-chip-action" data-action="toggle-matrix-topic" data-id="${t.id}" title="${t.active !== false ? 'Disable' : 'Enable'}">
-                ${t.active !== false ? '✅' : '⚪'}
+                ${activeIcon}
               </button>
             </div>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     container.querySelectorAll('[data-action="toggle-matrix-topic"]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1040,17 +1047,12 @@ class App {
         if (spinBtn) spinBtn.click();
       }
 
-      // Escape to close modals or exit fullscreen
+      // Escape to close theater mode or modals
       if (e.key === 'Escape') {
         const stageCard = document.getElementById('wheel-stage-card');
-        const isFullscreen = document.body.classList.contains('fullscreen-active') || (stageCard && stageCard.classList.contains('fullscreen-active'));
-        if (isFullscreen) {
-          document.body.classList.remove('fullscreen-active');
-          if (stageCard) stageCard.classList.remove('fullscreen-active');
-          if (document.fullscreenElement && document.exitFullscreen) {
-            document.exitFullscreen().catch(() => {});
-          }
-          setTimeout(() => this.wheel?.setupDPI(), 120);
+        if (stageCard && stageCard.classList.contains('theater-mode')) {
+          stageCard.classList.remove('theater-mode');
+          setTimeout(() => this.wheel?.setupDPI(), 100);
         }
 
         document.querySelectorAll('.modal-backdrop.open').forEach(m => {
@@ -1082,8 +1084,10 @@ class App {
 
     const toast = document.createElement('div');
     toast.className = 'toast';
-    const icon = type === 'success' ? '✨' : 'ℹ️';
-    toast.innerHTML = `<span>${icon}</span> <span>${this.escapeHTML(message)}</span>`;
+    const iconSVG = type === 'success'
+      ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+      : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+    toast.innerHTML = `<span style="display: inline-flex; align-items: center;">${iconSVG}</span> <span>${this.escapeHTML(message)}</span>`;
 
     container.appendChild(toast);
 

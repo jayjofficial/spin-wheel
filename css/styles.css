@@ -759,32 +759,11 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-subtle);
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
-}
-
-.live-dot-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 10px #10b981;
-  animation: blink 1.6s ease-in-out infinite;
-}
-
-.stage-status-text {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #34d399;
-  text-transform: uppercase;
-}
-
-.stage-bullet {
-  color: var(--text-dim);
-  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .stage-fullscreen-btn {
@@ -814,7 +793,7 @@ body::before {
   transform: translateY(0);
 }
 
-/* Floating Exit Fullscreen Button */
+/* Floating Exit Theater Button */
 .btn-exit-fullscreen {
   display: none;
   position: fixed;
@@ -824,7 +803,7 @@ body::before {
   align-items: center;
   gap: 0.55rem;
   padding: 0.65rem 1.35rem;
-  background: rgba(14, 18, 30, 0.9);
+  background: rgba(14, 18, 30, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -850,12 +829,8 @@ body::before {
   transform: translateY(0);
 }
 
-/* Fullscreen Theater Mode */
-body.fullscreen-active {
-  overflow: hidden !important;
-}
-
-.wheel-stage-card.fullscreen-active {
+/* Optional Wheel Theater Overlay (only when explicitly clicking Theater button) */
+.wheel-stage-card.theater-mode {
   position: fixed !important;
   inset: 0 !important;
   width: 100vw !important;
@@ -881,21 +856,21 @@ body.fullscreen-active {
   to { opacity: 1; transform: scale(1); }
 }
 
-.wheel-stage-card.fullscreen-active .btn-exit-fullscreen {
+.wheel-stage-card.theater-mode .btn-exit-fullscreen {
   display: inline-flex !important;
 }
 
-.wheel-stage-card.fullscreen-active .stage-fullscreen-btn {
+.wheel-stage-card.theater-mode .stage-fullscreen-btn {
   display: none !important;
 }
 
-.wheel-stage-card.fullscreen-active .stage-badge-row {
+.wheel-stage-card.theater-mode .stage-badge-row {
   max-width: 720px;
   justify-content: center;
   margin-bottom: 0.5rem;
 }
 
-.wheel-stage-card.fullscreen-active .wheel-wrapper {
+.wheel-stage-card.theater-mode .wheel-wrapper {
   width: min(720px, 72vh) !important;
   height: min(720px, 72vh) !important;
   max-width: 92vw !important;
@@ -903,13 +878,26 @@ body.fullscreen-active {
   margin: 0.5rem auto 1.5rem !important;
 }
 
-.wheel-stage-card.fullscreen-active .wheel-controls-row {
+.wheel-stage-card.theater-mode .wheel-controls-row {
   margin-top: 0.5rem;
 }
 
-.wheel-stage-card.fullscreen-active .spin-hint {
+.wheel-stage-card.theater-mode .spin-hint {
   margin-top: 0.75rem;
 }
+
+/* Status Indicator Dots (Linear / Figma style) */
+.status-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-indicator-dot.published { background: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.6); }
+.status-indicator-dot.completed { background: #34d399; box-shadow: 0 0 6px rgba(52, 211, 153, 0.6); }
+.status-indicator-dot.in_progress { background: #fbbf24; box-shadow: 0 0 6px rgba(251, 191, 36, 0.6); }
+.status-indicator-dot.planned { background: #a855f7; box-shadow: 0 0 6px rgba(168, 85, 247, 0.6); }
 
 .live-badge {
   display: inline-flex;

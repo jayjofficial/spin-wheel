@@ -18,37 +18,58 @@ const PALETTE = [
   '#0284c7'  // Sky
 ];
 
+const TOPIC_ICON_PATHS = {
+  plane: "M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z",
+  card: "M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5zm0 5h20M6 15h4",
+  package: "m16.5 9.4-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96 12 12.01l8.73-5.05M12 22.08V12",
+  zen: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-12a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4z",
+  bolt: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
+  watch: "M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4zm-1 2v3h3M9 2h6v4H9zm0 16h6v4H9z",
+  layout: "M3 3h7v9H3zm11 0h7v5h-7zm0 9h7v9h-7zM3 16h7v5H3z",
+  shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  activity: "M22 12h-4l-3 9L9 3l-3 9H2",
+  pen: "m18 2 4 4-12 12H6v-4L18 2zM14 6l4 4",
+  coffee: "M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zm4-7v3m4-3v3m4-3v3",
+  chat: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+  globe: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-1 17.93A8 8 0 0 1 4.07 13H7a14.2 14.2 0 0 0 2 6.93zM4.07 11A8 8 0 0 1 11 4.07 14.2 14.2 0 0 0 9 11zm8 8.93c1.3-1.8 2-4.2 2-6.93H10c0 2.73.7 5.13 2 6.93zM10 11h4a12 12 0 0 0-2-6.93A12 12 0 0 0 10 11zm5 6.93A14.2 14.2 0 0 0 17 13h2.93A8 8 0 0 1 15 17.93zM17 11a14.2 14.2 0 0 0-2-6.93A8 8 0 0 1 19.93 11z",
+  bot: "M12 8V4H8M2 14h2m16 0h2m-4-6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8zm-7 4h.01M15 12h.01",
+  spark: "m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"
+};
+window.TOPIC_ICON_PATHS = TOPIC_ICON_PATHS;
+
+function getTopicIconSVG(iconKey, size = 14) {
+  const pathD = TOPIC_ICON_PATHS[iconKey] || TOPIC_ICON_PATHS.spark;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${pathD}"/></svg>`;
+}
+window.getTopicIconSVG = getTopicIconSVG;
+
 function resolveTopicVisuals(topic) {
-  if (!topic) return { icon: '✨', shortLabel: 'Challenge' };
+  if (!topic) return { iconKey: 'spark', shortLabel: 'Challenge' };
   
-  if (topic.icon && topic.shortLabel) {
-    return { icon: topic.icon, shortLabel: topic.shortLabel };
+  if (topic.iconKey && topic.shortLabel) {
+    return { iconKey: topic.iconKey, shortLabel: topic.shortLabel };
   }
 
   const raw = topic.text || topic.title || 'Design Challenge';
   const text = raw.toLowerCase();
 
-  let icon = topic.icon || '';
-  if (!icon) {
-    if (text.includes('coffee') || text.includes('roast') || text.includes('espresso')) icon = '☕';
-    else if (text.includes('crypto') || text.includes('stake') || text.includes('fintech') || text.includes('bank') || text.includes('yield') || text.includes('wallet')) icon = '💳';
-    else if (text.includes('flight') || text.includes('travel') || text.includes('itinerary') || text.includes('airline') || text.includes('concierge')) icon = '✈️';
-    else if (text.includes('meditation') || text.includes('breath') || text.includes('mood') || text.includes('mind') || text.includes('journal')) icon = '🧘';
-    else if (text.includes('solar') || text.includes('energy') || text.includes('battery') || text.includes('power')) icon = '⚡';
-    else if (text.includes('watch') || text.includes('dial') || text.includes('wearable')) icon = '⌚';
-    else if (text.includes('portfolio') || text.includes('bento') || text.includes('case study') || text.includes('design')) icon = '🎨';
-    else if (text.includes('security') || text.includes('threat') || text.includes('cyber') || text.includes('shield')) icon = '🛡️';
-    else if (text.includes('fitness') || text.includes('workout') || text.includes('activity') || text.includes('sleep') || text.includes('ring')) icon = '📈';
-    else if (text.includes('whiteboard') || text.includes('canvas') || text.includes('team') || text.includes('sticky')) icon = '✏️';
-    else if (text.includes('ar') || text.includes('spatial') || text.includes('vr') || text.includes('vision') || text.includes('headset')) icon = '🥽';
-    else if (text.includes('ai') || text.includes('bot') || text.includes('copilot') || text.includes('gpt')) icon = '🤖';
-    else if (text.includes('grocery') || text.includes('box') || text.includes('shop') || text.includes('store') || text.includes('checkout')) icon = '🛍️';
-    else if (text.includes('music') || text.includes('audio') || text.includes('sound') || text.includes('track')) icon = '🎧';
-    else if (text.includes('car') || text.includes('ev') || text.includes('vehicle') || text.includes('charging')) icon = '🔋';
-    else if (text.includes('food') || text.includes('recipe') || text.includes('dish') || text.includes('kitchen')) icon = '🍽️';
-    else if (text.includes('chat') || text.includes('message') || text.includes('social')) icon = '💬';
-    else if (text.includes('cloud') || text.includes('server') || text.includes('saas') || text.includes('data')) icon = '☁️';
-    else icon = '✨';
+  let iconKey = topic.iconKey || '';
+  if (!iconKey) {
+    if (text.includes('coffee') || text.includes('roast') || text.includes('espresso')) iconKey = 'coffee';
+    else if (text.includes('crypto') || text.includes('stake') || text.includes('fintech') || text.includes('bank') || text.includes('yield') || text.includes('wallet')) iconKey = 'card';
+    else if (text.includes('flight') || text.includes('travel') || text.includes('itinerary') || text.includes('airline') || text.includes('concierge')) iconKey = 'plane';
+    else if (text.includes('meditation') || text.includes('breath') || text.includes('mood') || text.includes('mind') || text.includes('journal')) iconKey = 'zen';
+    else if (text.includes('solar') || text.includes('energy') || text.includes('battery') || text.includes('power')) iconKey = 'bolt';
+    else if (text.includes('watch') || text.includes('dial') || text.includes('wearable')) iconKey = 'watch';
+    else if (text.includes('portfolio') || text.includes('bento') || text.includes('case study') || text.includes('design')) iconKey = 'layout';
+    else if (text.includes('security') || text.includes('threat') || text.includes('cyber') || text.includes('shield')) iconKey = 'shield';
+    else if (text.includes('fitness') || text.includes('workout') || text.includes('activity') || text.includes('sleep') || text.includes('ring')) iconKey = 'activity';
+    else if (text.includes('whiteboard') || text.includes('canvas') || text.includes('team') || text.includes('sticky')) iconKey = 'pen';
+    else if (text.includes('ai') || text.includes('bot') || text.includes('copilot') || text.includes('gpt')) iconKey = 'bot';
+    else if (text.includes('grocery') || text.includes('box') || text.includes('shop') || text.includes('store') || text.includes('checkout')) iconKey = 'package';
+    else if (text.includes('chat') || text.includes('message') || text.includes('social')) iconKey = 'chat';
+    else if (text.includes('cloud') || text.includes('server') || text.includes('saas') || text.includes('data')) iconKey = 'layout';
+    else iconKey = 'spark';
   }
 
   let shortLabel = topic.shortLabel || '';
@@ -65,7 +86,7 @@ function resolveTopicVisuals(topic) {
     }
   }
 
-  return { icon, shortLabel };
+  return { iconKey, shortLabel };
 }
 window.resolveTopicVisuals = resolveTopicVisuals;
 
@@ -74,7 +95,7 @@ const DEFAULT_TOPICS = [
     id: 'top_1',
     text: 'AI Travel Concierge: Flight & Itinerary Booking Flow',
     shortLabel: 'Flight Concierge',
-    icon: '✈️',
+    iconKey: 'plane',
     category: 'AI & Travel',
     deliverable: 'Mobile App (iOS)',
     uxFocus: 'Conversational Onboarding & Dynamic Price Alerts',
@@ -85,7 +106,7 @@ const DEFAULT_TOPICS = [
     id: 'top_2',
     text: 'Fintech Staking & Yield Portfolio Dashboard',
     shortLabel: 'Fintech Vault',
-    icon: '💳',
+    iconKey: 'card',
     category: 'Fintech',
     deliverable: 'Web Dashboard',
     uxFocus: 'Data Visualization & High-Density Financial Hierarchy',
@@ -96,7 +117,7 @@ const DEFAULT_TOPICS = [
     id: 'top_3',
     text: 'Zero-Waste Grocery Box: Custom Taste Quiz & Schedule',
     shortLabel: 'ZeroWaste Box',
-    icon: '📦',
+    iconKey: 'package',
     category: 'E-Commerce',
     deliverable: 'Mobile App',
     uxFocus: 'Interactive Stepper & Micro-animations on Checkout',
@@ -107,7 +128,7 @@ const DEFAULT_TOPICS = [
     id: 'top_4',
     text: 'Spatial Audio Meditation & Breathing Guide',
     shortLabel: 'Spatial Breath',
-    icon: '🧘',
+    iconKey: 'zen',
     category: 'Health & Wellness',
     deliverable: 'Mobile & Watch App',
     uxFocus: 'Calming Haptics, Dark Mode Palette & Gesture Controls',
@@ -118,7 +139,7 @@ const DEFAULT_TOPICS = [
     id: 'top_5',
     text: 'Smart Home Energy & Solar Battery Monitor',
     shortLabel: 'Solar Battery',
-    icon: '⚡',
+    iconKey: 'bolt',
     category: 'IoT & Smart Living',
     deliverable: 'Tablet & Mobile App',
     uxFocus: 'Live Power-Flow Physics Animation & Consumption Forecasting',
@@ -129,7 +150,7 @@ const DEFAULT_TOPICS = [
     id: 'top_6',
     text: 'Luxury Mechanical Watch Customizer & 3D Configurator',
     shortLabel: 'Luxury Watch',
-    icon: '⌚',
+    iconKey: 'watch',
     category: 'Luxury & 3D',
     deliverable: 'Web Experience',
     uxFocus: 'Tactile Dial Zooming & Material Texture Customization',
@@ -140,7 +161,7 @@ const DEFAULT_TOPICS = [
     id: 'top_7',
     text: 'Designer Portfolio Bento Grid with Interactive Case Studies',
     shortLabel: 'Portfolio Bento',
-    icon: '🎨',
+    iconKey: 'layout',
     category: 'Portfolio',
     deliverable: 'Responsive Web',
     uxFocus: 'Cursor Interaction, Bento Layouts & Smooth Page Transitions',
@@ -151,7 +172,7 @@ const DEFAULT_TOPICS = [
     id: 'top_8',
     text: 'Cybersecurity Incident Response & Live Threat Map',
     shortLabel: 'Threat Map',
-    icon: '🛡️',
+    iconKey: 'shield',
     category: 'Enterprise SaaS',
     deliverable: 'Desktop Web App',
     uxFocus: 'Critical Alert Triage, Dark UI & Color-coded Severity Nodes',
@@ -162,7 +183,7 @@ const DEFAULT_TOPICS = [
     id: 'top_9',
     text: 'Fitness Wearable Activity Rings & Sleep Recovery Score',
     shortLabel: 'Fitness Rings',
-    icon: '📈',
+    iconKey: 'activity',
     category: 'Health & Fitness',
     deliverable: 'Smartwatch & Mobile',
     uxFocus: 'Glanceable Circular Progress & Heart-Rate Variability Chart',
@@ -173,7 +194,7 @@ const DEFAULT_TOPICS = [
     id: 'top_10',
     text: 'Remote Team Virtual Whiteboard & Sticky Canvas Hub',
     shortLabel: 'Team Canvas',
-    icon: '✏️',
+    iconKey: 'pen',
     category: 'Productivity',
     deliverable: 'Desktop App / Web',
     uxFocus: 'Multiplayer Cursors, Infinite Canvas Zoom & Toolbar Dock',
@@ -514,11 +535,9 @@ class TopicEngine {
     const saved = window.storageManager.getSavedTopics();
     if (saved && Array.isArray(saved) && saved.length > 0) {
       this.topics = saved.map(t => {
-        if (!t.icon || !t.shortLabel) {
-          const vis = resolveTopicVisuals(t);
-          t.icon = t.icon || vis.icon;
-          t.shortLabel = t.shortLabel || vis.shortLabel;
-        }
+        const vis = resolveTopicVisuals(t);
+        t.iconKey = t.iconKey || vis.iconKey;
+        t.shortLabel = t.shortLabel || vis.shortLabel;
         return t;
       });
     } else {
@@ -539,7 +558,7 @@ class TopicEngine {
     const newTopic = {
       id: 'top_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       text: topicData.text || topicData.title,
-      icon: topicData.icon || vis.icon,
+      iconKey: topicData.iconKey || vis.iconKey,
       shortLabel: topicData.shortLabel || vis.shortLabel,
       category: topicData.category || 'Custom Challenge',
       deliverable: topicData.deliverable || 'Mobile / Web Experience',
@@ -609,7 +628,7 @@ class TopicEngine {
         return {
           id: 'gen_' + Date.now() + '_' + idx,
           title: v.title,
-          icon: vis.icon,
+          iconKey: vis.iconKey,
           shortLabel: vis.shortLabel,
           category: bestPattern.category,
           deliverable: v.deliverable,
@@ -625,7 +644,7 @@ class TopicEngine {
         return {
           id: 'gen_' + Date.now() + '_' + idx,
           title: u.title,
-          icon: vis.icon,
+          iconKey: vis.iconKey,
           shortLabel: vis.shortLabel,
           category: u.category,
           deliverable: u.deliverable,

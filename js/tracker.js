@@ -55,7 +55,7 @@ class DesignTracker {
     const bannerWeekTag = document.getElementById('banner-current-week-tag');
     const bannerDateRange = document.getElementById('banner-date-range');
     if (bannerWeekTag) {
-      bannerWeekTag.textContent = `📅 Current: Week ${this.currentWeekData.week}, ${this.currentWeekData.year}`;
+      bannerWeekTag.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Current: Week ${this.currentWeekData.week}, ${this.currentWeekData.year}`;
     }
     if (bannerDateRange) {
       const range = StorageManager.getWeekDateRange(this.currentWeekData.year, this.currentWeekData.week);
@@ -96,7 +96,7 @@ class DesignTracker {
     // Save previous selection
     const prevVal = select.value || 'all';
 
-    select.innerHTML = '<option value="all">🗓️ All Weeks</option>';
+    select.innerHTML = '<option value="all">All Weeks</option>';
     
     // Sort descending (latest week first)
     const sortedWeeks = Array.from(weekMap.values()).sort((a, b) => {
@@ -151,13 +151,16 @@ class DesignTracker {
     if (filtered.length === 0) {
       container.innerHTML = `
         <div class="empty-gallery-state">
-          <div class="empty-icon-wrap">🎨</div>
+          <div class="empty-icon-wrap">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
           <h3 style="font-family: var(--font-heading); font-size: 1.35rem;">No Designs Logged Yet</h3>
           <p style="color: var(--text-muted); max-width: 420px; font-size: 0.92rem;">
             ${this.selectedWeekFilter !== 'all' ? 'No designs found for this selected week.' : 'Spin the UX Roulette, pick a challenge, and showcase your creative designs here!'}
           </p>
-          <button class="btn-primary-glow" id="btn-empty-spin-trigger" style="margin-top: 0.5rem;">
-            <span>🎡 Spin the Roulette</span>
+          <button class="btn-primary-glow" id="btn-empty-spin-trigger" style="margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+            <span>Spin the Roulette</span>
           </button>
         </div>
       `;
@@ -191,31 +194,31 @@ class DesignTracker {
     };
 
     const statusLabels = {
-      published: '🚀 Published',
-      completed: '✨ Completed',
-      in_progress: '⏳ In Progress',
-      planned: '📌 Planned'
+      published: '<span class="status-indicator-dot published"></span>Published',
+      completed: '<span class="status-indicator-dot completed"></span>Completed',
+      in_progress: '<span class="status-indicator-dot in_progress"></span>In Progress',
+      planned: '<span class="status-indicator-dot planned"></span>Planned'
     };
 
     const statusClass = statusClasses[design.status] || 'planned';
-    const statusText = statusLabels[design.status] || 'Planned';
+    const statusText = statusLabels[design.status] || '<span class="status-indicator-dot planned"></span>Planned';
 
     // Generative visual preview or real screenshot
     let mediaHTML = '';
     if (design.image) {
       mediaHTML = `<img src="${design.image}" alt="${design.title}" class="card-img" loading="lazy">`;
     } else {
-      const platformIcons = {
-        'Mobile App': '📱',
-        'Web / Dashboard': '💻',
-        'Smartwatch': '⌚',
-        'Tablet': '📲',
-        'Spatial / AR': '🥽'
+      const platformSVGs = {
+        'Mobile App': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+        'Web / Dashboard': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+        'Smartwatch': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="7"/><polyline points="12 9 12 12 13.5 13.5"/><path d="M16.51 17.35l-.85 3.22a2 2 0 0 1-1.94 1.43H10.28a2 2 0 0 1-1.94-1.43l-.85-3.22"/><path d="M7.49 6.65l.85-3.22A2 2 0 0 1 10.28 2h3.44a2 2 0 0 1 1.94 1.43l.85 3.22"/></svg>',
+        'Tablet': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+        'Spatial / AR': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a5 5 0 0 1-5 5h-1a3 3 0 0 1-6 0H8a5 5 0 0 1-5-5v-4z"/><circle cx="8" cy="13" r="2.5"/><circle cx="16" cy="13" r="2.5"/></svg>'
       };
-      const icon = platformIcons[design.platform] || '🎨';
+      const svgIcon = platformSVGs[design.platform] || '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
       mediaHTML = `
         <div class="card-generative-mock">
-          <div class="mock-device-preview">${icon}</div>
+          <div class="mock-device-preview">${svgIcon}</div>
           <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">${design.platform || 'UI Design'}</span>
         </div>
       `;
@@ -253,7 +256,7 @@ class DesignTracker {
           ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
 
           <div class="card-meta-row">
-            <span>📅 ${dateFormatted}</span>
+            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${dateFormatted}</span>
             <span>${design.platform || 'General'}</span>
           </div>
 

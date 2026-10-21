@@ -10,7 +10,7 @@ const CONVEX_ENVIRONMENTS = {
     cloudUrl: 'https://adorable-sturgeon-291.convex.cloud',
     siteUrl: 'https://adorable-sturgeon-291.convex.site',
     badgeColor: '#10b981',
-    label: '🟢 Convex: Dev'
+    label: 'Convex Dev'
   },
   prod: {
     id: 'prod',
@@ -18,7 +18,7 @@ const CONVEX_ENVIRONMENTS = {
     cloudUrl: 'https://beaming-capybara-489.convex.cloud',
     siteUrl: 'https://beaming-capybara-489.convex.site',
     badgeColor: '#a855f7',
-    label: '🟣 Convex: Prod'
+    label: 'Convex Prod'
   },
   offline: {
     id: 'offline',
@@ -26,7 +26,7 @@ const CONVEX_ENVIRONMENTS = {
     cloudUrl: null,
     siteUrl: null,
     badgeColor: '#64748b',
-    label: '💾 Offline Mode'
+    label: 'Offline Mode'
   }
 };
 

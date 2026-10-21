@@ -151,17 +151,19 @@ class RouletteWheel {
 
   setupDPI() {
     if (!this.canvas) return;
-    const isFullscreen = document.body.classList.contains('fullscreen-active') || !!document.fullscreenElement;
+    const stageCard = document.getElementById('wheel-stage-card');
+    const isTheater = stageCard && stageCard.classList.contains('theater-mode');
     const dpr = window.devicePixelRatio || 1;
 
     let size;
-    if (isFullscreen) {
+    if (isTheater) {
       const avail = Math.min(window.innerWidth * 0.88, window.innerHeight * 0.74);
       size = Math.min(Math.max(avail, 480), 720);
     } else {
-      const rect = this.canvas.getBoundingClientRect();
+      const wrapper = document.getElementById('wheel-wrapper') || this.canvas.parentElement;
+      const rect = wrapper ? wrapper.getBoundingClientRect() : this.canvas.getBoundingClientRect();
       size = Math.min(rect.width || 480, 520);
-      if (size < 320) size = 360;
+      if (size < 300) size = 340;
     }
 
     this.width = size;
@@ -341,27 +343,26 @@ class RouletteWheel {
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // 3. Draw PICTORIAL OPTION (Icon Pod + Concise Punchy Label)
+      // 3. Draw PICTORIAL OPTION (Vector Icon Pod + Concise Punchy Label)
       ctx.save();
       ctx.rotate(startAngle + sliceAngle / 2);
 
-      const visuals = window.resolveTopicVisuals ? window.resolveTopicVisuals(topic) : { icon: topic.icon || '✨', shortLabel: topic.shortLabel || topic.text || '' };
-      const icon = visuals.icon;
+      const visuals = window.resolveTopicVisuals ? window.resolveTopicVisuals(topic) : { iconKey: topic.iconKey || 'spark', shortLabel: topic.shortLabel || topic.text || '' };
       let shortLabel = visuals.shortLabel;
 
       // Calculate pictorial pod size & position
       const podDist = radius * 0.74;
       const arcWidth = (radius * Math.PI / numSlices);
       const maxPodR = arcWidth * 0.38;
-      const podR = Math.max(15, Math.min(23, maxPodR));
+      const podR = Math.max(14, Math.min(22, maxPodR));
 
       // 3A. Draw Pictorial Icon Pod
       ctx.save();
       ctx.translate(podDist, 0);
 
       // Pod shadow
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-      ctx.shadowBlur = 8;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+      ctx.shadowBlur = 6;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 2;
 
@@ -376,11 +377,23 @@ class RouletteWheel {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Icon Glyph
-      ctx.font = `${Math.round(podR * 1.15)}px -apple-system, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(icon, 0, 1);
+      // Vector Icon Glyphs (Feather / Lucide precision paths, zero emojis)
+      const iconKey = visuals.iconKey || 'spark';
+      const pathD = (window.TOPIC_ICON_PATHS && window.TOPIC_ICON_PATHS[iconKey]) || (window.TOPIC_ICON_PATHS && window.TOPIC_ICON_PATHS.spark);
+      if (pathD && typeof Path2D !== 'undefined') {
+        const path2d = new Path2D(pathD);
+        const iconSize = podR * 1.15;
+        const scale = iconSize / 24;
+        ctx.save();
+        ctx.translate(-12 * scale, -12 * scale);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = themeCfg.accentText;
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke(path2d);
+        ctx.restore();
+      }
       ctx.restore();
 
       // 3B. Draw Clean Concise Label

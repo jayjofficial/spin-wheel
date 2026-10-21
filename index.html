@@ -82,14 +82,16 @@
 
         <!-- Streak Pill -->
         <div class="streak-pill" title="Weekly Design Streak">
-          <span class="streak-icon">⚡</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           <span id="header-streak-count">0w</span>
         </div>
 
         <!-- Theme Switcher Dropdown -->
         <div class="theme-switcher-wrapper" id="theme-switcher-wrapper">
           <button class="theme-switcher-btn" id="btn-theme-switcher" aria-haspopup="true" aria-expanded="false" title="Switch Design Aesthetic Theme">
-            <span class="theme-btn-icon" id="theme-current-icon">⚡</span>
+            <span class="theme-btn-icon" id="theme-current-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            </span>
             <span class="theme-btn-label" id="theme-current-label">Linear</span>
             <svg class="chevron-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="6 9 12 15 18 9"></polyline>
@@ -102,7 +104,7 @@
               <span class="theme-preview-dot theme-dot-linear"></span>
               <div class="theme-info">
                 <div class="theme-title-row">
-                  <span class="theme-name">⚡ Linear Studio</span>
+                  <span class="theme-name">Linear Studio</span>
                   <span class="theme-badge-pill default">Default</span>
                 </div>
                 <span class="theme-desc">Obsidian dark mode, precision steel & sapphire</span>
@@ -112,7 +114,7 @@
               <span class="theme-preview-dot theme-dot-editorial"></span>
               <div class="theme-info">
                 <div class="theme-title-row">
-                  <span class="theme-name">📜 Nordic Editorial</span>
+                  <span class="theme-name">Nordic Editorial</span>
                   <span class="theme-badge-pill warm">Warm Light</span>
                 </div>
                 <span class="theme-desc">Gallery cream, terracotta, sage & ink</span>
@@ -122,7 +124,7 @@
               <span class="theme-preview-dot theme-dot-spatial"></span>
               <div class="theme-info">
                 <div class="theme-title-row">
-                  <span class="theme-name">🫧 Apple Spatial</span>
+                  <span class="theme-name">Apple Spatial</span>
                   <span class="theme-badge-pill glass">VisionOS</span>
                 </div>
                 <span class="theme-desc">Frosted glass blur, jewel tones & fluid light</span>
@@ -132,7 +134,7 @@
               <span class="theme-preview-dot theme-dot-arcade"></span>
               <div class="theme-info">
                 <div class="theme-title-row">
-                  <span class="theme-name">🕹️ Neo-Arcade</span>
+                  <span class="theme-name">Neo-Arcade</span>
                   <span class="theme-badge-pill neon">Cyber</span>
                 </div>
                 <span class="theme-desc">Tokyo midnight, laser cyan & hot magenta</span>
@@ -159,16 +161,14 @@
 
           <div class="stage-badge-row">
             <div class="stage-status-group">
-              <span class="live-dot-pulse"></span>
-              <span class="stage-status-text">STUDIO READY</span>
-              <span class="stage-bullet">•</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
               <span class="segment-count-pill" id="wheel-segment-count">10 Challenges</span>
             </div>
-            <button class="stage-fullscreen-btn" id="btn-stage-fullscreen" title="Expand Roulette to Full Screen (Press F)">
+            <button class="stage-fullscreen-btn" id="btn-stage-fullscreen" title="Expand Wheel Theater View">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
               </svg>
-              <span>Fullscreen</span>
+              <span>Theater</span>
             </button>
           </div>
 
@@ -235,12 +235,30 @@
               <div>
                 <span style="font-size: 0.76rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Quick Inspiration:</span>
                 <div class="quick-inspiration-tags">
-                  <button class="inspire-tag" data-topic="Coffee Subscription Box">☕ Coffee Box</button>
-                  <button class="inspire-tag" data-topic="Fintech Crypto Staking">🪙 Crypto Staking</button>
-                  <button class="inspire-tag" data-topic="Fitness Activity Wearable">⚡ Fitness Watch</button>
-                  <button class="inspire-tag" data-topic="Travel Flight Concierge">✈️ Flight Booking</button>
-                  <button class="inspire-tag" data-topic="Mental Health Mood Journal">🧘 Mood Journal</button>
-                  <button class="inspire-tag" data-topic="AI Canvas Copilot">🤖 AI Copilot</button>
+                  <button class="inspire-tag" data-topic="Coffee Subscription Box">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zm4-7v3m4-3v3m4-3v3"/></svg>
+                    <span>Coffee Box</span>
+                  </button>
+                  <button class="inspire-tag" data-topic="Fintech Crypto Staking">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>
+                    <span>Crypto Staking</span>
+                  </button>
+                  <button class="inspire-tag" data-topic="Fitness Activity Wearable">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <span>Fitness Watch</span>
+                  </button>
+                  <button class="inspire-tag" data-topic="Travel Flight Concierge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+                    <span>Flight Booking</span>
+                  </button>
+                  <button class="inspire-tag" data-topic="Mental Health Mood Journal">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7a5 5 0 0 0-5 5h10a5 5 0 0 0-5-5z"/></svg>
+                    <span>Mood Journal</span>
+                  </button>
+                  <button class="inspire-tag" data-topic="AI Canvas Copilot">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="14" x="3" y="7" rx="2"/><circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/><path d="M12 3v4M8 21v-3m8 3v-3"/></svg>
+                    <span>AI Copilot</span>
+                  </button>
                 </div>
               </div>
 
@@ -248,7 +266,8 @@
               <div class="generated-topics-section" id="generated-similar-section" style="display: none;">
                 <div class="generated-header">
                   <div class="generated-title" id="generated-topics-headline">
-                    <span>✨</span> Similar Generated Challenges:
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"/></svg>
+                    <span>Similar Generated Challenges:</span>
                   </div>
                   <button class="add-all-btn" id="btn-add-all-similar">+ Add All to Wheel</button>
                 </div>
@@ -264,7 +283,10 @@
           <div class="card-glass active-topics-card">
             <div class="card-header-styled">
               <div>
-                <h3>🎯 Active Wheel Challenges</h3>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                  <h3 style="font-size: 1.05rem; font-weight: 700;">Active Wheel Challenges</h3>
+                </div>
                 <p class="card-desc">Challenges currently loaded in the roulette slices.</p>
               </div>
             </div>
@@ -288,7 +310,8 @@
         <div class="weekly-summary-banner">
           <div class="week-headline-group">
             <div class="current-week-tag" id="banner-current-week-tag">
-              📅 Current: Week 43, 2026
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Current: Week 43, 2026</span>
             </div>
             <h2 class="weekly-title">Your Weekly Design Cadence</h2>
             <p class="weekly-date-range" id="banner-date-range">
@@ -308,7 +331,7 @@
             </div>
             <div class="stat-box">
               <span class="stat-value" id="stat-streak">0 Weeks</span>
-              <span class="stat-label">Active Streak 🔥</span>
+              <span class="stat-label">Active Streak</span>
             </div>
           </div>
         </div>
@@ -318,16 +341,28 @@
           <div class="filter-group-left">
             <!-- Week Dropdown Selector -->
             <select id="filter-week-select" class="styled-select" aria-label="Filter by week">
-              <option value="all">🗓️ All Weeks</option>
+              <option value="all">All Weeks</option>
             </select>
 
             <!-- Status Filter Pills -->
             <div class="filter-pills">
               <button class="filter-pill-btn active" data-status="all">All</button>
-              <button class="filter-pill-btn" data-status="published">🚀 Published</button>
-              <button class="filter-pill-btn" data-status="completed">✨ Completed</button>
-              <button class="filter-pill-btn" data-status="in_progress">⏳ In Progress</button>
-              <button class="filter-pill-btn" data-status="planned">📌 Planned</button>
+              <button class="filter-pill-btn" data-status="published">
+                <span class="status-indicator-dot published"></span>
+                <span>Published</span>
+              </button>
+              <button class="filter-pill-btn" data-status="completed">
+                <span class="status-indicator-dot completed"></span>
+                <span>Completed</span>
+              </button>
+              <button class="filter-pill-btn" data-status="in_progress">
+                <span class="status-indicator-dot in_progress"></span>
+                <span>In Progress</span>
+              </button>
+              <button class="filter-pill-btn" data-status="planned">
+                <span class="status-indicator-dot planned"></span>
+                <span>Planned</span>
+              </button>
             </div>
 
             <!-- Search Field -->
@@ -342,7 +377,8 @@
 
           <!-- Add Design Button -->
           <button class="btn-primary-glow" id="btn-log-new-design">
-            <span>➕ Log New Design</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Log New Design</span>
           </button>
         </div>
 
@@ -398,9 +434,11 @@
        ==================================================================== -->
   <div class="modal-backdrop" id="modal-winner" role="dialog" aria-modal="true" aria-labelledby="winner-modal-title">
     <div class="modal-dialog">
-      <button class="modal-close-btn" id="btn-close-winner" aria-label="Close modal">✕</button>
+      <button class="modal-close-btn" id="btn-close-winner" aria-label="Close modal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
-      <div class="winner-header-icon">🎯</div>
+      <div class="winner-header-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      </div>
       <div class="winner-subtitle">Roulette Landed On</div>
       <h3 class="winner-topic-title" id="winner-modal-title">Fintech Staking & Yield Portfolio Dashboard</h3>
 
@@ -421,13 +459,16 @@
 
       <div class="winner-actions-group">
         <button class="btn-primary-glow" id="btn-winner-start-design" style="width: 100%; justify-content: center;">
-          <span>🚀 Start & Log This Design</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Start & Log This Design</span>
         </button>
         <button class="btn-secondary" id="btn-winner-generate-more" style="width: 100%; justify-content: center;">
-          <span>✨ Generate Similar Challenges to This</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"/></svg>
+          <span>Generate Similar Challenges</span>
         </button>
         <button class="btn-secondary" id="btn-winner-spin-again" style="width: 100%; justify-content: center;">
-          <span>🔄 Spin Again</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Spin Again</span>
         </button>
       </div>
     </div>
@@ -438,10 +479,10 @@
        ==================================================================== -->
   <div class="modal-backdrop" id="modal-design-form" role="dialog" aria-modal="true" aria-labelledby="modal-design-form-title">
     <div class="modal-dialog" style="max-width: 680px;">
-      <button class="modal-close-btn" id="btn-close-design-form" aria-label="Close modal">✕</button>
+      <button class="modal-close-btn" id="btn-close-design-form" aria-label="Close modal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
       <h3 id="modal-design-form-title" style="font-family: var(--font-heading); font-size: 1.45rem; margin-bottom: 0.25rem;">
-        🎨 Log Design Entry
+        Log Design Entry
       </h3>
       <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
         Keep track of your UI/UX content, publication links, and weekly consistency.
@@ -470,7 +511,7 @@
           <div class="form-group">
             <label class="form-label" for="input-design-date">
               Date Designed <span class="req">*</span>
-              <span id="form-week-preview" style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem;">📆 Week 43, 2026</span>
+              <span id="form-week-preview" style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem;">Week 43, 2026</span>
             </label>
             <input type="date" id="input-design-date" class="form-input" required>
           </div>
@@ -480,11 +521,11 @@
               Deliverable Platform
             </label>
             <select id="select-design-platform" class="form-select">
-              <option value="Mobile App">📱 Mobile App</option>
-              <option value="Web / Dashboard">💻 Web / Dashboard</option>
-              <option value="Smartwatch">⌚ Smartwatch</option>
-              <option value="Tablet">📲 Tablet</option>
-              <option value="Spatial / AR">🥽 Spatial / AR</option>
+              <option value="Mobile App">Mobile App</option>
+              <option value="Web / Dashboard">Web / Dashboard</option>
+              <option value="Smartwatch">Smartwatch</option>
+              <option value="Tablet">Tablet</option>
+              <option value="Spatial / AR">Spatial / AR</option>
             </select>
           </div>
         </div>
@@ -496,10 +537,10 @@
               Current Status
             </label>
             <select id="select-design-status" class="form-select">
-              <option value="planned">📌 Planned</option>
-              <option value="in_progress">⏳ In Progress</option>
-              <option value="completed">✨ Completed</option>
-              <option value="published">🚀 Published on Social / Portfolio</option>
+              <option value="planned">Planned</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="published">Published on Social / Portfolio</option>
             </select>
           </div>
 
@@ -521,14 +562,14 @@
             <input type="file" id="input-design-image" accept="image/*" style="display: none;">
             
             <div id="dropzone-placeholder-content" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
-              <span style="font-size: 1.8rem;">🖼️</span>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
               <span style="font-size: 0.88rem; font-weight: 600; color: #fff;">Click to upload or drag image here</span>
               <span style="font-size: 0.78rem; color: var(--text-dim);">Paste image directly from clipboard (Ctrl+V)</span>
             </div>
 
             <div class="upload-preview-container" id="upload-preview-container">
               <img id="upload-preview-img" alt="Preview">
-              <button type="button" class="remove-img-btn" id="btn-remove-img">✕ Remove</button>
+              <button type="button" class="remove-img-btn" id="btn-remove-img" style="display: inline-flex; align-items: center; gap: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Remove</span></button>
             </div>
           </div>
         </div>
@@ -562,7 +603,8 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.85rem; margin-top: 0.5rem;">
           <button type="button" class="btn-secondary" id="btn-cancel-design-form">Cancel</button>
           <button type="submit" class="btn-primary-glow">
-            <span>💾 Save Design</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>Save Design</span>
           </button>
         </div>
 
@@ -575,7 +617,7 @@
        ==================================================================== -->
   <div class="modal-backdrop" id="modal-lightbox" role="dialog" aria-modal="true">
     <div style="position: relative; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center;">
-      <button class="modal-close-btn" id="btn-close-lightbox" style="top: -15px; right: -15px;">✕</button>
+      <button class="modal-close-btn" id="btn-close-lightbox" style="top: -15px; right: -15px;" aria-label="Close modal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <img id="lightbox-img" src="" alt="Full view" style="max-width: 100%; max-height: 85vh; border-radius: var(--radius-lg); object-fit: contain; box-shadow: var(--shadow-lg);">
       <div id="lightbox-caption" style="margin-top: 0.75rem; color: #fff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600;"></div>
     </div>
