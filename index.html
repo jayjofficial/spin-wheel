@@ -385,91 +385,105 @@
        MODAL 1: WINNING RESULT MODAL
        ==================================================================== -->
   <div class="modal-backdrop" id="modal-winner" role="dialog" aria-modal="true" aria-labelledby="winner-modal-title">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-compact">
       <button class="modal-close-btn" id="btn-close-winner" aria-label="Close modal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
-      <div class="winner-header-icon">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-      </div>
-      <div class="winner-subtitle">Roulette Landed On</div>
-      <h3 class="winner-topic-title" id="winner-modal-title">Flight booking & seat selector</h3>
-
-      <!-- Category & Platform Badges -->
-      <div class="winner-meta-badges">
-        <span class="winner-badge-pill" id="winner-spec-category">Travel</span>
-        <span class="winner-badge-pill" id="winner-spec-platform">Mobile App</span>
-      </div>
-
-      <!-- Section 1: Design Hint & Overview -->
-      <div class="winner-brief-card">
-        <div class="brief-card-header">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <span>What This Design Is About</span>
+      <!-- Compact Winner Header -->
+      <div class="winner-compact-header">
+        <div class="winner-top-kicker">
+          <span class="live-dot" style="width: 7px; height: 7px; background: #34d399; box-shadow: 0 0 8px #34d399;"></span>
+          <span>CHALLENGE UNLOCKED</span>
         </div>
-        <p class="brief-card-text" id="winner-spec-about">
-          A mobile reservation flow that lets travelers pick flights, compare cabin classes, and choose their exact airplane seats on an interactive map.
-        </p>
-      </div>
-
-      <!-- Section 2: UX Problem to Solve -->
-      <div class="winner-problem-card">
-        <div class="problem-card-header">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-rose)" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <span>The UX Problem to Solve</span>
-        </div>
-        <p class="problem-card-text" id="winner-spec-problem">
-          Travelers struggle with hidden add-on fees during checkout and find cabin seat maps cramped and hard to navigate on small mobile screens.
-        </p>
-      </div>
-
-      <!-- Section 3: Recommended Global UI Style -->
-      <div class="winner-style-card" id="winner-style-card">
-        <div class="style-card-top-row">
-          <div class="style-title-group">
-            <span class="style-badge-label">Design In This UI Style</span>
-            <h4 class="style-name-heading" id="winner-style-name">Naija FinTech High-Trust Neo-Bank</h4>
+        <div class="winner-title-row">
+          <h3 class="winner-topic-title" id="winner-modal-title">Flight booking & seat selector</h3>
+          <div class="winner-meta-badges">
+            <span class="winner-badge-pill" id="winner-spec-category">Travel</span>
+            <span class="winner-badge-pill" id="winner-spec-platform">Mobile App</span>
           </div>
-          <div class="style-actions-right">
-            <span class="style-region-pill" id="winner-style-region">Africa • Lagos</span>
-            <button class="btn-reroll-style" id="btn-winner-reroll-style" type="button" title="Swap to another global UI style">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </div>
+      </div>
+
+      <!-- Compact 2-Column Bento Specs -->
+      <div class="winner-bento-grid">
+        
+        <!-- Left: UX Challenge Brief -->
+        <div class="bento-card bento-card-brief">
+          <div class="bento-section">
+            <div class="bento-header">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Design Overview</span>
+            </div>
+            <p class="bento-body-text" id="winner-spec-about">
+              A mobile reservation flow that lets travelers pick flights, compare cabin classes, and choose their exact airplane seats on an interactive map.
+            </p>
+          </div>
+
+          <div class="bento-section bento-section-problem">
+            <div class="bento-header bento-header-problem">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>The UX Problem to Solve</span>
+            </div>
+            <p class="bento-body-text bento-problem-text" id="winner-spec-problem">
+              Travelers struggle with hidden add-on fees during checkout and find cabin seat maps cramped and hard to navigate on small mobile screens.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Recommended UI Style -->
+        <div class="bento-card bento-card-style" id="winner-style-card">
+          <div class="bento-style-top">
+            <span class="bento-header" style="margin-bottom: 0;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              <span>UI Style Direction</span>
+            </span>
+            <button class="btn-reroll-compact" id="btn-winner-reroll-style" type="button" title="Swap to another global UI style">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
               <span>Swap Style</span>
             </button>
           </div>
-        </div>
 
-        <p class="style-vibe-text" id="winner-style-vibe">
-          Deep midnight obsidian with crisp emerald verification green, prominent numeric hierarchy, and biometric one-touch cards.
-        </p>
+          <div class="bento-style-title-row">
+            <h4 class="bento-style-name" id="winner-style-name">Naija FinTech High-Trust Neo-Bank</h4>
+            <span class="bento-region-pill" id="winner-style-region">Africa • Lagos</span>
+          </div>
 
-        <div class="style-palette-row">
-          <span class="style-sublabel">Palette:</span>
-          <div class="palette-swatches" id="winner-style-palette">
-            <!-- Injected dynamically -->
+          <p class="bento-vibe-text" id="winner-style-vibe">
+            Deep midnight obsidian with crisp emerald verification green, prominent numeric hierarchy, and biometric one-touch cards.
+          </p>
+
+          <div class="bento-meta-table">
+            <div class="bento-meta-row">
+              <span class="bento-meta-label">Palette</span>
+              <div class="palette-swatches-compact" id="winner-style-palette">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <div class="bento-meta-row">
+              <span class="bento-meta-label">Rule</span>
+              <span class="bento-meta-val" id="winner-style-principles">Radical fee transparency & 1-thumb reachability.</span>
+            </div>
+
+            <div class="bento-meta-row">
+              <span class="bento-meta-label">Type</span>
+              <span class="bento-meta-val" id="winner-style-typography">Tabular numbers & clean crisp sans</span>
+            </div>
           </div>
         </div>
 
-        <div class="style-rule-item">
-          <span class="style-sublabel">Key Principle:</span>
-          <span class="style-rule-text" id="winner-style-principles">Radical fee transparency, high-trust security guarantees, one-thumb reachability.</span>
-        </div>
-
-        <div class="style-rule-item">
-          <span class="style-sublabel">Typography:</span>
-          <span class="style-rule-text" id="winner-style-typography">Ultra-clear tabular numbers & clean crisp sans</span>
-        </div>
       </div>
 
-      <div class="winner-actions-group">
-        <button class="btn-primary-glow" id="btn-winner-start-design" style="width: 100%; justify-content: center;">
+      <!-- Compact Action Buttons (Single Row) -->
+      <div class="winner-actions-compact">
+        <button class="btn-primary-glow btn-action-primary" id="btn-winner-start-design">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Start & Log This Design</span>
         </button>
-        <button class="btn-secondary" id="btn-winner-generate-more" style="width: 100%; justify-content: center;">
+        <button class="btn-secondary btn-action-secondary" id="btn-winner-generate-more">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z"/></svg>
-          <span>Generate Similar Challenges</span>
+          <span>Similar Ideas</span>
         </button>
-        <button class="btn-secondary" id="btn-winner-spin-again" style="width: 100%; justify-content: center;">
+        <button class="btn-secondary btn-action-secondary" id="btn-winner-spin-again">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
           <span>Spin Again</span>
         </button>

@@ -972,16 +972,23 @@ class TopicEngine {
   init() {
     const saved = window.storageManager.getSavedTopics();
     const hasOldJargon = saved && saved.some(t => 
-      t.text && (
+      !t.about || 
+      !t.problem || 
+      !t.style ||
+      (t.text && (
         t.text.includes('Fintech Staking') || 
         t.text.includes('AI Travel Concierge') || 
         t.text.includes('Zero-Waste Grocery Box') || 
         t.text.includes('Spatial Audio Meditation') ||
+        t.text.includes('Password & security') ||
+        t.text.includes('Custom watch builder') ||
+        t.text.includes('portfolio showcase') ||
+        t.text.includes('brainstorming whiteboard') ||
         t.text.includes('Mars colony') ||
         t.text.includes('Time traveler') ||
         t.text.includes('Alien language') ||
         t.text.includes('Ghost hunting')
-      )
+      ))
     );
 
     // If no saved topics or old jargon exists, upgrade directly to natural topics
