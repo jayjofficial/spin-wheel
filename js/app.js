@@ -665,12 +665,12 @@ class App {
       styleObj = window.GLOBAL_UI_STYLES.find(s => s.name === design.uiStyle) || null;
     }
 
-    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'Industry Standard Minimal');
-    const styleRegion = design.uiStyleRegion || (styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : 'Global');
-    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Clear visual hierarchy, ergonomic spacing, and modern typography.');
-    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Clarity, direct affordances, and accessible contrast.');
-    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Modern clean sans-serif');
-    const stylePalette = (design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : (styleObj ? styleObj.palette : ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b', '#ffffff']);
+    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'Ghana Style');
+    const styleRegion = design.uiStyleRegion || (styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : 'West Africa • Ghana');
+    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Warm, vibrant, and proud. Inspired by Ghanaian Kente patterns, featuring structured cards with bold golden-yellow, forest green, and rich crimson accents over a crisp dark background.');
+    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Use structured rectangular card grids, bold warm gold primary buttons, rich green and red tag badges, and high-contrast readable cards.');
+    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Bold modern headings paired with clear, friendly body text');
+    const stylePalette = (design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : (styleObj ? styleObj.palette : ['#0f1015', '#f59e0b', '#10b981', '#ef4444', '#ffffff']);
 
     if (styleNameEl) styleNameEl.textContent = styleName;
     if (styleRegionEl) styleRegionEl.textContent = styleRegion;

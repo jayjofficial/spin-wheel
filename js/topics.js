@@ -56,163 +56,167 @@ window.getTopicIconSVG = getTopicIconSVG;
 // Grounded in real-world regional design philosophies, with special prominence
 // given to authentic African UI styles, Asian, European, and American aesthetics.
 // ============================================================================
+// GLOBAL UI DESIGN STYLES CATALOG
+// Intuitive country-based design styles (prominently featuring African styles)
+// with direct, easy-to-understand design instructions anyone can design in Figma.
+// ============================================================================
 const GLOBAL_UI_STYLES = [
-  // --- African UI Design Styles ---
+  // --- African Design Styles ---
   {
-    id: 'afro_futurism',
-    name: 'Afro-Modernist Tech',
-    region: 'Africa',
-    subRegion: 'Pan-African & Silicon Savannah',
-    vibe: 'High-contrast dark mode with electric cyan and solar gold accents, woven geometric card borders, and battery-efficient layout.',
-    principles: 'Optimized for high outdoor sunlight, data-efficient micro-assets, and rich cultural rhythm with zero clutter.',
-    palette: ['#0a0e17', '#00f0ff', '#f59e0b', '#10b981', '#f8fafc'],
-    typography: 'Modern Geometric Sans with high x-height (e.g. Syne / Space Grotesk)'
+    id: 'ghana_style',
+    name: 'Ghana Style',
+    region: 'West Africa • Ghana',
+    subRegion: 'Accra',
+    vibe: 'Warm, vibrant, and proud. Inspired by Ghanaian Kente patterns, featuring structured cards with bold golden-yellow, forest green, and rich crimson accents over a crisp dark background.',
+    principles: 'Use structured rectangular card grids, bold warm gold primary buttons, rich green and red tag badges, and high-contrast readable cards.',
+    palette: ['#0f1015', '#f59e0b', '#10b981', '#ef4444', '#ffffff'],
+    typography: 'Bold modern headings paired with clear, friendly body text'
   },
   {
-    id: 'naija_fintech',
-    name: 'Lagos FinTech Neo-Bank',
-    region: 'Africa',
-    subRegion: 'Nigeria (Lagos Tech Hub)',
-    vibe: 'Deep midnight obsidian with crisp emerald verification green, prominent numeric hierarchy, and biometric one-touch cards.',
-    principles: 'Radical fee transparency, high-trust security guarantees, one-thumb reachability, and offline-resilient micro-states.',
+    id: 'nigeria_style',
+    name: 'Nigeria Style',
+    region: 'West Africa • Nigeria',
+    subRegion: 'Lagos Tech Hub',
+    vibe: 'High-energy fintech aesthetic inspired by top Lagos apps (like Paystack & PiggyVest). Sleek obsidian dark mode with electric emerald green action buttons and big numbers.',
+    principles: 'Show large bold numbers and balances, use emerald green for all primary buttons, add high-trust security shields, and keep bottom tabs easy to tap with one thumb.',
     palette: ['#090d1a', '#10b981', '#38bdf8', '#6366f1', '#ffffff'],
-    typography: 'Ultra-clear tabular numbers & clean crisp sans (e.g. Plus Jakarta Sans)'
+    typography: 'Crisp sans-serif with big, bold numbers'
   },
   {
-    id: 'sahel_terracotta',
-    name: 'Sahelian Earth-Tone Minimal',
-    region: 'Africa',
-    subRegion: 'West & North Africa (Sahel Belt)',
-    vibe: 'Warm desert sand, baked terracotta clay, deep indigo accents, and organic card curves with subtle textile dividers.',
-    principles: 'Warm human resonance, tactile stacked cards, calm grounded hierarchy, and natural earthy warmth.',
-    palette: ['#1c1815', '#e07a5f', '#f4a261', '#3d405b', '#f9f6f0'],
-    typography: 'Warm Humanist Sans with organic curves (e.g. Outfit / Epilogue)'
+    id: 'kenya_style',
+    name: 'Kenya Style',
+    region: 'East Africa • Kenya',
+    subRegion: 'Nairobi (Silicon Savannah)',
+    vibe: 'Mobile-first practical simplicity inspired by M-Pesa and Nairobi innovation. High-visibility sunny orange and fresh teal on clean cards that are easy to use anywhere.',
+    principles: 'Design large, easy-to-tap buttons for outdoor sunlight, simple step-by-step transaction flows, and warm sunrise orange or teal highlights.',
+    palette: ['#0b1615', '#f97316', '#14b8a6', '#facc15', '#ffffff'],
+    typography: 'Clear, spacious modern mobile sans'
   },
   {
-    id: 'kente_modular',
-    name: 'Geometric Modular Bento',
-    region: 'Africa',
-    subRegion: 'Ghana (Accra)',
-    vibe: 'Structured interlocking bento grid with golden yellow, royal crimson, and forest emerald accents over deep charcoal.',
-    principles: 'Celebrated heritage geometry, modular content hierarchy, rhythmic spacing, and bold visual anchors.',
-    palette: ['#121214', '#eab308', '#ef4444', '#15803d', '#fafafa'],
-    typography: 'Bold Display Heading paired with ultra-legible Body (e.g. Clash Display + Inter)'
+    id: 'south_africa_style',
+    name: 'South Africa Style',
+    region: 'Southern Africa • South Africa',
+    subRegion: 'Johannesburg & Cape Town',
+    vibe: 'Urban modernism with punchy industrial flair. Deep slate gray surfaces, high-contrast borders, warning orange highlights, and structured information layouts.',
+    principles: 'Use solid 1.5px card borders, punchy orange action buttons, dark slate cards, and prominent glanceable data tags.',
+    palette: ['#14171f', '#f97316', '#3b82f6', '#64748b', '#ffffff'],
+    typography: 'Strong, impactful geometric headings with clean body text'
   },
   {
-    id: 'swahili_glass',
-    name: 'Swahili Glassmorphism',
-    region: 'Africa',
-    subRegion: 'East African Coast (Zanzibar & Mombasa)',
-    vibe: 'Breezy coastal whitespace, frosted glass cards over deep sea teal, soft mother-of-pearl accents, and tranquil rounded pills.',
-    principles: 'Airy cognitive breathing room, tranquil visual hierarchy, graceful touch targets, and serene interaction cadence.',
-    palette: ['#081c24', '#06b6d4', '#14b8a6', '#f0fdfa', '#ffffff'],
-    typography: 'Light, airy modern sans with generous tracking'
+    id: 'rwanda_style',
+    name: 'Rwanda Style',
+    region: 'East Africa • Rwanda',
+    subRegion: 'Kigali Eco-Tech',
+    vibe: 'Clean eco-minimalism inspired by Kigali\'s green innovation. Lush botanical greens, clean white surfaces, rounded cards, and orderly breathing room.',
+    principles: 'Keep layouts spacious and uncluttered, use fresh leaf-green accent colors, gentle card rounded corners (16px), and clear friendly icons.',
+    palette: ['#091712', '#10b981', '#06b6d4', '#d97706', '#ffffff'],
+    typography: 'Soft, modern geometric sans'
   },
   {
-    id: 'joburg_industrial',
-    name: 'Joburg Industrial Modern',
-    region: 'Africa',
-    subRegion: 'South Africa (Johannesburg)',
-    vibe: 'Raw slate grey, crisp industrial typography, punchy warning orange highlights, and structured card borders with brutalist precision.',
-    principles: 'Direct visual hierarchy, high scannability, utilitarian clarity, and unapologetic structural honesty.',
-    palette: ['#181a1d', '#f97316', '#e2e8f0', '#475569', '#ffffff'],
-    typography: 'Monospaced metadata + Heavy Industrial Grotesk'
+    id: 'morocco_style',
+    name: 'Morocco Style',
+    region: 'North Africa • Morocco',
+    subRegion: 'Marrakech & Casablanca',
+    vibe: 'Warm desert clay and royal blue. Terracotta tones, deep Majorelle blue accents, arched pill badges, and handcrafted warmth.',
+    principles: 'Use warm clay and sand card backgrounds, deep blue primary buttons, pill-shaped tags, and smooth rounded cards.',
+    palette: ['#1c1614', '#e07a5f', '#2563eb', '#f4a261', '#fdfaf5'],
+    typography: 'Warm humanist font with organic, friendly curves'
   },
 
-  // --- Asian UI Design Styles ---
+  // --- Asian Design Styles ---
   {
-    id: 'japan_zen',
-    name: 'Japanese Minimalist Zen',
-    region: 'Asia',
-    subRegion: 'Japan (Kyoto & Tokyo)',
-    vibe: 'Delicate hairline dividers, generous intentional whitespace, muted stone & sumi ink accents, and serene focus.',
-    principles: 'Extreme cognitive calm, single primary action focus, meditative clarity, and zero decorative distraction.',
-    palette: ['#141414', '#a3a3a3', '#d4d4d4', '#dc2626', '#ffffff'],
-    typography: 'Clean, disciplined grotesk with light weights'
+    id: 'japan_style',
+    name: 'Japan Style',
+    region: 'Asia • Japan',
+    subRegion: 'Kyoto & Tokyo',
+    vibe: 'Calm Zen minimalism. Lots of empty breathing space, ultra-thin dividers, muted stone gray surfaces, and a single striking red accent.',
+    principles: 'Keep screens completely uncluttered. Put only 1 primary action per screen, use generous margins, and avoid all decorative gradients.',
+    palette: ['#121212', '#737373', '#e5e5e5', '#dc2626', '#ffffff'],
+    typography: 'Light, disciplined sans with wide letter spacing'
   },
   {
-    id: 'korean_pastel',
-    name: 'Korean Soft Neo-Card',
-    region: 'Asia',
-    subRegion: 'South Korea (Seoul)',
-    vibe: 'Pillowy rounded cards (24px+), soft diffused shadows, gentle friendly pastel badges, and welcoming micro-copy.',
-    principles: 'Approachable empathy, low cognitive friction, and friendly delightful micro-interactions.',
+    id: 'korea_style',
+    name: 'South Korea Style',
+    region: 'Asia • South Korea',
+    subRegion: 'Seoul',
+    vibe: 'Friendly, pillowy, and delightful. Extra-rounded cards (24px+ radius), soft pastel accent pills (lilac, sky blue, soft peach), and playful micro-copy.',
+    principles: 'Use extra-rounded bubbly cards, soft diffused drop shadows, friendly pastel badges, and warm conversational button labels.',
     palette: ['#0f172a', '#a78bfa', '#38bdf8', '#f472b6', '#ffffff'],
-    typography: 'Soft rounded geometric sans'
-  },
-  {
-    id: 'tokyo_hud',
-    name: 'Cyberpunk HUD Interface',
-    region: 'Asia',
-    subRegion: 'Japan (Tokyo / Shinjuku)',
-    vibe: 'Dense dark telemetry, electric magenta & cyan borders, mono-spaced data tags, and glowing status markers.',
-    principles: 'High-information density, rapid glanceability, and futuristic tactile feedback.',
-    palette: ['#050811', '#ff007f', '#00e5ff', '#3b82f6', '#ffffff'],
-    typography: 'Technical Monospace + Compact Sans'
+    typography: 'Soft, friendly rounded geometric sans'
   },
 
-  // --- European UI Design Styles ---
+  // --- European Design Styles ---
   {
-    id: 'swiss_typo',
-    name: 'Swiss International Style',
-    region: 'Europe',
-    subRegion: 'Switzerland (Zurich & Basel)',
-    vibe: 'Mathematical grid alignment, stark black/white contrast with vivid red accent, heavy grotesque typography, and zero decoration.',
-    principles: 'Content-as-interface, uncompromising typographic hierarchy, and mathematical clarity.',
+    id: 'switzerland_style',
+    name: 'Switzerland Style',
+    region: 'Europe • Switzerland',
+    subRegion: 'Zurich & Basel',
+    vibe: 'The iconic Swiss typographic grid. Stark black-and-white contrast with a signature Swiss red accent, strict grid alignment, and big bold type.',
+    principles: 'Let typography be the visual hero. Use huge stark headings, strict column grids, crisp black/white cards, and vivid red buttons.',
     palette: ['#09090b', '#ffffff', '#ef4444', '#71717a', '#27272a'],
-    typography: 'Neutral grotesque (Helvetica / Neue Haas / Inter)'
+    typography: 'Pure Swiss grotesque (like Helvetica, Inter, or Neue Haas)'
   },
   {
-    id: 'scandi_functional',
-    name: 'Scandinavian Functionalism',
-    region: 'Europe',
-    subRegion: 'Denmark & Sweden (Nordic)',
-    vibe: 'Soft muted slate, forest sage, warm birchwood accents, generous ergonomics, and natural breathing room.',
-    principles: 'Democratic design, honest ergonomics, accessible for all ages, and clutter-free utility.',
-    palette: ['#181a1d', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
-    typography: 'Warm Humanist Grotesk'
+    id: 'germany_style',
+    name: 'Germany Style',
+    region: 'Europe • Germany',
+    subRegion: 'Berlin & Bauhaus',
+    vibe: 'Strict functional clarity and Bauhaus geometry. Uncompromising 8px grid alignment, primary color blocks (red, blue, yellow), and zero fluff.',
+    principles: 'Align every element to an exact 8px grid. Use clean rectangular cards, bold primary blue or red action buttons, and clear functional labels.',
+    palette: ['#111111', '#ef4444', '#3b82f6', '#facc15', '#ffffff'],
+    typography: 'Clean, neutral industrial grotesque'
   },
   {
-    id: 'french_editorial',
-    name: 'Editorial Serif & Luxury Minimal',
-    region: 'Europe',
-    subRegion: 'France (Paris)',
-    vibe: 'Sophisticated serif headlines, hairline gold & cream borders, editorial multi-column flow, and restrained elegance.',
-    principles: 'Storytelling visual flow, elevated aesthetics, meticulous breathing space, and high craft.',
-    palette: ['#121110', '#d4af37', '#f5f5f0', '#78716c', '#ffffff'],
-    typography: 'High-contrast Serif headlines paired with clean Sans body'
+    id: 'france_style',
+    name: 'France Style',
+    region: 'Europe • France',
+    subRegion: 'Paris',
+    vibe: 'Parisian luxury editorial aesthetic. High-fashion elegance, sophisticated serif headlines, champagne gold hairline borders, and museum-like whitespace.',
+    principles: 'Use high-contrast serif typography for headings, delicate 1px champagne borders, generous luxury whitespace, and minimal subtle badges.',
+    palette: ['#141312', '#d4af37', '#f5f5f0', '#78716c', '#ffffff'],
+    typography: 'High-contrast Serif headlines paired with clean sans body'
+  },
+  {
+    id: 'scandinavia_style',
+    name: 'Scandinavia Style',
+    region: 'Europe • Sweden & Denmark',
+    subRegion: 'Stockholm & Copenhagen',
+    vibe: 'Cozy, functional Nordic simplicity. Soft muted sage green, warm birchwood tones, spacious ergonomics, and honest utility for everyone.',
+    principles: 'Use soft natural background tones, large comfortable tap targets, calm distraction-free layouts, and gentle rounded corners.',
+    palette: ['#16191d', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
+    typography: 'Warm, approachable humanist sans'
   },
 
-  // --- Americas & Contemporary Global UI Styles ---
+  // --- Americas & Global Web Styles ---
   {
-    id: 'brazil_modern',
-    name: 'Brazilian Organic Modernism',
-    region: 'Americas',
-    subRegion: 'Brazil (São Paulo & Rio)',
-    vibe: 'Sweeping Niemeyer-inspired wave curves, deep botanical green, terracotta highlights, and vibrant lively rhythm.',
-    principles: 'Organic fluid motion, human-centric warmth, dynamic card transitions, and expressive energy.',
-    palette: ['#0c1913', '#059669', '#ea580c', '#facc15', '#ffffff'],
-    typography: 'Organic, curved modern display sans'
+    id: 'brazil_style',
+    name: 'Brazil Style',
+    region: 'South America • Brazil',
+    subRegion: 'Rio & São Paulo',
+    vibe: 'Lively organic modernism inspired by tropical nature and Niemeyer curves. Botanical greens, warm sunburst yellow, and sweeping fluid card curves.',
+    principles: 'Use organic wave-like curves on cards or headers, vibrant botanical green and mango yellow accents, and energetic fluid layouts.',
+    palette: ['#0a1811', '#059669', '#ea580c', '#facc15', '#ffffff'],
+    typography: 'Expressive, curved modern display sans'
   },
   {
-    id: 'bento_grid',
-    name: 'Modern Bento Grid',
-    region: 'Global',
-    subRegion: 'Modern Tech & Silicon Valley',
-    vibe: 'Asymmetrical modular compartments, inner-glow borders, interactive status pills, and dense glanceable hierarchy.',
-    principles: 'Scannable modular blocks, progressive disclosure, and responsive reflow.',
+    id: 'silicon_valley_style',
+    name: 'Silicon Valley Style',
+    region: 'United States • California Tech',
+    subRegion: 'San Francisco',
+    vibe: 'Modern tech bento-grid. Dark obsidian glass cards with subtle inner glow borders, colorful status pills, and dense glanceable metric blocks.',
+    principles: 'Arrange content in an asymmetrical bento-grid (small & large interlocking cards), add subtle 1px border glows, and use purple/cyan status pills.',
     palette: ['#090d16', '#6366f1', '#06b6d4', '#8b5cf6', '#ffffff'],
     typography: 'Contemporary tech sans with tight tracking'
   },
   {
-    id: 'neo_brutalism',
-    name: 'High-Contrast Neo-Brutalism',
-    region: 'Global',
-    subRegion: 'Global Indie Web',
-    vibe: '2.5px solid black borders, hard dropped 4px box shadows without blur, saturated color blocks, and high affordance.',
-    principles: 'Unmistakable interactive affordance, zero ambiguity, bold tactile presence, and accessible contrast.',
+    id: 'indie_web_style',
+    name: 'Indie Web Style',
+    region: 'Global • Retro Neo-Brutalism',
+    subRegion: 'Indie Creator Web',
+    vibe: 'Playful high-contrast retro web style. Bold solid 2.5px black outlines, hard 4px drop shadows with zero blur, and saturated yellow & pink blocks.',
+    principles: 'Give every card and button a solid 2.5px black border, a hard 4px drop shadow with 0 blur, and use high-contrast vibrant pop colors.',
     palette: ['#18181b', '#facc15', '#ec4899', '#06b6d4', '#ffffff'],
-    typography: 'Heavy bold grotesque with high contrast'
+    typography: 'Heavy bold grotesque or monospaced font'
   }
 ];
 window.GLOBAL_UI_STYLES = GLOBAL_UI_STYLES;
