@@ -263,15 +263,20 @@ class DesignTracker {
             </div>
           ` : ''}
 
-          ${design.uiStyle ? `
-            <div class="archive-style-tag">
-              <span class="style-badge-pill">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                ${this.escapeHTML(design.uiStyle)}
-              </span>
-              ${design.uiStylePrinciples ? `<span class="archive-style-subprinciple" title="${this.escapeHTML(design.uiStylePrinciples)}">${this.escapeHTML(design.uiStylePrinciples)}</span>` : ''}
-            </div>
-          ` : ''}
+          ${design.uiStyle ? (() => {
+            const styleObj = window.getUIStyleById ? window.getUIStyleById(design.uiStyle) : null;
+            const styleName = styleObj ? styleObj.name : design.uiStyle;
+            const guideHint = (styleObj && styleObj.figmaGuide?.signature) || design.uiStylePrinciples || '';
+            return `
+              <div class="archive-style-tag">
+                <span class="style-badge-pill">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                  ${this.escapeHTML(styleName)}
+                </span>
+                ${guideHint ? `<span class="archive-style-subprinciple" title="${this.escapeHTML(guideHint)}">${this.escapeHTML(guideHint)}</span>` : ''}
+              </div>
+            `;
+          })() : ''}
 
           ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
 

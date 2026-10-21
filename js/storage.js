@@ -89,6 +89,25 @@ class StorageManager {
     return `${startStr} – ${endStr}`;
   }
 
+  // --- Auto-Migration for Legacy Design UI Styles ---
+  static normalizeDesignStyle(design) {
+    if (!design) return design;
+    const rawStyle = design.uiStyle || '';
+    if (window.getUIStyleById) {
+      const styleObj = window.getUIStyleById(rawStyle);
+      if (styleObj) {
+        design.uiStyle = styleObj.name;
+        design.uiStyleRegion = `${styleObj.region} • ${styleObj.subRegion}`;
+        design.uiStyleVibe = styleObj.vibe;
+        design.uiStylePrinciples = styleObj.principles;
+        design.uiStyleTypography = styleObj.typography;
+        design.uiStylePalette = styleObj.palette;
+        design.figmaGuide = styleObj.figmaGuide;
+      }
+    }
+    return design;
+  }
+
   // --- Design CRUD with Convex Cloud Sync ---
   async getAllDesigns() {
     await this.ready;
@@ -97,8 +116,9 @@ class StorageManager {
     if (window.convexManager && window.convexManager.currentEnv !== 'offline') {
       const cloudList = await window.convexManager.getCloudDesigns();
       if (Array.isArray(cloudList) && cloudList.length > 0) {
-        // Cache to local IndexedDB
+        // Cache to local IndexedDB & normalize styles
         for (const item of cloudList) {
+          StorageManager.normalizeDesignStyle(item);
           await this.saveLocalOnly(item);
         }
         cloudList.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
@@ -114,7 +134,21 @@ class StorageManager {
         const req = store.getAll();
         req.onsuccess = () => {
           const list = req.result || [];
+          let modified = false;
+          list.forEach(item => {
+            const oldName = item.uiStyle;
+            StorageManager.normalizeDesignStyle(item);
+            if (oldName !== item.uiStyle) modified = true;
+          });
           list.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          if (modified) {
+            // Asynchronously update sanitized records in storage
+            setTimeout(async () => {
+              for (const item of list) {
+                await this.saveLocalOnly(item);
+              }
+            }, 50);
+          }
           resolve(list);
         };
         req.onerror = () => resolve(this.getFallbackDesigns());
@@ -205,7 +239,17 @@ class StorageManager {
   getFallbackDesigns() {
     try {
       const data = localStorage.getItem('ux_roulette_designs');
-      return data ? JSON.parse(data) : [];
+      const list = data ? JSON.parse(data) : [];
+      let modified = false;
+      list.forEach(d => {
+        const old = d.uiStyle;
+        StorageManager.normalizeDesignStyle(d);
+        if (old !== d.uiStyle) modified = true;
+      });
+      if (modified) {
+        localStorage.setItem('ux_roulette_designs', JSON.stringify(list));
+      }
+      return list;
     } catch (e) {
       return [];
     }

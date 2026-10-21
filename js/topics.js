@@ -67,30 +67,48 @@ const GLOBAL_UI_STYLES = [
     name: 'Ghana Style',
     region: 'West Africa • Ghana',
     subRegion: 'Accra',
-    vibe: 'Warm, vibrant, and proud. Inspired by Ghanaian Kente patterns, featuring structured cards with bold golden-yellow, forest green, and rich crimson accents over a crisp dark background.',
+    vibe: 'Warm, vibrant, and proud. Inspired by Ghanaian modernism & Kente geometry. Rich gold and emerald accents over clean obsidian dark surfaces.',
     principles: 'Use structured rectangular card grids, bold warm gold primary buttons, rich green and red tag badges, and high-contrast readable cards.',
-    palette: ['#0f1015', '#f59e0b', '#10b981', '#ef4444', '#ffffff'],
-    typography: 'Bold modern headings paired with clear, friendly body text'
+    palette: ['#0f1015', '#1a1d26', '#f59e0b', '#10b981', '#ef4444', '#ffffff'],
+    typography: 'Bold modern headings paired with clear, friendly body text',
+    figmaGuide: {
+      buttons: 'Warm Gold (#f59e0b) primary CTA with dark text (#0f1015) and 10px rounded corners',
+      cards: 'Dark obsidian (#1a1d26) with 14px corner radius and subtle 1px gold hairline border',
+      layout: 'Structured multi-column card grid with warm yellow/gold section headers',
+      signature: 'Warm golden primary button paired with geometric status badges inspired by Ghanaian textiles'
+    }
   },
   {
     id: 'nigeria_style',
     name: 'Nigeria Style',
     region: 'West Africa • Nigeria',
     subRegion: 'Lagos Tech Hub',
-    vibe: 'High-energy fintech aesthetic inspired by top Lagos apps (like Paystack & PiggyVest). Sleek obsidian dark mode with electric emerald green action buttons and big numbers.',
+    vibe: 'High-energy fintech aesthetic inspired by world-class Lagos apps (Paystack, PiggyVest, Kuda). Deep navy-black, electric emerald green actions, and big readable metrics.',
     principles: 'Show large bold numbers and balances, use emerald green for all primary buttons, add high-trust security shields, and keep bottom tabs easy to tap with one thumb.',
-    palette: ['#090d1a', '#10b981', '#38bdf8', '#6366f1', '#ffffff'],
-    typography: 'Crisp sans-serif with big, bold numbers'
+    palette: ['#090d1a', '#111827', '#10b981', '#38bdf8', '#6366f1', '#ffffff'],
+    typography: 'Crisp sans-serif with big, bold numbers (32px+ bold)',
+    figmaGuide: {
+      buttons: 'Electric Emerald Green (#10b981) with white text, 12px rounded corners, and bold font',
+      cards: 'Midnight slate cards (#111827), 16px corner radius, soft 1px border (rgba(16, 185, 129, 0.18))',
+      layout: 'Bottom-sheet reachability for single-thumb mobile use with circular quick-action icon row',
+      signature: 'Electric emerald "Send / Confirm" button, high-contrast numerical balance card, and one-tap bottom nav'
+    }
   },
   {
     id: 'kenya_style',
     name: 'Kenya Style',
     region: 'East Africa • Kenya',
     subRegion: 'Nairobi (Silicon Savannah)',
-    vibe: 'Mobile-first practical simplicity inspired by M-Pesa and Nairobi innovation. High-visibility sunny orange and fresh teal on clean cards that are easy to use anywhere.',
+    vibe: 'Mobile-first practical simplicity inspired by M-Pesa. High-visibility sunny orange and fresh teal on clean cards that are easy to use anywhere in direct sunlight.',
     principles: 'Design large, easy-to-tap buttons for outdoor sunlight, simple step-by-step transaction flows, and warm sunrise orange or teal highlights.',
-    palette: ['#0b1615', '#f97316', '#14b8a6', '#facc15', '#ffffff'],
-    typography: 'Clear, spacious modern mobile sans'
+    palette: ['#0b1615', '#132220', '#f97316', '#14b8a6', '#facc15', '#ffffff'],
+    typography: 'Clear, spacious modern mobile sans',
+    figmaGuide: {
+      buttons: 'Vibrant Sunrise Orange (#f97316) or Bright Teal (#14b8a6), 14px corners, 48px touch target height',
+      cards: 'Deep pine cards (#132220), 16px corner radius, crisp high-contrast border for outdoor visibility',
+      layout: 'Numbered 3-step linear flow with large readable recipient/receipt summary breakdown',
+      signature: 'Massive high-contrast tap buttons, step-by-step transaction summary card, and bright orange CTA'
+    }
   },
   {
     id: 'south_africa_style',
@@ -99,18 +117,30 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Johannesburg & Cape Town',
     vibe: 'Urban modernism with punchy industrial flair. Deep slate gray surfaces, high-contrast borders, warning orange highlights, and structured information layouts.',
     principles: 'Use solid 1.5px card borders, punchy orange action buttons, dark slate cards, and prominent glanceable data tags.',
-    palette: ['#14171f', '#f97316', '#3b82f6', '#64748b', '#ffffff'],
-    typography: 'Strong, impactful geometric headings with clean body text'
+    palette: ['#12141a', '#1c202a', '#f97316', '#3b82f6', '#64748b', '#ffffff'],
+    typography: 'Strong, impactful geometric headings with clean body text',
+    figmaGuide: {
+      buttons: 'Punchy Industrial Orange (#f97316), 8px tight corner radius, bold uppercase micro-tracking',
+      cards: 'Heavy charcoal cards (#1c202a), 8px to 10px corners, solid 1.5px border (rgba(255, 255, 255, 0.12))',
+      layout: 'Asymmetric data density, glanceable telemetry blocks, and prominent stat counters',
+      signature: 'Solid 1.5px slate borders, warning-orange action triggers, and condensed geometric headers'
+    }
   },
   {
     id: 'rwanda_style',
     name: 'Rwanda Style',
     region: 'East Africa • Rwanda',
     subRegion: 'Kigali Eco-Tech',
-    vibe: 'Clean eco-minimalism inspired by Kigali\'s green innovation. Lush botanical greens, clean white surfaces, rounded cards, and orderly breathing room.',
+    vibe: 'Clean eco-minimalism inspired by Kigali\'s spotless green innovation. Lush botanical greens, clean white surfaces, rounded cards, and orderly breathing room.',
     principles: 'Keep layouts spacious and uncluttered, use fresh leaf-green accent colors, gentle card rounded corners (16px), and clear friendly icons.',
-    palette: ['#091712', '#10b981', '#06b6d4', '#d97706', '#ffffff'],
-    typography: 'Soft, modern geometric sans'
+    palette: ['#091712', '#12251e', '#10b981', '#06b6d4', '#d97706', '#ffffff'],
+    typography: 'Soft, modern geometric sans',
+    figmaGuide: {
+      buttons: 'Fresh Mint/Emerald (#10b981), full pill shape (9999px radius), white text',
+      cards: 'Forest dark cards (#12251e), 20px smooth corners, subtle inner green glow',
+      layout: 'Extra spacious margins, soft icon illustrations, and calm, uncrowded card stacks',
+      signature: 'Full pill-shaped buttons, botanical green color accents, and generous whitespace'
+    }
   },
   {
     id: 'morocco_style',
@@ -119,8 +149,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Marrakech & Casablanca',
     vibe: 'Warm desert clay and royal blue. Terracotta tones, deep Majorelle blue accents, arched pill badges, and handcrafted warmth.',
     principles: 'Use warm clay and sand card backgrounds, deep blue primary buttons, pill-shaped tags, and smooth rounded cards.',
-    palette: ['#1c1614', '#e07a5f', '#2563eb', '#f4a261', '#fdfaf5'],
-    typography: 'Warm humanist font with organic, friendly curves'
+    palette: ['#1c1614', '#2a201c', '#e07a5f', '#2563eb', '#f4a261', '#fdfaf5'],
+    typography: 'Warm humanist font with organic, friendly curves',
+    figmaGuide: {
+      buttons: 'Royal Majorelle Blue (#2563eb) or Warm Terracotta (#e07a5f), 12px rounded corners',
+      cards: 'Warm clay-charcoal cards (#2a201c), 16px corner radius, warm sand border tone',
+      layout: 'Soft rounded card arches, warm contrast, and humanized storytelling copy',
+      signature: 'Striking contrast between warm terracotta surfaces and vivid royal blue buttons'
+    }
   },
 
   // --- Asian Design Styles ---
@@ -131,8 +167,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Kyoto & Tokyo',
     vibe: 'Calm Zen minimalism. Lots of empty breathing space, ultra-thin dividers, muted stone gray surfaces, and a single striking red accent.',
     principles: 'Keep screens completely uncluttered. Put only 1 primary action per screen, use generous margins, and avoid all decorative gradients.',
-    palette: ['#121212', '#737373', '#e5e5e5', '#dc2626', '#ffffff'],
-    typography: 'Light, disciplined sans with wide letter spacing'
+    palette: ['#121212', '#1a1a1a', '#737373', '#e5e5e5', '#dc2626', '#ffffff'],
+    typography: 'Light, disciplined sans with wide letter spacing',
+    figmaGuide: {
+      buttons: 'Pure Crimson Red (#dc2626) or Clean White on dark, 4px minimal radius, clean typography',
+      cards: 'Pure dark stone (#1a1a1a), 6px to 8px modest radius, ultra-thin hairline border (rgba(255,255,255,0.06))',
+      layout: 'At least 32px to 48px padding around primary content; only 1 primary action per screen',
+      signature: 'Extreme minimalist whitespace, quiet monochrome cards, and a single focal red accent button'
+    }
   },
   {
     id: 'korea_style',
@@ -141,8 +183,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Seoul',
     vibe: 'Friendly, pillowy, and delightful. Extra-rounded cards (24px+ radius), soft pastel accent pills (lilac, sky blue, soft peach), and playful micro-copy.',
     principles: 'Use extra-rounded bubbly cards, soft diffused drop shadows, friendly pastel badges, and warm conversational button labels.',
-    palette: ['#0f172a', '#a78bfa', '#38bdf8', '#f472b6', '#ffffff'],
-    typography: 'Soft, friendly rounded geometric sans'
+    palette: ['#0f172a', '#1e293b', '#a78bfa', '#38bdf8', '#f472b6', '#ffffff'],
+    typography: 'Soft, friendly rounded geometric sans',
+    figmaGuide: {
+      buttons: 'Soft Lilac/Purple (#a78bfa) or Bubblegum Rose (#f472b6), 16px pillowy radius',
+      cards: 'Extra-rounded slate cards (#1e293b), 24px to 28px corner radius, soft diffused drop shadow',
+      layout: 'Playful card stacks, friendly greeting banners, and delightful conversational button copy',
+      signature: '24px+ pillowy curved cards, soft pastel highlights (lilac, baby blue), and friendly rounded icons'
+    }
   },
 
   // --- European Design Styles ---
@@ -153,8 +201,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Zurich & Basel',
     vibe: 'The iconic Swiss typographic grid. Stark black-and-white contrast with a signature Swiss red accent, strict grid alignment, and big bold type.',
     principles: 'Let typography be the visual hero. Use huge stark headings, strict column grids, crisp black/white cards, and vivid red buttons.',
-    palette: ['#09090b', '#ffffff', '#ef4444', '#71717a', '#27272a'],
-    typography: 'Pure Swiss grotesque (like Helvetica, Inter, or Neue Haas)'
+    palette: ['#09090b', '#18181b', '#ffffff', '#ef4444', '#71717a', '#27272a'],
+    typography: 'Pure Swiss grotesque (like Helvetica, Inter, or Neue Haas), 36px+ stark bold headlines',
+    figmaGuide: {
+      buttons: 'Vivid Swiss Red (#ef4444) or Stark Solid White with black text, 4px minimal radius',
+      cards: 'Pure black and stark gray cards (#18181b), 4px to 6px crisp corners, sharp 1px border',
+      layout: 'Strict 12-column or 4-column mathematical grid, rigid left alignment, and zero fluff',
+      signature: 'Massive stark grotesque typography, crisp black/white cards, and surgical Swiss red CTA buttons'
+    }
   },
   {
     id: 'germany_style',
@@ -163,8 +217,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Berlin & Bauhaus',
     vibe: 'Strict functional clarity and Bauhaus geometry. Uncompromising 8px grid alignment, primary color blocks (red, blue, yellow), and zero fluff.',
     principles: 'Align every element to an exact 8px grid. Use clean rectangular cards, bold primary blue or red action buttons, and clear functional labels.',
-    palette: ['#111111', '#ef4444', '#3b82f6', '#facc15', '#ffffff'],
-    typography: 'Clean, neutral industrial grotesque'
+    palette: ['#111111', '#1c1c1c', '#ef4444', '#3b82f6', '#facc15', '#ffffff'],
+    typography: 'Clean, neutral industrial grotesque',
+    figmaGuide: {
+      buttons: 'Bold Primary Blue (#3b82f6) or Red (#ef4444), 6px tight radius, clear functional action label',
+      cards: 'Rational dark gray cards (#1c1c1c), 8px corner radius, strict 8px/16px/24px padding rule',
+      layout: 'Every margin, gap, and button height is an exact multiple of 8px (40px, 48px, 56px)',
+      signature: 'Mathematical 8px alignment, rectangular card modules, and primary color accents'
+    }
   },
   {
     id: 'france_style',
@@ -173,8 +233,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Paris',
     vibe: 'Parisian luxury editorial aesthetic. High-fashion elegance, sophisticated serif headlines, champagne gold hairline borders, and museum-like whitespace.',
     principles: 'Use high-contrast serif typography for headings, delicate 1px champagne borders, generous luxury whitespace, and minimal subtle badges.',
-    palette: ['#141312', '#d4af37', '#f5f5f0', '#78716c', '#ffffff'],
-    typography: 'High-contrast Serif headlines paired with clean sans body'
+    palette: ['#141312', '#1f1d1b', '#d4af37', '#f5f5f0', '#78716c', '#ffffff'],
+    typography: 'High-contrast Serif headlines (Playfair / Bodoni) paired with clean sans body',
+    figmaGuide: {
+      buttons: 'Champagne Gold (#d4af37) or Luxe Ivory (#f5f5f0), 6px subtle radius, refined tracked text',
+      cards: 'Velvet dark cards (#1f1d1b), 8px corners, delicate 1px champagne gold border (rgba(212, 175, 55, 0.25))',
+      layout: 'Asymmetric magazine editorial layout, generous negative space, and refined thin dividers',
+      signature: 'Sophisticated Serif headlines, champagne gold hairline accents, and high-fashion editorial spacing'
+    }
   },
   {
     id: 'scandinavia_style',
@@ -183,8 +249,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Stockholm & Copenhagen',
     vibe: 'Cozy, functional Nordic simplicity. Soft muted sage green, warm birchwood tones, spacious ergonomics, and honest utility for everyone.',
     principles: 'Use soft natural background tones, large comfortable tap targets, calm distraction-free layouts, and gentle rounded corners.',
-    palette: ['#16191d', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
-    typography: 'Warm, approachable humanist sans'
+    palette: ['#14181d', '#1d232a', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
+    typography: 'Warm, approachable humanist sans',
+    figmaGuide: {
+      buttons: 'Muted Sage Green (#10b981) or Soft Birch, 12px rounded corners, calm and welcoming',
+      cards: 'Nordic slate cards (#1d232a), 16px corner radius, soft natural border',
+      layout: 'Ergonomic single-column mobile view, generous card padding, and friendly human iconography',
+      signature: 'Calming sage green accents, spacious soft-cornered cards, and distraction-free usability'
+    }
   },
 
   // --- Americas & Global Web Styles ---
@@ -195,8 +267,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Rio & São Paulo',
     vibe: 'Lively organic modernism inspired by tropical nature and Niemeyer curves. Botanical greens, warm sunburst yellow, and sweeping fluid card curves.',
     principles: 'Use organic wave-like curves on cards or headers, vibrant botanical green and mango yellow accents, and energetic fluid layouts.',
-    palette: ['#0a1811', '#059669', '#ea580c', '#facc15', '#ffffff'],
-    typography: 'Expressive, curved modern display sans'
+    palette: ['#0a1811', '#11291d', '#059669', '#ea580c', '#facc15', '#ffffff'],
+    typography: 'Expressive, curved modern display sans',
+    figmaGuide: {
+      buttons: 'Sunburst Mango (#ea580c) or Lush Emerald (#059669), 16px to 20px organic curves',
+      cards: 'Deep tropical forest cards (#11291d), 20px rounded corners with flowing curved header shapes',
+      layout: 'Fluid asymmetric cards, wave-like sectional divides, and energetic typography',
+      signature: 'Sweeping curved container edges, tropical botanical green & mango yellow palette'
+    }
   },
   {
     id: 'silicon_valley_style',
@@ -205,8 +283,14 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'San Francisco',
     vibe: 'Modern tech bento-grid. Dark obsidian glass cards with subtle inner glow borders, colorful status pills, and dense glanceable metric blocks.',
     principles: 'Arrange content in an asymmetrical bento-grid (small & large interlocking cards), add subtle 1px border glows, and use purple/cyan status pills.',
-    palette: ['#090d16', '#6366f1', '#06b6d4', '#8b5cf6', '#ffffff'],
-    typography: 'Contemporary tech sans with tight tracking'
+    palette: ['#090d16', '#111728', '#6366f1', '#06b6d4', '#8b5cf6', '#ffffff'],
+    typography: 'Contemporary tech sans with tight tracking',
+    figmaGuide: {
+      buttons: 'Electric Indigo (#6366f1) with soft glow drop shadow, 10px rounded corners',
+      cards: 'Bento glass cards (#111728), 16px corner radius, subtle 1px border glow (rgba(99, 102, 241, 0.25))',
+      layout: 'Asymmetric bento-grid (interlocking 1x1, 2x1, and 2x2 modules) packed with glanceable metrics',
+      signature: 'Bento-grid card layout, subtle inner border glows, and electric indigo/cyan pills'
+    }
   },
   {
     id: 'indie_web_style',
@@ -215,14 +299,88 @@ const GLOBAL_UI_STYLES = [
     subRegion: 'Indie Creator Web',
     vibe: 'Playful high-contrast retro web style. Bold solid 2.5px black outlines, hard 4px drop shadows with zero blur, and saturated yellow & pink blocks.',
     principles: 'Give every card and button a solid 2.5px black border, a hard 4px drop shadow with 0 blur, and use high-contrast vibrant pop colors.',
-    palette: ['#18181b', '#facc15', '#ec4899', '#06b6d4', '#ffffff'],
-    typography: 'Heavy bold grotesque or monospaced font'
+    palette: ['#18181b', '#27272a', '#facc15', '#ec4899', '#06b6d4', '#ffffff'],
+    typography: 'Heavy bold grotesque or monospaced font',
+    figmaGuide: {
+      buttons: 'Saturated Canary Yellow (#facc15) or Hot Pink (#ec4899), solid 2.5px black border, hard 4px unblurred shadow (4px 4px 0 #000)',
+      cards: 'Pop-color cards with solid 2.5px black borders, 6px to 8px corners, and hard 4px unblurred offset shadows',
+      layout: 'Playful offset grids, tactile button press animations, and bold retro aesthetics',
+      signature: 'Solid 2.5px black borders on EVERYTHING, with hard 4px unblurred drop shadows'
+    }
   }
 ];
 window.GLOBAL_UI_STYLES = GLOBAL_UI_STYLES;
 
+// Comprehensive legacy migration map: converts any old ID or old style name directly to the new country style
+const OLD_TO_NEW_STYLE_MAP = {
+  // Legacy IDs
+  'afro_futurism': 'ghana_style',
+  'kente_modular': 'ghana_style',
+  'naija_fintech': 'nigeria_style',
+  'swahili_glass': 'kenya_style',
+  'joburg_industrial': 'south_africa_style',
+  'sahel_terracotta': 'morocco_style',
+  'japan_zen': 'japan_style',
+  'tokyo_hud': 'japan_style',
+  'korean_pastel': 'korea_style',
+  'swiss_typo': 'switzerland_style',
+  'scandi_functional': 'scandinavia_style',
+  'french_editorial': 'france_style',
+  'brazil_modern': 'brazil_style',
+  'bento_grid': 'silicon_valley_style',
+  'neo_brutalism': 'indie_web_style',
+  
+  // Legacy Style Names
+  'Afro-Modernist Tech': 'ghana_style',
+  'Geometric Modular Bento': 'ghana_style',
+  'Lagos FinTech Neo-Bank': 'nigeria_style',
+  'Swahili Glassmorphism': 'kenya_style',
+  'Joburg Industrial Modern': 'south_africa_style',
+  'Sahelian Earth-Tone Minimal': 'morocco_style',
+  'Japanese Minimalist Zen': 'japan_style',
+  'Japanese Wabi-Sabi & Digital Zen': 'japan_style',
+  'Japanese Wabi-Sabi': 'japan_style',
+  'Cyberpunk HUD Interface': 'japan_style',
+  'Korean Soft Neo-Card': 'korea_style',
+  'Swiss International Style': 'switzerland_style',
+  'Scandinavian Functionalism': 'scandinavia_style',
+  'Editorial Serif & Luxury Minimal': 'france_style',
+  'Brazilian Organic Modernism': 'brazil_style',
+  'Modern Bento Grid': 'silicon_valley_style',
+  'Modern Bento Grid System': 'silicon_valley_style',
+  'High-Contrast Neo-Brutalism': 'indie_web_style',
+  'Neo-Brutalist High-Contrast': 'indie_web_style',
+  'São Paulo Bold Gradient': 'brazil_style',
+  'Tokyo Cyber HUD Dark': 'japan_style',
+  'Minimal Clean Glass': 'kenya_style',
+  'Neo-Brutalism Raw': 'indie_web_style',
+  'Cyberpunk Neon Dark': 'japan_style',
+  'Bento Grid Dashboard': 'silicon_valley_style',
+  'Fintech Ultra-Clean': 'nigeria_style',
+  'E-Commerce Luxury Serif': 'france_style',
+  'Pastel Playful Soft': 'korea_style',
+  'Swiss Typographic Grid': 'switzerland_style',
+  'Material Design 3 Neo': 'germany_style',
+  'Dark Mode HUD Terminal': 'japan_style',
+  'Nordic Editorial': 'scandinavia_style',
+  'Apple Spatial': 'silicon_valley_style',
+  'Neo-Arcade': 'indie_web_style',
+  'Linear Studio': 'silicon_valley_style'
+};
+window.OLD_TO_NEW_STYLE_MAP = OLD_TO_NEW_STYLE_MAP;
+
 function getUIStyleById(styleId) {
-  return GLOBAL_UI_STYLES.find(s => s.id === styleId) || GLOBAL_UI_STYLES[0];
+  if (!styleId) return GLOBAL_UI_STYLES[0];
+  const query = (typeof styleId === 'object' && styleId !== null)
+    ? (styleId.id || styleId.name || '')
+    : String(styleId);
+  const mappedId = OLD_TO_NEW_STYLE_MAP[query] || query;
+  return GLOBAL_UI_STYLES.find(s => 
+    s.id === mappedId || 
+    s.id === query || 
+    s.name.toLowerCase() === query.toLowerCase() || 
+    s.name.toLowerCase() === String(mappedId).toLowerCase()
+  ) || GLOBAL_UI_STYLES[0];
 }
 window.getUIStyleById = getUIStyleById;
 
@@ -297,7 +455,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Interactive Seat Map & Transparent Price Breakdown',
     about: 'A mobile reservation flow that lets travelers pick flights, compare cabin classes, and choose their exact airplane seats on an interactive map.',
     problem: 'Travelers struggle with hidden add-on fees during checkout and find cabin seat maps cramped and hard to navigate on small mobile screens.',
-    style: getUIStyleById('swiss_typo'),
+    style: getUIStyleById('switzerland_style'),
     color: PALETTE[0],
     active: true
   },
@@ -311,7 +469,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Receipt Scanning & One-Tap Balance Settle',
     about: 'An app for housemates to log utility bills, scan shared grocery receipts, split costs unequally when needed, and settle balances instantly.',
     problem: 'Social awkwardness and calculation errors when splitting household bills, leading to delayed payments and unresolved debts between friends.',
-    style: getUIStyleById('naija_fintech'),
+    style: getUIStyleById('nigeria_style'),
     color: PALETTE[1],
     active: true
   },
@@ -325,7 +483,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Dietary Filter Toggles & One-Tap Reorders',
     about: 'An online supermarket delivery service where users select weekly dinner recipes and automatically add the exact fresh ingredients to their cart.',
     problem: 'High cart abandonment caused by complicated ingredient quantity conversions and frustrating out-of-stock item replacements.',
-    style: getUIStyleById('scandi_functional'),
+    style: getUIStyleById('scandinavia_style'),
     color: PALETTE[2],
     active: true
   },
@@ -339,7 +497,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Calming Dark UI & Tactile Breathing Gauge',
     about: 'A bedtime relaxation companion featuring ambient nature soundscapes, guided breathing exercises, and an automatic gentle sleep shutoff timer.',
     problem: 'Harsh screen brightness and confusing menus wake users up right before sleeping when they just want to tap once and put their phone away.',
-    style: getUIStyleById('japan_zen'),
+    style: getUIStyleById('japan_style'),
     color: PALETTE[3],
     active: true
   },
@@ -353,7 +511,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Live Power Flow Animation & Battery Level Gauge',
     about: 'A home dashboard displaying real-time rooftop solar generation, home battery reserve, and notifications for the cheapest hours to run laundry.',
     problem: 'Homeowners find kilowatt-hour charts confusing and need clear, plain-language recommendations on how to cut electricity bills today.',
-    style: getUIStyleById('afro_futurism'),
+    style: getUIStyleById('ghana_style'),
     color: PALETTE[4],
     active: true
   },
@@ -367,7 +525,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Verified Provider Cards & Digital Medical Intake',
     about: 'A patient portal to find nearby doctors, book open appointment slots, and fill out intake forms on mobile before stepping into the clinic.',
     problem: 'Patients arrive stressed and waste 20 minutes filling out repetitive clipboards in waiting rooms with zero visibility into doctor delay times.',
-    style: getUIStyleById('swahili_glass'),
+    style: getUIStyleById('kenya_style'),
     color: PALETTE[5],
     active: true
   },
@@ -381,7 +539,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Clean Invoice Builder & Payment Link Generator',
     about: 'A streamlined tool for independent contractors to generate professional invoices, set automated polite payment reminders, and receive bank deposits.',
     problem: 'Freelancers feel uncomfortable chasing late client payments, and clients delay paying due to complicated PDF forms and tedious bank wire steps.',
-    style: getUIStyleById('sahel_terracotta'),
+    style: getUIStyleById('morocco_style'),
     color: PALETTE[6],
     active: true
   },
@@ -395,7 +553,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Single-Tap Rep Entry & Barbell Weight Calculator',
     about: 'A high-speed fitness companion to log lifting sets, track rest countdowns, and calculate barbell plate combinations in a crowded gym.',
     problem: 'Typing on a phone while sweaty and out of breath is clumsy; lifters need massive touch targets and haptic rest-timer buzzers.',
-    style: getUIStyleById('kente_modular'),
+    style: getUIStyleById('south_africa_style'),
     color: PALETTE[7],
     active: true
   },
@@ -409,7 +567,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Live GPS Arrival Counter & NFC Tap-to-Board',
     about: 'A city transit app showing real-time GPS bus arrival countdowns, platform walking directions, and a quick-swipe digital boarding pass.',
     problem: 'Riders running to catch their bus cannot tell whether the bus is 2 minutes away or already gone, causing missed rides and transit anxiety.',
-    style: getUIStyleById('bento_grid'),
+    style: getUIStyleById('silicon_valley_style'),
     color: PALETTE[8],
     active: true
   },
@@ -423,7 +581,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Verified Landlord Badges & Digital Lease Signing',
     about: 'A rental property discovery app with verified landlord virtual tours, neighborhood safety scores, and digital lease signing.',
     problem: 'Renters waste time on misleading listings, hidden maintenance fees, and opaque application timelines from property managers.',
-    style: getUIStyleById('korean_pastel'),
+    style: getUIStyleById('korea_style'),
     color: PALETTE[9],
     active: true
   }
@@ -443,7 +601,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Harvest Availability & Pickup Time Slots',
     about: 'A community app connecting local urban dwellers directly with small regional farms to order seasonal vegetable crates.',
     problem: 'Shoppers cannot see what produce is actually in season each week, and farmers struggle with erratic weekly preorder quantities.',
-    styleId: 'sahel_terracotta'
+    styleId: 'morocco_style'
   },
   {
     text: 'Coffee shop mobile pickup order',
@@ -453,7 +611,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Milk & Sweetener Modifiers with Preparation Bar',
     about: 'A neighborhood coffee order app allowing commuters to customize drinks, prepay, and grab their cup from a contactless pickup shelf.',
     problem: 'Morning counter lines cause people to run late for work, and complex drink customizations frequently get miscommunicated.',
-    styleId: 'naija_fintech'
+    styleId: 'nigeria_style'
   },
   {
     text: 'Neighborhood lost pet alert & map',
@@ -463,7 +621,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Radius Push Notification & Sighting Pins',
     about: 'A hyperlocal alert system where owners post lost pet notices with photos and neighbors drop GPS pins of sightings in real time.',
     problem: 'Panicked pet owners post across fragmented social media groups where critical local sightings get buried under irrelevant comments.',
-    styleId: 'afro_futurism'
+    styleId: 'ghana_style'
   },
   {
     text: 'Second-hand clothing buy & sell',
@@ -473,7 +631,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Garment Condition Ratings & Buyer Protection Badge',
     about: 'A sustainable fashion marketplace for thrifting, trading, and selling pre-owned vintage clothes with prepaid shipping labels.',
     problem: 'Buyers worry about unwashed clothes or counterfeit tags, while sellers find measuring garment dimensions tedious.',
-    styleId: 'kente_modular'
+    styleId: 'ghana_style'
   },
   {
     text: 'Personal monthly budget & debt payoff',
@@ -483,7 +641,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Envelope Spending Bars & Snowball Debt Tracker',
     about: 'A simple personal finance app that categorizes daily spending, flags recurring subscriptions, and visualizes loan repayment progress.',
     problem: 'Users get overwhelmed by complex banking charts and abandon budgeting apps that make them feel guilty about small daily purchases.',
-    styleId: 'naija_fintech'
+    styleId: 'nigeria_style'
   },
   {
     text: 'Language exchange practice with locals',
@@ -493,7 +651,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Voice Note Corrections & Icebreaker Prompts',
     about: 'An app matching language learners around the world for 15-minute split conversations (half in your native language, half in theirs).',
     problem: 'Learners feel intimidated speaking with strangers and conversations stall quickly without structured conversational prompts.',
-    styleId: 'swahili_glass'
+    styleId: 'kenya_style'
   },
   {
     text: 'Public library book reserve & loan reminder',
@@ -503,7 +661,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Barcode Card Wallet & 1-Tap Hold Renewal',
     about: 'A digital library card to browse city catalog books, place holds on popular novels, and receive alerts before overdue fines kick in.',
     problem: 'Patrons forget return deadlines, lose track of reserve hold positions, and misplace physical plastic membership cards.',
-    styleId: 'swiss_typo'
+    styleId: 'switzerland_style'
   },
   {
     text: 'Emergency blood donor & hospital finder',
@@ -513,7 +671,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Urgent Blood Type Match & Hospital Route Navigation',
     about: 'A critical health app alerting nearby verified donors when local hospitals experience urgent shortages of specific blood types.',
     problem: 'Families spend frantic hours calling acquaintances during medical emergencies because hospitals lack instant donor broadcast channels.',
-    styleId: 'afro_futurism'
+    styleId: 'ghana_style'
   },
   {
     text: 'Home plant watering & disease diagnosis',
@@ -523,7 +681,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Camera Leaf Scanner & Sunlight Meter',
     about: 'A houseplant care assistant that identifies yellowing leaves via smartphone camera and schedules moisture-aware watering reminders.',
     problem: 'Beginner plant owners either overwater or underwater their indoor plants because care tags are generic and ignore season/climate.',
-    styleId: 'scandi_functional'
+    styleId: 'scandinavia_style'
   },
   {
     text: 'Electric vehicle charging station finder',
@@ -533,7 +691,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Plug Compatibility Filter & Live Stall Availability',
     about: 'A map for EV drivers showing functional charging plugs, real-time stall occupancy, charging speeds, and nearby cafe amenities.',
     problem: 'Drivers arrive with low battery only to find broken charging stations, long queues, or incompatible connector plugs.',
-    styleId: 'joburg_industrial'
+    styleId: 'south_africa_style'
   },
   {
     text: 'Campus carpool & student ride share',
@@ -543,7 +701,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Verified Student ID & Gas Cost Contribution Split',
     about: 'A safe ridesharing network for university students commuting between student housing, suburban campuses, and weekend hometowns.',
     problem: 'Public transit between campuses is slow, while private taxis are unaffordable for students on tight college budgets.',
-    styleId: 'kente_modular'
+    styleId: 'ghana_style'
   },
   {
     text: 'Pet vet appointment & vaccination log',
@@ -553,7 +711,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Vaccine Certificate Vault & Flea Medication Reminder',
     about: 'A pet healthcare passport storing official rabies certificates, vet visit history, and push notifications for monthly medication.',
     problem: 'Pet owners lose paper vaccination cards needed for boarding kennels, and forget crucial annual booster appointments.',
-    styleId: 'korean_pastel'
+    styleId: 'korea_style'
   },
   {
     text: 'Restaurant table & meal preorder',
@@ -563,7 +721,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Party Size Availability & Kitchen Dietary Notes',
     about: 'A dining app allowing dinner guests to reserve tables and preorder appetizers so food arrives shortly after sitting down.',
     problem: 'Busy lunch diners with 45-minute work breaks waste 30 minutes waiting for food to be cooked and another 10 waiting for the bill.',
-    styleId: 'french_editorial'
+    styleId: 'france_style'
   },
   {
     text: 'Household recycling guide & pickup alert',
@@ -573,7 +731,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Packaging Barcode Scanner & Bin Color Schedule',
     about: 'A city app where residents scan consumer packaging barcodes to find out whether an item goes in the paper, plastic, or compost bin.',
     problem: 'Confusing recycling symbols cause widespread contamination in municipal waste bins, resulting in entire truckloads going to landfills.',
-    styleId: 'scandi_functional'
+    styleId: 'scandinavia_style'
   },
   {
     text: 'Local artisan craft & pottery market',
@@ -583,7 +741,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Maker Story Video Cards & Custom Commission Form',
     about: 'A digital marketplace showcasing handmade ceramics, woven textiles, and woodworking from verified independent local makers.',
     problem: 'Independent creators struggle to stand out on massive commercial e-commerce websites filled with mass-produced dropshipped items.',
-    styleId: 'sahel_terracotta'
+    styleId: 'morocco_style'
   },
   {
     text: 'Podcast player with chapter bookmarks',
@@ -593,7 +751,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Clickable Transcript Search & Smart Silence Skip',
     about: 'An audio app designed for educational podcasts with interactive transcripts, searchable keywords, and saved 30-second audio clips.',
     problem: 'Listeners hear a memorable insight on a 2-hour podcast while walking or driving, but have no easy way to save or reference that exact moment later.',
-    styleId: 'bento_grid'
+    styleId: 'silicon_valley_style'
   },
   {
     text: 'Daily water intake & hydration reminder',
@@ -603,7 +761,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Quick-Add Container Buttons & Daily Hydration Ring',
     about: 'A fast hydration companion with one-tap buttons for standard glasses, water bottles, and teas with smart daylight reminders.',
     problem: 'People forget to drink water during intense desk work, and existing health apps require too many taps to log a simple cup of water.',
-    styleId: 'swahili_glass'
+    styleId: 'kenya_style'
   },
   {
     text: 'High school tutor booking & homework help',
@@ -613,7 +771,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Subject Match Badges & Virtual Whiteboard Session',
     about: 'A platform connecting high school students with qualified university tutors for 30-minute targeted math and science review sessions.',
     problem: 'Parents find private tutoring agencies exorbitantly expensive, while students need quick help on specific homework problems tonight.',
-    styleId: 'naija_fintech'
+    styleId: 'nigeria_style'
   },
   {
     text: 'Music concert ticket swap & fair resale',
@@ -623,7 +781,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Face-Value Price Cap & Dynamic Anti-Scalp QR Code',
     about: 'A fair-price ticket exchange for live music and theater, allowing fans to safely resell tickets they can no longer use at original face value.',
     problem: 'Secondary ticket sites allow bots and scalpers to charge 400% markups, leaving real fans unable to attend shows.',
-    styleId: 'neo_brutalism'
+    styleId: 'indie_web_style'
   },
   {
     text: 'Package locker pickup',
@@ -633,7 +791,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Bluetooth Proximity Door Unlock & Delivery Code',
     about: 'A contactless delivery app that guides package recipients to local neighborhood locker hubs and pops open the locker door with one button.',
     problem: 'Porch package theft is widespread, while traditional post office pickup desks have long queues and limited working hours.',
-    styleId: 'joburg_industrial'
+    styleId: 'south_africa_style'
   },
   {
     text: 'Pharmacy prescription refill & reminder',
@@ -643,7 +801,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Bottle Barcode Scanner & Delivery Status Tracker',
     about: 'An accessible pharmacy tool to scan prescription pill bottles, request automatic refills from doctors, and schedule home delivery.',
     problem: 'Elderly patients and busy caregivers lose track of pill counts and face stressful gaps in daily essential medications.',
-    styleId: 'swiss_typo'
+    styleId: 'switzerland_style'
   },
   {
     text: 'Plumber & electrician home repair booking',
@@ -653,7 +811,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Photo Damage Uploader & Upfront Fixed-Price Quotes',
     about: 'An on-demand home maintenance app matching homeowners with licensed plumbers and electricians with transparent upfront hourly rates.',
     problem: 'Homeowners face unexpected gouged repair bills and have no reliable way to verify trade licenses or insurance coverage.',
-    styleId: 'brazil_modern'
+    styleId: 'brazil_style'
   },
   {
     text: 'Car oil change & maintenance schedule',
@@ -663,7 +821,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Mileage Due Counter & Trusted Mechanic Booking',
     about: 'A vehicle maintenance tracker logging tire rotations, oil change intervals, and brake pad inspections based on actual mileage.',
     problem: 'Drivers ignore dashboard maintenance lights because they suspect repair garages will invent unnecessary replacement items.',
-    styleId: 'joburg_industrial'
+    styleId: 'south_africa_style'
   },
   {
     text: 'Baby feeding & sleep schedule log',
@@ -673,7 +831,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'One-Handed Night Mode Log & Partner Cloud Sync',
     about: 'A sleep-deprived parent companion to log nursing times, bottle ounces, diaper changes, and sleep windows with one hand in the dark.',
     problem: 'New parents are exhausted at 3 AM and struggle to remember when the infant was last fed or which side they nursed on.',
-    styleId: 'korean_pastel'
+    styleId: 'korea_style'
   },
   {
     text: 'Local hiking trail map & offline GPS',
@@ -683,7 +841,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Elevation Contour Chart & Offline Waypoint Compass',
     about: 'An outdoor GPS guide detailing trail difficulty, water fountain locations, shade coverage, and downloadable offline topographical maps.',
     problem: 'Hikers lose cellular reception in forest canyons and risk taking dangerous wrong turns when signs are missing or overgrown.',
-    styleId: 'scandi_functional'
+    styleId: 'scandinavia_style'
   },
   {
     text: 'Blood pressure & daily health vitals log',
@@ -693,7 +851,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Large Numbers Display & Doctor PDF Summary Export',
     about: 'A clean health journal for hypertensive patients to record daily morning/evening blood pressure readings and export clean charts for doctors.',
     problem: 'Seniors struggle with cluttered health apps with small fonts, making it hard to show accurate trends during brief clinic checkups.',
-    styleId: 'swahili_glass'
+    styleId: 'kenya_style'
   },
   {
     text: 'Neighborhood tool sharing & borrowing club',
@@ -703,7 +861,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Lawnmower / Drill Availability & Deposit Protection',
     about: 'A suburban community app where neighbors borrow drills, ladders, lawnmowers, and pressure washers instead of buying single-use tools.',
     problem: 'Homeowners spend hundreds on tools they only use once a year, while garages stay cluttered and neighbors remain disconnected.',
-    styleId: 'kente_modular'
+    styleId: 'ghana_style'
   },
   {
     text: 'Job interview prep & salary comparison',
@@ -713,7 +871,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Role Salary Range Benchmarks & Mock Question Timer',
     about: 'A career platform providing verified transparent compensation benchmarks by city and practice timers for common behavioral questions.',
     problem: 'Job applicants go into salary negotiations blind and undervalue their worth due to intentionally opaque corporate salary disclosures.',
-    styleId: 'swiss_typo'
+    styleId: 'switzerland_style'
   },
   {
     text: 'Hostel bed booking & traveler group chat',
@@ -723,7 +881,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Bunk Bed Privacy Rating & Walking Tour Group Chat',
     about: 'A backpacker app combining verified hostel dormitory reviews with an active group chat for solo travelers looking to explore the city together.',
     problem: 'Solo travelers want to meet fellow explorers safely without relying on noisy hotel bars or unstructured public social channels.',
-    styleId: 'brazil_modern'
+    styleId: 'brazil_style'
   },
   {
     text: 'Food allergy restaurant menu scanner',
@@ -733,7 +891,7 @@ const PRACTICE_TOPIC_POOL = [
     uxFocus: 'Gluten / Peanut Warning Badge & Safe Dish Filter',
     about: 'A dining safety tool that translates restaurant menus and cross-checks ingredient disclosures against user food allergies (nuts, gluten, dairy).',
     problem: 'People with severe food allergies experience constant anxiety when eating out because menu descriptions omit hidden allergen cross-contaminations.',
-    styleId: 'tokyo_hud'
+    styleId: 'japan_style'
   }
 ];
 
@@ -752,7 +910,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Milk & Sweetener Modifiers with Preparation Bar',
         about: 'A neighborhood coffee order app allowing commuters to customize drinks, prepay, and grab their cup from a contactless pickup shelf.',
         problem: 'Morning counter lines cause people to run late for work, and complex drink customizations frequently get miscommunicated.',
-        styleId: 'naija_fintech'
+        styleId: 'nigeria_style'
       },
       {
         title: 'Pour-over coffee recipe timer',
@@ -760,7 +918,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Water Pour Weight & Bloom Countdown',
         about: 'A brewing guide tracking water ratio, grind size, and blooming duration for specialty coffee roasters.',
         problem: 'Home baristas ruin expensive beans by guessing pour intervals instead of maintaining consistent water flow.',
-        styleId: 'japan_zen'
+        styleId: 'japan_style'
       },
       {
         title: 'Coffee bean monthly subscription',
@@ -768,7 +926,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Roast Preference Quiz & Delivery Frequency',
         about: 'A subscription box selecting single-origin coffee beans from small roasters matched to personal flavor preferences.',
         problem: 'Shoppers find specialty coffee tasting notes pretentious and cannot predict whether they will enjoy a roast.',
-        styleId: 'french_editorial'
+        styleId: 'france_style'
       },
       {
         title: 'Barista register touch terminal',
@@ -776,7 +934,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Big Touch Buttons & Fast Split Payments',
         about: 'A fast point-of-sale system for busy cafe baristas to punch orders, handle modifiers, and split tabs in seconds.',
         problem: 'Cluttered cash register screens slow down transactions during the 8 AM commuter rush.',
-        styleId: 'scandi_functional'
+        styleId: 'scandinavia_style'
       }
     ]
   },
@@ -790,7 +948,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Receipt Scanning & One-Tap Settle',
         about: 'An app for flatmates to log rent, scan shared supermarket receipts, and settle IOUs with one tap.',
         problem: 'Awkward social tension and calculation errors when friends split unequal shares of household bills.',
-        styleId: 'naija_fintech'
+        styleId: 'nigeria_style'
       },
       {
         title: 'Personal monthly budget & expense tracker',
@@ -798,7 +956,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Spending Category Caps & Bill Due Notifications',
         about: 'A simple budget manager showing daily safe-to-spend limits and automatic alerts for upcoming utility bills.',
         problem: 'Users abandon complex spreadsheets and financial apps that make them feel overwhelmed by obscure metrics.',
-        styleId: 'swiss_typo'
+        styleId: 'switzerland_style'
       },
       {
         title: 'Freelancer invoice & payment link generator',
@@ -806,7 +964,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: '1-Click Invoice Creation & Automatic Reminders',
         about: 'A clean billing tool for independent designers and contractors to send invoices and receive instant debit/credit payments.',
         problem: 'Freelancers waste hours drafting invoices and feel uncomfortable chasing late client payments.',
-        styleId: 'sahel_terracotta'
+        styleId: 'morocco_style'
       },
       {
         title: 'Family savings goal & allowance jar',
@@ -814,7 +972,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Visual Progress Piggybank & Match Contributions',
         about: 'A shared savings tracker helping families set targets for holidays, emergency funds, and kids chores.',
         problem: 'Family members lose motivation without a shared visual tracker celebrating incremental savings milestones.',
-        styleId: 'kente_modular'
+        styleId: 'ghana_style'
       }
     ]
   },
@@ -828,7 +986,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Single-Tap Rep Entry & Barbell Weight Calculator',
         about: 'A high-speed fitness companion to log lifting sets, track rest countdowns, and calculate barbell plate combinations in a crowded gym.',
         problem: 'Typing on a phone while sweaty and out of breath is clumsy; lifters need massive touch targets and haptic rest-timer buzzers.',
-        styleId: 'kente_modular'
+        styleId: 'south_africa_style'
       },
       {
         title: 'Boutique gym class & spot reservation',
@@ -836,7 +994,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Studio Spot Map & Waitlist Push Notification',
         about: 'A reservation system to book cycling bikes, yoga mats, and personal training slots at boutique fitness studios.',
         problem: 'Popular fitness classes fill up in seconds, and users cannot see which instructor or studio spot they are getting.',
-        styleId: 'bento_grid'
+        styleId: 'silicon_valley_style'
       },
       {
         title: 'Outdoor running pace & mile split tracker',
@@ -844,7 +1002,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'High-Contrast Sunlight Display & Audio Pace Alerts',
         about: 'A distraction-free GPS run tracker providing audio mile updates and elevation gains without needing to unlock the phone.',
         problem: 'Runners struggle to read phone screens in bright direct sunlight while maintaining running cadence.',
-        styleId: 'joburg_industrial'
+        styleId: 'south_africa_style'
       }
     ]
   },
@@ -858,7 +1016,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Interactive Seat Map & Transparent Price Breakdown',
         about: 'A mobile flight reservation flow with interactive aircraft cabin seat selection and baggage add-ons.',
         problem: 'Travelers struggle to compare legroom, seat amenities, and hidden fees on small mobile screens before checkout.',
-        styleId: 'swiss_typo'
+        styleId: 'switzerland_style'
       },
       {
         title: 'Hostel bed booking & traveler group chat',
@@ -866,7 +1024,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Bunk Bed Privacy Rating & Walking Tour Group Chat',
         about: 'A backpacker app combining verified hostel dormitory reviews with an active group chat for solo travelers looking to explore the city together.',
         problem: 'Solo travelers want to meet fellow explorers safely without relying on noisy hotel bars or unstructured public social channels.',
-        styleId: 'brazil_modern'
+        styleId: 'brazil_style'
       },
       {
         title: 'City walking guide & offline map',
@@ -874,7 +1032,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Curated Audio Landmarks & Zero-Data Mode',
         about: 'A self-guided walking tour app that triggers interesting neighborhood history stories as travelers approach historic street corners.',
         problem: 'International travelers without roaming data get lost and miss authentic local architecture hidden behind tourist traps.',
-        styleId: 'swahili_glass'
+        styleId: 'kenya_style'
       }
     ]
   },
@@ -888,7 +1046,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Verified Provider Cards & Digital Medical Intake',
         about: 'A patient portal to find nearby doctors, book open appointment slots, and fill out intake forms on mobile before stepping into the clinic.',
         problem: 'Patients arrive stressed and waste 20 minutes filling out repetitive clipboards in waiting rooms with zero visibility into doctor delay times.',
-        styleId: 'swahili_glass'
+        styleId: 'kenya_style'
       },
       {
         title: 'Pharmacy prescription refill & reminder',
@@ -896,7 +1054,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Bottle Barcode Scanner & Delivery Status Tracker',
         about: 'An accessible pharmacy tool to scan prescription pill bottles, request automatic refills from doctors, and schedule home delivery.',
         problem: 'Elderly patients and busy caregivers lose track of pill counts and face stressful gaps in daily essential medications.',
-        styleId: 'swiss_typo'
+        styleId: 'switzerland_style'
       },
       {
         title: 'Meditation & bedtime sleep timer',
@@ -904,7 +1062,7 @@ const DOMAIN_PATTERNS = [
         uxFocus: 'Calming Dark UI & Tactile Breathing Gauge',
         about: 'A bedtime relaxation companion featuring ambient nature soundscapes, guided breathing exercises, and an automatic gentle sleep shutoff timer.',
         problem: 'Harsh screen brightness and confusing menus wake users up right before sleeping when they just want to tap once and put their phone away.',
-        styleId: 'japan_zen'
+        styleId: 'japan_style'
       }
     ]
   }
@@ -923,7 +1081,7 @@ function generateUniversalVariants(topicInput) {
       uxFocus: 'Smooth Onboarding & One-Thumb Reachability',
       about: `A dedicated mobile app designed for everyday users to manage their ${clean.toLowerCase()} tasks with zero friction.`,
       problem: `Users feel frustrated by bloated multi-step apps when they want to accomplish ${clean.toLowerCase()} goals quickly on their phone.`,
-      styleId: 'naija_fintech'
+      styleId: 'nigeria_style'
     },
     {
       title: `${titleCase} search & map finder`,
@@ -932,7 +1090,7 @@ function generateUniversalVariants(topicInput) {
       uxFocus: 'Interactive Map Pins & Real-Time Availability Chips',
       about: `A location discovery map helping users locate nearby verified ${clean.toLowerCase()} spots with open hours and pricing.`,
       problem: `Finding trustworthy local options for ${clean.toLowerCase()} requires checking multiple outdated review sites with inaccurate hours.`,
-      styleId: 'afro_futurism'
+      styleId: 'ghana_style'
     },
     {
       title: `${titleCase} booking & checkout`,
@@ -941,7 +1099,7 @@ function generateUniversalVariants(topicInput) {
       uxFocus: 'Transparent Pricing Breakdown & 1-Tap Pay',
       about: `A streamlined reservation and checkout flow for ${clean.toLowerCase()} with clear cancellation terms.`,
       problem: `Customers abandon checkout when surprise convenience fees and rigid time slots appear on the final confirmation step.`,
-      styleId: 'kente_modular'
+      styleId: 'ghana_style'
     },
     {
       title: `${titleCase} tracking dashboard`,
@@ -950,7 +1108,7 @@ function generateUniversalVariants(topicInput) {
       uxFocus: 'Clean Metric Cards & Weekly Progress Overview',
       about: `A desktop dashboard providing insights and weekly consistency stats for ${clean.toLowerCase()} activity.`,
       problem: `Users find raw data intimidating; they need visual comparisons that highlight achievements and next steps.`,
-      styleId: 'scandi_functional'
+      styleId: 'scandinavia_style'
     },
     {
       title: `${titleCase} community exchange`,
@@ -959,7 +1117,7 @@ function generateUniversalVariants(topicInput) {
       uxFocus: 'Verified Member Profiles & Direct Chat Messaging',
       about: `A community platform where people share advice, trade gear, and organize meetups around ${clean.toLowerCase()}.`,
       problem: `Niche enthusiasts struggle to find welcoming, spam-free spaces to connect with local peers who share their interest.`,
-      styleId: 'sahel_terracotta'
+      styleId: 'morocco_style'
     }
   ];
 }
@@ -995,21 +1153,33 @@ class TopicEngine {
       ))
     );
 
+    let needsPersist = false;
+
     // If no saved topics or old jargon exists, upgrade directly to natural topics
     if (saved && Array.isArray(saved) && saved.length > 0 && !hasOldJargon) {
       this.topics = saved.map(t => {
         if (t.text === 'Self-service parcel locker pickup') {
           t.text = 'Package locker pickup';
           t.shortLabel = 'Locker Pickup';
+          needsPersist = true;
         }
         const vis = resolveTopicVisuals(t);
         t.iconKey = t.iconKey || vis.iconKey;
         t.shortLabel = t.shortLabel || vis.shortLabel;
-        if (!t.style) {
-          t.style = getRandomUIStyle();
+
+        // Force normalize style to current country style
+        const currentStyleName = t.style?.name || '';
+        const currentStyleId = t.style?.id || t.styleId || '';
+        const isUpToDate = t.style && GLOBAL_UI_STYLES.some(s => s.id === currentStyleId && s.name === currentStyleName && s.figmaGuide);
+        if (!isUpToDate) {
+          t.style = getUIStyleById(currentStyleId || currentStyleName || t.styleId);
+          needsPersist = true;
         }
         return t;
       });
+      if (needsPersist) {
+        this.persist();
+      }
     } else {
       this.topics = JSON.parse(JSON.stringify(DEFAULT_TOPICS));
       this.persist();

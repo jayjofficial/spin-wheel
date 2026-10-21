@@ -133,6 +133,7 @@ class App {
       uiStylePrinciples: winner.style?.principles || '',
       uiStyleTypography: winner.style?.typography || '',
       uiStylePalette: Array.isArray(winner.style?.palette) ? winner.style.palette : [],
+      figmaGuide: winner.style?.figmaGuide || null,
       status: 'planned',
       date: todayStr,
       week: weekData.week,
@@ -524,6 +525,7 @@ class App {
             existing.uiStylePrinciples = newStyle.principles;
             existing.uiStyleTypography = newStyle.typography;
             existing.uiStylePalette = newStyle.palette;
+            existing.figmaGuide = newStyle.figmaGuide;
             await window.storageManager.saveDesign(existing);
             if (window.designTracker) await window.designTracker.refresh();
           }
@@ -573,20 +575,41 @@ class App {
     const nameEl = document.getElementById('winner-style-name');
     const regionEl = document.getElementById('winner-style-region');
     const vibeEl = document.getElementById('winner-style-vibe');
-    const principlesEl = document.getElementById('winner-style-principles');
     const typoEl = document.getElementById('winner-style-typography');
     const paletteEl = document.getElementById('winner-style-palette');
+    const specsEl = document.getElementById('winner-figma-specs');
 
     if (nameEl) nameEl.textContent = style.name;
     if (regionEl) regionEl.textContent = `${style.region} • ${style.subRegion}`;
     if (vibeEl) vibeEl.textContent = style.vibe;
-    if (principlesEl) principlesEl.textContent = style.principles;
     if (typoEl) typoEl.textContent = style.typography;
 
     if (paletteEl && Array.isArray(style.palette)) {
       paletteEl.innerHTML = style.palette.map(hex => 
         `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
       ).join('');
+    }
+
+    if (specsEl) {
+      const guide = style.figmaGuide || {};
+      specsEl.innerHTML = `
+        <div class="figma-spec-row">
+          <span class="spec-badge">Buttons</span>
+          <span class="spec-text">${guide.buttons || style.principles}</span>
+        </div>
+        <div class="figma-spec-row">
+          <span class="spec-badge">Cards</span>
+          <span class="spec-text">${guide.cards || 'Structured rectangular cards with crisp contrast'}</span>
+        </div>
+        <div class="figma-spec-row">
+          <span class="spec-badge">Layout</span>
+          <span class="spec-text">${guide.layout || 'Disciplined grid alignment'}</span>
+        </div>
+        <div class="figma-spec-row highlight">
+          <span class="spec-badge signature-badge">Signature</span>
+          <span class="spec-text">${guide.signature || style.vibe}</span>
+        </div>
+      `;
     }
   }
 
@@ -652,36 +675,56 @@ class App {
       problemEl.textContent = design.problem || 'Standard usability optimization, clarity of actions, and reduced cognitive load.';
     }
 
-    // UI Style details
+    // Resolve UI Style using robust mapping
+    let styleObj = null;
+    if (design.uiStyle && window.getUIStyleById) {
+      styleObj = window.getUIStyleById(design.uiStyle);
+    }
+
+    const styleName = styleObj ? styleObj.name : (design.uiStyle || 'Ghana Style');
+    const styleRegion = styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : (design.uiStyleRegion || 'West Africa • Ghana');
+    const styleVibe = styleObj ? styleObj.vibe : (design.uiStyleVibe || 'Warm, vibrant, and proud. Inspired by Ghanaian modernism & Kente geometry. Rich gold and emerald accents over clean obsidian dark surfaces.');
+    const styleTypography = styleObj ? styleObj.typography : (design.uiStyleTypography || 'Bold modern headings paired with clear, friendly body text');
+    const stylePalette = (styleObj && styleObj.palette) ? styleObj.palette : ((design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : ['#0f1015', '#1a1d26', '#f59e0b', '#10b981', '#ef4444', '#ffffff']);
+    const guide = (styleObj && styleObj.figmaGuide) || design.figmaGuide || {};
+
     const styleNameEl = document.getElementById('archive-detail-style-name');
     const styleRegionEl = document.getElementById('archive-detail-style-region');
     const styleVibeEl = document.getElementById('archive-detail-style-vibe');
     const stylePaletteEl = document.getElementById('archive-detail-palette');
-    const stylePrinciplesEl = document.getElementById('archive-detail-principles');
     const styleTypoEl = document.getElementById('archive-detail-typography');
-
-    let styleObj = null;
-    if (design.uiStyle && window.GLOBAL_UI_STYLES) {
-      styleObj = window.GLOBAL_UI_STYLES.find(s => s.name === design.uiStyle) || null;
-    }
-
-    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'Ghana Style');
-    const styleRegion = design.uiStyleRegion || (styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : 'West Africa • Ghana');
-    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Warm, vibrant, and proud. Inspired by Ghanaian Kente patterns, featuring structured cards with bold golden-yellow, forest green, and rich crimson accents over a crisp dark background.');
-    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Use structured rectangular card grids, bold warm gold primary buttons, rich green and red tag badges, and high-contrast readable cards.');
-    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Bold modern headings paired with clear, friendly body text');
-    const stylePalette = (design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : (styleObj ? styleObj.palette : ['#0f1015', '#f59e0b', '#10b981', '#ef4444', '#ffffff']);
+    const specsEl = document.getElementById('archive-detail-figma-specs');
 
     if (styleNameEl) styleNameEl.textContent = styleName;
     if (styleRegionEl) styleRegionEl.textContent = styleRegion;
     if (styleVibeEl) styleVibeEl.textContent = styleVibe;
-    if (stylePrinciplesEl) stylePrinciplesEl.textContent = stylePrinciples;
     if (styleTypoEl) styleTypoEl.textContent = styleTypography;
 
     if (stylePaletteEl) {
       stylePaletteEl.innerHTML = stylePalette.map(hex =>
         `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
       ).join('');
+    }
+
+    if (specsEl) {
+      specsEl.innerHTML = `
+        <div class="figma-spec-row">
+          <span class="spec-badge">Buttons</span>
+          <span class="spec-text">${guide.buttons || '12px rounded action buttons with clear contrast'}</span>
+        </div>
+        <div class="figma-spec-row">
+          <span class="spec-badge">Cards</span>
+          <span class="spec-text">${guide.cards || 'Structured rectangular cards with crisp contrast'}</span>
+        </div>
+        <div class="figma-spec-row">
+          <span class="spec-badge">Layout</span>
+          <span class="spec-text">${guide.layout || 'Disciplined grid alignment'}</span>
+        </div>
+        <div class="figma-spec-row highlight">
+          <span class="spec-badge signature-badge">Signature</span>
+          <span class="spec-text">${guide.signature || styleVibe}</span>
+        </div>
+      `;
     }
 
     this.openModal('modal-challenge-details');

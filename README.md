@@ -16,27 +16,27 @@ A studio tool designed for UI/UX designers to overcome creative block, generate 
   - **The UX Problem to Solve**: The specific human friction, ergonomics, or usability challenge to address.
   - **Assigned Global UI Design Style**: A paired international UI design style complete with regional origin, color palette swatches, typography pairing, and core UX principles (with easy one-click style swapping).
 
-### 2. Authentic Global UI Design Styles
-Includes 15 authentic UI design styles from around the world, prominently featuring African UI design aesthetics:
+### 2. Intuitive Country UI Design Styles (With Figma Cheat Sheets)
+Includes 15 intuitive country design styles from around the world, prominently featuring African UI design aesthetics with actionable Figma guidelines (Buttons, Cards, Layout, and Signature Elements):
 - **Africa**:
-  - *Afro-Futurism High-Contrast* (Pan-African / Silicon Savannah)
-  - *Naija FinTech High-Trust Neo-Bank* (Nigeria / Lagos)
-  - *Sahelian Terracotta & Ochre Rhythm* (West & North Africa)
-  - *Kente Geometrics & Modular Craft* (Ghana / Accra)
-  - *Swahili Coast Oceanic Glass* (East African Coast / Zanzibar & Mombasa)
-  - *Joburg Industrial Modernism* (South Africa / Johannesburg)
+  - *Ghana Style* (Accra) — Bold warm gold primary buttons, rich green/red badges, Kente-inspired cards.
+  - *Nigeria Style* (Lagos Tech Hub) — Electric emerald green action buttons, big numbers, and high-trust balance cards.
+  - *Kenya Style* (Nairobi Silicon Savannah) — Mobile-first outdoor visibility, large touch targets, sunrise orange & teal.
+  - *South Africa Style* (Johannesburg & Cape Town) — Urban industrial modernism, heavy charcoal cards, solid 1.5px borders.
+  - *Rwanda Style* (Kigali Eco-Tech) — Clean botanical eco-minimalism, full pill buttons, spacious whitespace.
+  - *Morocco Style* (Marrakech & Casablanca) — Warm desert terracotta clay cards, deep royal Majorelle blue buttons.
 - **Asia**:
-  - *Japanese Wabi-Sabi & Digital Zen* (Japan / Kyoto & Tokyo)
-  - *Korean Soft Neo-Card & Marshmallow* (South Korea / Seoul)
-  - *Tokyo Cyberpunk Neo-HUD* (Japan / Tokyo)
+  - *Japan Style* (Kyoto & Tokyo) — Calm Zen minimalism, generous breathing room, single crimson red accent.
+  - *South Korea Style* (Seoul) — 24px+ pillowy extra-rounded cards, soft lilac & sky pastel chips, friendly micro-copy.
 - **Europe**:
-  - *Swiss International Typographic Style* (Switzerland / Zurich)
-  - *Scandinavian Warm Functionalism* (Denmark & Sweden)
-  - *French Haute Editorial & Serif Luxury* (France / Paris)
+  - *Switzerland Style* (Zurich & Basel) — Iconic grotesque typography grid, pure Swiss red buttons, strict mathematical layout.
+  - *Germany Style* (Berlin & Bauhaus) — Strict 8px functional grid, primary blue/red action blocks, zero fluff.
+  - *France Style* (Paris) — Parisian luxury editorial, high-contrast Serif headlines, champagne gold hairline borders.
+  - *Scandinavia Style* (Stockholm & Copenhagen) — Cozy Nordic simplicity, soft muted sage green, ergonomic touch targets.
 - **Americas & Global**:
-  - *Brazilian Tropical Modernism* (Brazil / São Paulo & Rio)
-  - *Modern Bento Grid Functionalism* (Global Modern Tech)
-  - *Neo-Brutalism with Thick Ink Lines* (Global Indie Web)
+  - *Brazil Style* (Rio & São Paulo) — Lively organic modernism, fluid sweeping card curves, botanical green & mango yellow.
+  - *Silicon Valley Style* (California Tech) — Modern tech bento-grid, subtle 1px border glows, cyan/indigo status pills.
+  - *Indie Web Style* (Retro Neo-Brutalism) — Solid 2.5px black borders on everything, hard 4px unblurred drop shadows.
 
 ### 3. Everyday Human Challenge Pool & Shuffle
 - **Natural Phrasing**: Challenges use names everyday people say (e.g., *Roommate expense & bill splitter*, *Grocery delivery & weekly meal box*, *Doctor appointment & clinic check-in*, *Bus countdown & digital transit pass*, *Apartment hunting & rent lease*).

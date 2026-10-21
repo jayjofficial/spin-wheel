@@ -1,6 +1,6 @@
 /* ==========================================================================
    UX Roulette & Design Studio - Core Multi-Theme Design System
-   Themes: Linear Studio (Default), Nordic Editorial, Apple Spatial, Neo-Arcade
+   Themes: Obsidian Dark Mode (Default)
    ========================================================================== */
 
 /* 1. Linear Studio Theme (Default) - Obsidian Dark Mode, Precision Steel & Sapphire */
@@ -2127,6 +2127,66 @@ body::before {
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Actionable Figma Design Guide Grid */
+.figma-specs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.5rem 0 0.45rem;
+}
+
+.figma-spec-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  transition: border-color var(--transition-fast);
+}
+
+.figma-spec-row:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.figma-spec-row.highlight {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.figma-spec-row .spec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.16);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.figma-spec-row .spec-badge.signature-badge {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.figma-spec-row .spec-text {
+  color: var(--text-main);
+  font-size: 0.78rem;
+  font-weight: 500;
 }
 
 .style-rule-item {
