@@ -1,33 +1,36 @@
 /**
- * UX Roulette - Canvas-Based High-DPI Spin Wheel Engine
+ * UX Roulette - Canvas-Based High-DPI Studio Wheel Engine
  * Features realistic deceleration physics, mechanical peg collisions, and needle deflection.
- * Equipped with multi-theme designer styling (Linear Studio, Nordic Editorial, Apple Spatial, Neo-Arcade).
+ * Equipped with Pictorial Icon Badges, calibrated milled bezel dial, and Fullscreen Studio Mode.
  */
 
 const THEME_WHEEL_CONFIGS = {
   linear: {
     name: 'Linear Studio',
     palette: [
-      '#1e293b', // Slate Charcoal
-      '#1e3a5f', // Deep Sapphire
-      '#242b3d', // Dark Steel
-      '#1e3347', // Cobalt Mist
-      '#202636', // Graphite
-      '#1e2f47', // Muted Deep Navy
-      '#282c3c', // Midnight Obsidian
-      '#192d3b'  // Deep Marine
+      '#131a28', // Studio Graphite
+      '#1a263c', // Slate Sapphire
+      '#162033', // Deep Steel
+      '#1b2842', // Cobalt Slate
+      '#182236', // Muted Obsidian
+      '#1f2d48', // Titanium Blue
+      '#162135', // Deep Navy
+      '#1d2a45'  // Precision Milled
     ],
     fontFamily: "'Inter', -apple-system, sans-serif",
     accentText: '#f8fafc',
     textShadow: 'rgba(0, 0, 0, 0.95)',
-    centerDarken: '#090d16',
-    outerRingGlow: 'rgba(59, 130, 246, 0.45)',
-    separatorColor: 'rgba(10, 14, 24, 0.9)',
+    centerDarken: '#080a11',
+    outerRingGlow: 'rgba(59, 130, 246, 0.35)',
+    separatorColor: 'rgba(8, 10, 16, 0.95)',
     bezelOuter: 'rgba(255, 255, 255, 0.16)',
-    bezelInner: 'rgba(59, 130, 246, 0.3)',
-    pegColor: '#f1f5f9',
+    bezelInner: 'rgba(59, 130, 246, 0.35)',
+    bezelTick: 'rgba(255, 255, 255, 0.25)',
+    pegColor: '#e2e8f0',
     pegCore: '#38bdf8',
-    gradientDarken: 0.35,
+    podBg: 'rgba(10, 14, 24, 0.82)',
+    podBorder: 'rgba(255, 255, 255, 0.22)',
+    gradientDarken: 0.38,
     confettiColors: ['#3b82f6', '#60a5fa', '#94a3b8', '#ffffff', '#818cf8', '#0ea5e9']
   },
   editorial: {
@@ -42,7 +45,7 @@ const THEME_WHEEL_CONFIGS = {
       '#ad6c47', // Burnished Sienna
       '#384852'  // Nordic Sea
     ],
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif",
     accentText: '#faf8f5',
     textShadow: 'rgba(28, 25, 23, 0.85)',
     centerDarken: '#2d2724',
@@ -50,8 +53,11 @@ const THEME_WHEEL_CONFIGS = {
     separatorColor: 'rgba(250, 248, 245, 0.35)',
     bezelOuter: 'rgba(194, 94, 61, 0.35)',
     bezelInner: 'rgba(217, 119, 6, 0.25)',
+    bezelTick: 'rgba(194, 94, 61, 0.4)',
     pegColor: '#fef3c7',
     pegCore: '#d97706',
+    podBg: 'rgba(255, 255, 255, 0.88)',
+    podBorder: 'rgba(194, 94, 61, 0.45)',
     gradientDarken: 0.2,
     confettiColors: ['#c25e3d', '#476856', '#c9893d', '#d97706', '#8c586a', '#fef3c7']
   },
@@ -75,8 +81,11 @@ const THEME_WHEEL_CONFIGS = {
     separatorColor: 'rgba(255, 255, 255, 0.3)',
     bezelOuter: 'rgba(255, 255, 255, 0.4)',
     bezelInner: 'rgba(56, 189, 248, 0.45)',
+    bezelTick: 'rgba(255, 255, 255, 0.45)',
     pegColor: '#ffffff',
     pegCore: '#38bdf8',
+    podBg: 'rgba(255, 255, 255, 0.22)',
+    podBorder: 'rgba(255, 255, 255, 0.4)',
     gradientDarken: 0.28,
     confettiColors: ['#0071e3', '#30d158', '#bf5af2', '#ff375f', '#ff9f0a', '#64d2ff', '#ffffff']
   },
@@ -100,8 +109,11 @@ const THEME_WHEEL_CONFIGS = {
     separatorColor: 'rgba(0, 242, 254, 0.5)',
     bezelOuter: 'rgba(255, 0, 127, 0.6)',
     bezelInner: 'rgba(0, 242, 254, 0.5)',
+    bezelTick: 'rgba(0, 242, 254, 0.6)',
     pegColor: '#ffffff',
     pegCore: '#ff007f',
+    podBg: 'rgba(6, 6, 16, 0.85)',
+    podBorder: 'rgba(0, 242, 254, 0.5)',
     gradientDarken: 0.45,
     confettiColors: ['#00f2fe', '#ff007f', '#ffd600', '#10e598', '#7928ca', '#ffffff']
   }
@@ -129,6 +141,7 @@ class RouletteWheel {
 
     this.setupDPI();
     window.addEventListener('resize', () => this.setupDPI());
+    document.addEventListener('fullscreenchange', () => setTimeout(() => this.setupDPI(), 100));
   }
 
   setTheme(themeName) {
@@ -138,20 +151,30 @@ class RouletteWheel {
 
   setupDPI() {
     if (!this.canvas) return;
-    const rect = this.canvas.getBoundingClientRect();
+    const isFullscreen = document.body.classList.contains('fullscreen-active') || !!document.fullscreenElement;
     const dpr = window.devicePixelRatio || 1;
 
-    const size = Math.min(rect.width || 480, 520);
+    let size;
+    if (isFullscreen) {
+      const avail = Math.min(window.innerWidth * 0.88, window.innerHeight * 0.74);
+      size = Math.min(Math.max(avail, 480), 720);
+    } else {
+      const rect = this.canvas.getBoundingClientRect();
+      size = Math.min(rect.width || 480, 520);
+      if (size < 320) size = 360;
+    }
+
     this.width = size;
     this.height = size;
 
     this.canvas.width = size * dpr;
     this.canvas.height = size * dpr;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
 
     this.centerX = size / 2;
     this.centerY = size / 2;
-    this.radius = size / 2 - 16; // Outer wheel padding
+    this.radius = size / 2 - 18; // Outer wheel padding
 
     this.draw();
   }
@@ -165,9 +188,7 @@ class RouletteWheel {
     if (this.isSpinning || this.topics.length === 0) return;
 
     this.isSpinning = true;
-    // Randomized high initial velocity (between 0.36 and 0.58 rad per frame)
     this.angularVelocity = initialVelocity || (0.36 + Math.random() * 0.22);
-    
     this.friction = 0.985 + Math.random() * 0.005;
 
     // Trigger audio gesture unlock
@@ -182,15 +203,10 @@ class RouletteWheel {
     if (!this.isSpinning) return;
 
     this.currentAngle += this.angularVelocity;
-    // Normalize angle between 0 and 2*PI
     this.currentAngle = (this.currentAngle + Math.PI * 2) % (Math.PI * 2);
 
-    // Apply friction deceleration
     this.angularVelocity *= this.friction;
-
-    // Track peg collisions for needle tick audio and visual wobble
     this.checkPegCollision();
-
     this.draw();
 
     if (this.angularVelocity > this.minVelocity) {
@@ -205,7 +221,6 @@ class RouletteWheel {
     const numSlices = this.topics.length;
     const sliceAngle = (Math.PI * 2) / numSlices;
 
-    // Pointer is at the top: angle = 3*PI/2
     const pointerAngle = (3 * Math.PI) / 2;
     let relativeAngle = (pointerAngle - this.currentAngle) % (Math.PI * 2);
     if (relativeAngle < 0) relativeAngle += Math.PI * 2;
@@ -214,11 +229,9 @@ class RouletteWheel {
 
     if (currentPeg !== this.lastPegIndex) {
       this.lastPegIndex = currentPeg;
-      // Play tick sound with velocity modulation
       if (window.soundEngine) {
         window.soundEngine.playTick(this.angularVelocity * 100);
       }
-      // Deflect needle visually
       if (this.pointerEl) {
         const deflection = Math.min(22, this.angularVelocity * 120);
         this.pointerEl.style.transform = `translateX(-50%) rotate(${deflection}deg)`;
@@ -249,7 +262,6 @@ class RouletteWheel {
     const numSlices = this.topics.length;
     const sliceAngle = (Math.PI * 2) / numSlices;
 
-    // Pointer is at 12 o'clock (3*PI / 2)
     const pointerAngle = (3 * Math.PI) / 2;
     let relativeAngle = (pointerAngle - this.currentAngle) % (Math.PI * 2);
     if (relativeAngle < 0) relativeAngle += Math.PI * 2;
@@ -270,17 +282,16 @@ class RouletteWheel {
     const themeCfg = THEME_WHEEL_CONFIGS[this.currentTheme] || THEME_WHEEL_CONFIGS.linear;
 
     if (this.topics.length === 0) {
-      // Draw empty wheel state
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.fillStyle = this.currentTheme === 'editorial' ? '#f4f0e8' : '#1e293b';
+      ctx.fillStyle = this.currentTheme === 'editorial' ? '#f4f0e8' : '#101420';
       ctx.fill();
-      ctx.strokeStyle = this.currentTheme === 'editorial' ? '#d6cebe' : '#475569';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = this.currentTheme === 'editorial' ? '#d6cebe' : '#273142';
+      ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.fillStyle = this.currentTheme === 'editorial' ? '#78716c' : '#94a3b8';
-      ctx.font = `600 15px ${themeCfg.fontFamily}`;
+      ctx.font = `600 14px ${themeCfg.fontFamily}`;
       ctx.textAlign = 'center';
       ctx.fillText('No active challenges on wheel', cx, cy);
       return;
@@ -294,7 +305,7 @@ class RouletteWheel {
     ctx.beginPath();
     ctx.arc(cx, cy, radius + 8, 0, Math.PI * 2);
     ctx.strokeStyle = themeCfg.outerRingGlow;
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3.5;
     ctx.stroke();
     ctx.restore();
 
@@ -314,13 +325,12 @@ class RouletteWheel {
       ctx.arc(0, 0, radius, startAngle, endAngle);
       ctx.closePath();
 
-      // Palette resolution: theme palette or custom color
       const baseColor = themeCfg.palette[i % themeCfg.palette.length];
 
-      // Subtle radial lighting gradient
-      const sliceGrad = ctx.createRadialGradient(0, 0, radius * 0.12, 0, 0, radius);
+      // Sophisticated radial lighting gradient
+      const sliceGrad = ctx.createRadialGradient(0, 0, radius * 0.15, 0, 0, radius);
       sliceGrad.addColorStop(0, themeCfg.centerDarken);
-      sliceGrad.addColorStop(0.32, baseColor);
+      sliceGrad.addColorStop(0.35, baseColor);
       sliceGrad.addColorStop(1, this.darkenColor(baseColor, themeCfg.gradientDarken));
 
       ctx.fillStyle = sliceGrad;
@@ -328,33 +338,74 @@ class RouletteWheel {
 
       // Slice Separator Line
       ctx.strokeStyle = themeCfg.separatorColor;
-      ctx.lineWidth = 2.2;
+      ctx.lineWidth = 2;
       ctx.stroke();
 
-      // 3. Draw Slice Text (Oriented along the radius)
+      // 3. Draw PICTORIAL OPTION (Icon Pod + Concise Punchy Label)
       ctx.save();
       ctx.rotate(startAngle + sliceAngle / 2);
 
+      const visuals = window.resolveTopicVisuals ? window.resolveTopicVisuals(topic) : { icon: topic.icon || '✨', shortLabel: topic.shortLabel || topic.text || '' };
+      const icon = visuals.icon;
+      let shortLabel = visuals.shortLabel;
+
+      // Calculate pictorial pod size & position
+      const podDist = radius * 0.74;
+      const arcWidth = (radius * Math.PI / numSlices);
+      const maxPodR = arcWidth * 0.38;
+      const podR = Math.max(15, Math.min(23, maxPodR));
+
+      // 3A. Draw Pictorial Icon Pod
+      ctx.save();
+      ctx.translate(podDist, 0);
+
+      // Pod shadow
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+
+      ctx.beginPath();
+      ctx.arc(0, 0, podR, 0, Math.PI * 2);
+      ctx.fillStyle = themeCfg.podBg;
+      ctx.fill();
+
+      // Pod border ring
+      ctx.shadowColor = 'transparent';
+      ctx.strokeStyle = themeCfg.podBorder;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Icon Glyph
+      ctx.font = `${Math.round(podR * 1.15)}px -apple-system, "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(icon, 0, 1);
+      ctx.restore();
+
+      // 3B. Draw Clean Concise Label
+      ctx.save();
+      const labelDist = podDist - podR - 7;
       ctx.fillStyle = themeCfg.accentText;
-      ctx.font = `700 12px ${themeCfg.fontFamily}`;
+      const fontSize = numSlices > 12 ? 11 : numSlices > 8 ? 12 : 13;
+      ctx.font = `700 ${fontSize}px ${themeCfg.fontFamily}`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
 
-      // Drop shadow for crisp readability
       ctx.shadowColor = themeCfg.textShadow;
-      ctx.shadowBlur = 5;
+      ctx.shadowBlur = 4;
       ctx.shadowOffsetX = 1;
       ctx.shadowOffsetY = 1;
 
-      // Format & Truncate Text for segment size
-      const maxTextLength = numSlices > 12 ? 20 : numSlices > 8 ? 26 : 34;
-      let label = topic.text || topic.title || '';
-      if (label.length > maxTextLength) {
-        label = label.substr(0, maxTextLength - 2) + '...';
+      // Truncate cleanly if needed
+      const maxChars = numSlices > 12 ? 15 : numSlices > 8 ? 19 : 24;
+      if (shortLabel.length > maxChars) {
+        shortLabel = shortLabel.substr(0, maxChars - 1) + '…';
       }
 
-      // Draw text near outer edge with room for center hub
-      ctx.fillText(label, radius - 26, 0);
+      ctx.fillText(shortLabel, labelDist, 0);
+      ctx.restore();
+
       ctx.restore();
     }
 
@@ -364,7 +415,6 @@ class RouletteWheel {
       const px = Math.cos(pegAngle) * (radius - 5);
       const py = Math.sin(pegAngle) * (radius - 5);
 
-      // Outer peg dot
       ctx.beginPath();
       ctx.arc(px, py, 4.5, 0, Math.PI * 2);
       ctx.fillStyle = themeCfg.pegColor;
@@ -372,7 +422,6 @@ class RouletteWheel {
       ctx.shadowBlur = 4;
       ctx.fill();
 
-      // Center core dot
       ctx.beginPath();
       ctx.arc(px, py, 2, 0, Math.PI * 2);
       ctx.fillStyle = themeCfg.pegCore;
@@ -381,12 +430,12 @@ class RouletteWheel {
 
     ctx.restore();
 
-    // 5. Draw Outer Metallic Chrome Bezel Rim
+    // 5. Draw Outer Calibrated Milled Bezel Dial
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.strokeStyle = themeCfg.bezelOuter;
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 4.5;
     ctx.stroke();
 
     ctx.beginPath();
@@ -394,6 +443,26 @@ class RouletteWheel {
     ctx.strokeStyle = themeCfg.bezelInner;
     ctx.lineWidth = 1.5;
     ctx.stroke();
+
+    // Calibrated micro tick marks around bezel rim (60 ticks like a luxury watch)
+    const totalTicks = 60;
+    ctx.strokeStyle = themeCfg.bezelTick || 'rgba(255, 255, 255, 0.2)';
+    for (let t = 0; t < totalTicks; t++) {
+      const tickAngle = (t * Math.PI * 2) / totalTicks;
+      const isMajor = t % 5 === 0;
+      const tickLen = isMajor ? 5 : 2.5;
+      const x1 = cx + Math.cos(tickAngle) * (radius - 1);
+      const y1 = cy + Math.sin(tickAngle) * (radius - 1);
+      const x2 = cx + Math.cos(tickAngle) * (radius - 1 - tickLen);
+      const y2 = cy + Math.sin(tickAngle) * (radius - 1 - tickLen);
+
+      ctx.lineWidth = isMajor ? 1.5 : 1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
     ctx.restore();
   }
 

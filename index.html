@@ -35,34 +35,63 @@
     <!-- Header / Navbar -->
     <header class="site-header">
       <div class="brand-wrapper" id="brand-home-btn">
-        <div class="brand-icon">✨</div>
+        <div class="brand-mark" title="UX Roulette Studio">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
         <div class="brand-title">
-          <span>UX <span class="highlight">ROULETTE</span></span>
-          <span class="brand-subtitle">Design Studio & Weekly Tracker</span>
+          <span class="brand-name">UX ROULETTE</span>
+          <span class="brand-subtitle">STUDIO LAB • HABIT TRACKER</span>
         </div>
       </div>
 
       <!-- Main Navigation Tabs -->
       <nav class="nav-tabs" aria-label="Main Navigation">
         <button class="nav-tab-btn active" data-tab="roulette" id="tab-btn-roulette">
-          <span>🎡</span> Roulette
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
+          <span>Studio</span>
         </button>
         <button class="nav-tab-btn" data-tab="tracker" id="tab-btn-tracker">
-          <span>📂</span> Design Archive & Tracker
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          <span>Archive</span>
         </button>
         <button class="nav-tab-btn" data-tab="matrix" id="tab-btn-matrix">
-          <span>🧩</span> Topic Matrix
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          <span>Challenges</span>
         </button>
       </nav>
 
-      <!-- Header Actions: Theme Switcher, Convex Environment, Streak & Sound -->
+      <!-- Header Actions: Fullscreen, Sound, Streak & Theme Switcher -->
       <div class="header-actions">
+        <!-- Fullscreen Mode Button -->
+        <button class="header-icon-btn" id="btn-fullscreen-toggle" title="Full Screen Studio Mode (Press F)" aria-label="Toggle Fullscreen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+        </button>
+
+        <!-- Sound Toggle -->
+        <button class="header-icon-btn" id="btn-sound-toggle" title="Toggle Sound (Mute/Unmute)" aria-label="Toggle Sound">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+
+        <!-- Streak Pill -->
+        <div class="streak-pill" title="Weekly Design Streak">
+          <span class="streak-icon">⚡</span>
+          <span id="header-streak-count">0w</span>
+        </div>
+
         <!-- Theme Switcher Dropdown -->
         <div class="theme-switcher-wrapper" id="theme-switcher-wrapper">
           <button class="theme-switcher-btn" id="btn-theme-switcher" aria-haspopup="true" aria-expanded="false" title="Switch Design Aesthetic Theme">
             <span class="theme-btn-icon" id="theme-current-icon">⚡</span>
             <span class="theme-btn-label" id="theme-current-label">Linear</span>
-            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg class="chevron-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>
@@ -111,27 +140,6 @@
             </button>
           </div>
         </div>
-
-        <!-- Convex Environment Selector & Status Pill -->
-        <div class="convex-env-pill" title="Convex Cloud Backend Status">
-          <span class="convex-dot" id="convex-status-dot"></span>
-          <select id="convex-env-selector" class="convex-select" aria-label="Convex Environment">
-            <option value="dev">🟢 Dev: adorable-sturgeon</option>
-            <option value="prod">🟣 Prod: beaming-capybara</option>
-            <option value="offline">💾 Local Offline</option>
-          </select>
-        </div>
-
-        <div class="streak-pill" title="Weekly Design Streak: Weeks with at least one logged design">
-          <span class="fire-icon">🔥</span>
-          <span id="header-streak-count">0 Weeks</span>
-        </div>
-        <button class="sound-toggle-btn" id="btn-sound-toggle" title="Toggle Wheel Sound Effects" aria-label="Toggle Sound">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-          </svg>
-        </button>
       </div>
     </header>
 
@@ -142,15 +150,29 @@
       <div class="roulette-grid">
         
         <!-- Left Column: Wheel Canvas Stage -->
-        <section class="wheel-stage-card" aria-label="Roulette Wheel Stage">
+        <section class="wheel-stage-card" id="wheel-stage-card" aria-label="Roulette Wheel Stage">
+          <!-- Floating Exit Fullscreen Button -->
+          <button class="btn-exit-fullscreen" id="btn-exit-fullscreen" title="Exit Fullscreen Mode (Esc or F)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span>Exit Fullscreen</span>
+          </button>
+
           <div class="stage-badge-row">
-            <span class="live-badge">
-              <span class="live-dot"></span> Ready to Spin
-            </span>
-            <span class="segment-count-pill" id="wheel-segment-count">10 Challenges on Wheel</span>
+            <div class="stage-status-group">
+              <span class="live-dot-pulse"></span>
+              <span class="stage-status-text">STUDIO READY</span>
+              <span class="stage-bullet">•</span>
+              <span class="segment-count-pill" id="wheel-segment-count">10 Challenges</span>
+            </div>
+            <button class="stage-fullscreen-btn" id="btn-stage-fullscreen" title="Expand Roulette to Full Screen (Press F)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+              </svg>
+              <span>Fullscreen</span>
+            </button>
           </div>
 
-          <div class="wheel-wrapper">
+          <div class="wheel-wrapper" id="wheel-wrapper">
             <!-- Physical Top Needle Pointer -->
             <div class="wheel-pointer" id="wheel-pointer">
               <div class="pointer-triangle"></div>
@@ -167,13 +189,16 @@
 
           <!-- Bottom Wheel Controls -->
           <div class="wheel-controls-row">
-            <button class="btn-primary-glow" id="btn-main-spin">
-              <span>🎲 Spin the Roulette</span>
+            <button class="btn-primary-studio" id="btn-main-spin">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              <span>Spin Challenge</span>
             </button>
           </div>
 
           <div class="spin-hint">
-            <span>Pro tip: Press</span> <span class="kbd-shortcut">Space</span> <span>to spin anytime</span>
+            <span>Command: Press</span> <span class="kbd-shortcut">Space</span> <span>to spin</span>
+            <span class="hint-sep">•</span>
+            <span>Press</span> <span class="kbd-shortcut">F</span> <span>for fullscreen</span>
           </div>
         </section>
 
@@ -184,8 +209,8 @@
           <div class="card-glass">
             <div class="card-header-styled">
               <div>
-                <h2>✨ Influence The Wheel</h2>
-                <p class="card-desc">Type what you want to design. We'll add it to the wheel and generate similar design prompts for you!</p>
+                <h2>Influence Challenges</h2>
+                <p class="card-desc">Type any concept or industry to inject into the wheel with instant AI-expanded variants.</p>
               </div>
             </div>
 
@@ -330,78 +355,31 @@
     </section>
 
     <!-- ====================================================================
-         TAB 3: TOPIC MATRIX & CONVEX CLOUD SETTINGS
+         TAB 3: CHALLENGE LIBRARY & PRESET MATRICES
          ==================================================================== -->
     <section id="tab-matrix" class="tab-content">
       <div class="tracker-wrapper">
 
-        <!-- Convex Cloud Status & Sync Card -->
-        <div class="card-glass" style="border-color: rgba(99, 102, 241, 0.35);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
-            <div>
-              <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem;">
-                <span style="font-size: 1.5rem;">☁️</span>
-                <h2 style="font-family: var(--font-heading); font-size: 1.45rem;">Convex Cloud Deployments</h2>
-                <span class="live-badge" id="convex-connection-pill" style="margin-left: 0.5rem;">
-                  <span class="live-dot" id="convex-panel-dot"></span> <span id="convex-panel-status">Connected to Dev</span>
-                </span>
-              </div>
-              <p style="color: var(--text-muted); font-size: 0.9rem;">
-                Real-time reactive cloud database, portfolio storage, and HTTP endpoints.
-              </p>
-            </div>
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-              <button class="btn-primary-glow" id="btn-sync-to-convex" style="padding: 0.65rem 1.4rem; font-size: 0.88rem;">
-                <span>☁️ Push Local Data to Convex</span>
-              </button>
-              <button class="btn-secondary" id="btn-fetch-from-convex" style="padding: 0.65rem 1.2rem; font-size: 0.88rem;">
-                <span>🔄 Pull Latest Cloud Data</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Deployments Table / Grid -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-            <!-- Dev Box -->
-            <div style="background: rgba(14, 18, 30, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 1.2rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                <span style="font-family: var(--font-heading); font-weight: 700; color: #34d399; font-size: 0.95rem;">🟢 Development Environment</span>
-                <span class="status-pill in_progress" style="font-size: 0.68rem;">Dev</span>
-              </div>
-              <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-muted);">
-                <div><strong>Cloud:</strong> <a href="https://adorable-sturgeon-291.convex.cloud" target="_blank" rel="noopener" style="color: #67e8f9; word-break: break-all;">https://adorable-sturgeon-291.convex.cloud</a></div>
-                <div><strong>HTTP Actions:</strong> <a href="https://adorable-sturgeon-291.convex.site" target="_blank" rel="noopener" style="color: #a5b4fc; word-break: break-all;">https://adorable-sturgeon-291.convex.site</a></div>
-              </div>
-            </div>
-
-            <!-- Prod Box -->
-            <div style="background: rgba(14, 18, 30, 0.7); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: var(--radius-lg); padding: 1.2rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                <span style="font-family: var(--font-heading); font-weight: 700; color: #c084fc; font-size: 0.95rem;">🟣 Production Environment</span>
-                <span class="status-pill completed" style="font-size: 0.68rem;">Production</span>
-              </div>
-              <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-muted);">
-                <div><strong>Cloud:</strong> <a href="https://beaming-capybara-489.convex.cloud" target="_blank" rel="noopener" style="color: #67e8f9; word-break: break-all;">https://beaming-capybara-489.convex.cloud</a></div>
-                <div><strong>HTTP Actions:</strong> <a href="https://beaming-capybara-489.convex.site" target="_blank" rel="noopener" style="color: #a5b4fc; word-break: break-all;">https://beaming-capybara-489.convex.site</a></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="card-glass" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
           <div>
-            <h2 style="font-family: var(--font-heading); font-size: 1.5rem;">🧩 Topic Library & Presets</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Browse curated design categories, toggle topics on/off, or backup your data.</p>
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <h2 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em;">Challenge Library & Presets</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">Browse curated design categories, customize topic pools, or manage local backup state.</p>
           </div>
-          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
             <button class="btn-secondary" id="btn-matrix-reset-default">
-              🔄 Reset to Defaults
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>Reset Defaults</span>
             </button>
             <button class="btn-secondary" id="btn-export-backup">
-              💾 Export Backup (JSON)
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Export JSON</span>
             </button>
-            <label class="btn-secondary" style="cursor: pointer;">
-              📂 Restore Backup
+            <label class="btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+              <span>Restore</span>
               <input type="file" id="input-import-backup" accept=".json" style="display: none;">
             </label>
           </div>

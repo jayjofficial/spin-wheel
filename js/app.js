@@ -17,6 +17,7 @@ class App {
     this.initThemeSwitcher();
     this.initWheel();
     this.initNavigation();
+    this.initFullscreen();
     this.initInfluenceInput();
     this.initWinningModal();
     this.initDesignModal();
@@ -181,8 +182,88 @@ class App {
     const active = window.topicEngine.getActiveTopics();
     const countEl = document.getElementById('wheel-segment-count');
     if (countEl) {
-      countEl.textContent = `${active.length} Challenges on Wheel`;
+      countEl.textContent = `${active.length} Challenges`;
     }
+  }
+
+  // --- Fullscreen Studio Mode ---
+  initFullscreen() {
+    const stageCard = document.getElementById('wheel-stage-card');
+    const headerToggleBtn = document.getElementById('btn-fullscreen-toggle');
+    const stageToggleBtn = document.getElementById('btn-stage-fullscreen');
+    const exitBtn = document.getElementById('btn-exit-fullscreen');
+
+    const toggleFullscreen = () => {
+      const isCurrentlyFullscreen = document.fullscreenElement || document.body.classList.contains('fullscreen-active');
+
+      if (!isCurrentlyFullscreen) {
+        // Enter Fullscreen
+        document.body.classList.add('fullscreen-active');
+        if (stageCard) stageCard.classList.add('fullscreen-active');
+
+        // Request browser native fullscreen if available
+        const targetElement = stageCard || document.documentElement;
+        if (targetElement.requestFullscreen) {
+          targetElement.requestFullscreen().catch(() => {});
+        } else if (targetElement.webkitRequestFullscreen) {
+          targetElement.webkitRequestFullscreen();
+        }
+
+        // Notify wheel to resize for crisp theater view
+        setTimeout(() => {
+          if (this.wheel) this.wheel.setupDPI();
+        }, 120);
+
+        this.showToast('Full Screen Roulette active. Press Esc or F to exit.', 'info');
+      } else {
+        // Exit Fullscreen
+        document.body.classList.remove('fullscreen-active');
+        if (stageCard) stageCard.classList.remove('fullscreen-active');
+
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        }
+
+        setTimeout(() => {
+          if (this.wheel) this.wheel.setupDPI();
+        }, 120);
+      }
+    };
+
+    if (headerToggleBtn) headerToggleBtn.addEventListener('click', toggleFullscreen);
+    if (stageToggleBtn) stageToggleBtn.addEventListener('click', toggleFullscreen);
+    if (exitBtn) exitBtn.addEventListener('click', toggleFullscreen);
+
+    // Sync on native fullscreen exit
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        document.body.classList.remove('fullscreen-active');
+        if (stageCard) stageCard.classList.remove('fullscreen-active');
+        setTimeout(() => {
+          if (this.wheel) this.wheel.setupDPI();
+        }, 120);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+    // Keyboard shortcut F for fullscreen toggle
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'f' || e.key === 'F') {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+        const openModal = document.querySelector('.modal-backdrop.open');
+        if (openModal) return;
+
+        e.preventDefault();
+        toggleFullscreen();
+      }
+    });
   }
 
   // --- Navigation & Tabs ---
@@ -360,10 +441,12 @@ class App {
 
     list.innerHTML = topics.map((t, idx) => {
       const chipColor = themeCfg ? themeCfg.palette[idx % themeCfg.palette.length] : (t.color || '#3b82f6');
+      const topicIcon = t.icon || (window.resolveTopicVisuals ? window.resolveTopicVisuals(t.text).icon : '🎯');
       return `
       <div class="active-topic-chip" style="opacity: ${t.active !== false ? '1' : '0.45'};">
         <div class="topic-chip-left">
           <span class="color-indicator" style="background-color: ${chipColor};"></span>
+          <span class="topic-chip-icon" title="${this.escapeHTML(t.category || '')}">${topicIcon}</span>
           <span class="topic-name" title="${this.escapeHTML(t.text)}">${this.escapeHTML(t.text)}</span>
         </div>
         <div class="topic-chip-actions">
@@ -957,8 +1040,19 @@ class App {
         if (spinBtn) spinBtn.click();
       }
 
-      // Escape to close modals
+      // Escape to close modals or exit fullscreen
       if (e.key === 'Escape') {
+        const stageCard = document.getElementById('wheel-stage-card');
+        const isFullscreen = document.body.classList.contains('fullscreen-active') || (stageCard && stageCard.classList.contains('fullscreen-active'));
+        if (isFullscreen) {
+          document.body.classList.remove('fullscreen-active');
+          if (stageCard) stageCard.classList.remove('fullscreen-active');
+          if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          }
+          setTimeout(() => this.wheel?.setupDPI(), 120);
+        }
+
         document.querySelectorAll('.modal-backdrop.open').forEach(m => {
           m.classList.remove('open');
         });

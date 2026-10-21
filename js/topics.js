@@ -18,10 +18,63 @@ const PALETTE = [
   '#0284c7'  // Sky
 ];
 
+function resolveTopicVisuals(topic) {
+  if (!topic) return { icon: '✨', shortLabel: 'Challenge' };
+  
+  if (topic.icon && topic.shortLabel) {
+    return { icon: topic.icon, shortLabel: topic.shortLabel };
+  }
+
+  const raw = topic.text || topic.title || 'Design Challenge';
+  const text = raw.toLowerCase();
+
+  let icon = topic.icon || '';
+  if (!icon) {
+    if (text.includes('coffee') || text.includes('roast') || text.includes('espresso')) icon = '☕';
+    else if (text.includes('crypto') || text.includes('stake') || text.includes('fintech') || text.includes('bank') || text.includes('yield') || text.includes('wallet')) icon = '💳';
+    else if (text.includes('flight') || text.includes('travel') || text.includes('itinerary') || text.includes('airline') || text.includes('concierge')) icon = '✈️';
+    else if (text.includes('meditation') || text.includes('breath') || text.includes('mood') || text.includes('mind') || text.includes('journal')) icon = '🧘';
+    else if (text.includes('solar') || text.includes('energy') || text.includes('battery') || text.includes('power')) icon = '⚡';
+    else if (text.includes('watch') || text.includes('dial') || text.includes('wearable')) icon = '⌚';
+    else if (text.includes('portfolio') || text.includes('bento') || text.includes('case study') || text.includes('design')) icon = '🎨';
+    else if (text.includes('security') || text.includes('threat') || text.includes('cyber') || text.includes('shield')) icon = '🛡️';
+    else if (text.includes('fitness') || text.includes('workout') || text.includes('activity') || text.includes('sleep') || text.includes('ring')) icon = '📈';
+    else if (text.includes('whiteboard') || text.includes('canvas') || text.includes('team') || text.includes('sticky')) icon = '✏️';
+    else if (text.includes('ar') || text.includes('spatial') || text.includes('vr') || text.includes('vision') || text.includes('headset')) icon = '🥽';
+    else if (text.includes('ai') || text.includes('bot') || text.includes('copilot') || text.includes('gpt')) icon = '🤖';
+    else if (text.includes('grocery') || text.includes('box') || text.includes('shop') || text.includes('store') || text.includes('checkout')) icon = '🛍️';
+    else if (text.includes('music') || text.includes('audio') || text.includes('sound') || text.includes('track')) icon = '🎧';
+    else if (text.includes('car') || text.includes('ev') || text.includes('vehicle') || text.includes('charging')) icon = '🔋';
+    else if (text.includes('food') || text.includes('recipe') || text.includes('dish') || text.includes('kitchen')) icon = '🍽️';
+    else if (text.includes('chat') || text.includes('message') || text.includes('social')) icon = '💬';
+    else if (text.includes('cloud') || text.includes('server') || text.includes('saas') || text.includes('data')) icon = '☁️';
+    else icon = '✨';
+  }
+
+  let shortLabel = topic.shortLabel || '';
+  if (!shortLabel) {
+    const firstPart = raw.split(/[:\–\—\-]/)[0].trim();
+    const words = firstPart.split(/\s+/);
+    if (words.length <= 3) {
+      shortLabel = words.join(' ');
+    } else {
+      shortLabel = words.slice(0, 2).join(' ');
+    }
+    if (shortLabel.length > 18) {
+      shortLabel = shortLabel.slice(0, 16) + '…';
+    }
+  }
+
+  return { icon, shortLabel };
+}
+window.resolveTopicVisuals = resolveTopicVisuals;
+
 const DEFAULT_TOPICS = [
   {
     id: 'top_1',
     text: 'AI Travel Concierge: Flight & Itinerary Booking Flow',
+    shortLabel: 'Flight Concierge',
+    icon: '✈️',
     category: 'AI & Travel',
     deliverable: 'Mobile App (iOS)',
     uxFocus: 'Conversational Onboarding & Dynamic Price Alerts',
@@ -31,6 +84,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_2',
     text: 'Fintech Staking & Yield Portfolio Dashboard',
+    shortLabel: 'Fintech Vault',
+    icon: '💳',
     category: 'Fintech',
     deliverable: 'Web Dashboard',
     uxFocus: 'Data Visualization & High-Density Financial Hierarchy',
@@ -40,6 +95,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_3',
     text: 'Zero-Waste Grocery Box: Custom Taste Quiz & Schedule',
+    shortLabel: 'ZeroWaste Box',
+    icon: '📦',
     category: 'E-Commerce',
     deliverable: 'Mobile App',
     uxFocus: 'Interactive Stepper & Micro-animations on Checkout',
@@ -49,6 +106,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_4',
     text: 'Spatial Audio Meditation & Breathing Guide',
+    shortLabel: 'Spatial Breath',
+    icon: '🧘',
     category: 'Health & Wellness',
     deliverable: 'Mobile & Watch App',
     uxFocus: 'Calming Haptics, Dark Mode Palette & Gesture Controls',
@@ -58,6 +117,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_5',
     text: 'Smart Home Energy & Solar Battery Monitor',
+    shortLabel: 'Solar Battery',
+    icon: '⚡',
     category: 'IoT & Smart Living',
     deliverable: 'Tablet & Mobile App',
     uxFocus: 'Live Power-Flow Physics Animation & Consumption Forecasting',
@@ -67,6 +128,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_6',
     text: 'Luxury Mechanical Watch Customizer & 3D Configurator',
+    shortLabel: 'Luxury Watch',
+    icon: '⌚',
     category: 'Luxury & 3D',
     deliverable: 'Web Experience',
     uxFocus: 'Tactile Dial Zooming & Material Texture Customization',
@@ -76,6 +139,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_7',
     text: 'Designer Portfolio Bento Grid with Interactive Case Studies',
+    shortLabel: 'Portfolio Bento',
+    icon: '🎨',
     category: 'Portfolio',
     deliverable: 'Responsive Web',
     uxFocus: 'Cursor Interaction, Bento Layouts & Smooth Page Transitions',
@@ -85,6 +150,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_8',
     text: 'Cybersecurity Incident Response & Live Threat Map',
+    shortLabel: 'Threat Map',
+    icon: '🛡️',
     category: 'Enterprise SaaS',
     deliverable: 'Desktop Web App',
     uxFocus: 'Critical Alert Triage, Dark UI & Color-coded Severity Nodes',
@@ -94,6 +161,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_9',
     text: 'Fitness Wearable Activity Rings & Sleep Recovery Score',
+    shortLabel: 'Fitness Rings',
+    icon: '📈',
     category: 'Health & Fitness',
     deliverable: 'Smartwatch & Mobile',
     uxFocus: 'Glanceable Circular Progress & Heart-Rate Variability Chart',
@@ -103,6 +172,8 @@ const DEFAULT_TOPICS = [
   {
     id: 'top_10',
     text: 'Remote Team Virtual Whiteboard & Sticky Canvas Hub',
+    shortLabel: 'Team Canvas',
+    icon: '✏️',
     category: 'Productivity',
     deliverable: 'Desktop App / Web',
     uxFocus: 'Multiplayer Cursors, Infinite Canvas Zoom & Toolbar Dock',
@@ -442,7 +513,14 @@ class TopicEngine {
   init() {
     const saved = window.storageManager.getSavedTopics();
     if (saved && Array.isArray(saved) && saved.length > 0) {
-      this.topics = saved;
+      this.topics = saved.map(t => {
+        if (!t.icon || !t.shortLabel) {
+          const vis = resolveTopicVisuals(t);
+          t.icon = t.icon || vis.icon;
+          t.shortLabel = t.shortLabel || vis.shortLabel;
+        }
+        return t;
+      });
     } else {
       this.topics = JSON.parse(JSON.stringify(DEFAULT_TOPICS));
     }
@@ -457,9 +535,12 @@ class TopicEngine {
   }
 
   addTopic(topicData) {
+    const vis = resolveTopicVisuals(topicData);
     const newTopic = {
       id: 'top_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
       text: topicData.text || topicData.title,
+      icon: topicData.icon || vis.icon,
+      shortLabel: topicData.shortLabel || vis.shortLabel,
       category: topicData.category || 'Custom Challenge',
       deliverable: topicData.deliverable || 'Mobile / Web Experience',
       uxFocus: topicData.uxFocus || 'Visual Polish & Micro-interactions',
@@ -523,25 +604,35 @@ class TopicEngine {
     let generatedList = [];
 
     if (bestPattern && maxMatches > 0) {
-      generatedList = bestPattern.variants.map((v, idx) => ({
-        id: 'gen_' + Date.now() + '_' + idx,
-        title: v.title,
-        category: bestPattern.category,
-        deliverable: v.deliverable,
-        uxFocus: v.uxFocus,
-        color: PALETTE[(this.topics.length + idx) % PALETTE.length]
-      }));
+      generatedList = bestPattern.variants.map((v, idx) => {
+        const vis = resolveTopicVisuals({ text: v.title, category: bestPattern.category });
+        return {
+          id: 'gen_' + Date.now() + '_' + idx,
+          title: v.title,
+          icon: vis.icon,
+          shortLabel: vis.shortLabel,
+          category: bestPattern.category,
+          deliverable: v.deliverable,
+          uxFocus: v.uxFocus,
+          color: PALETTE[(this.topics.length + idx) % PALETTE.length]
+        };
+      });
     } else {
       // Use intelligent universal fallback generator
       const universals = generateUniversalVariants(userInput);
-      generatedList = universals.map((u, idx) => ({
-        id: 'gen_' + Date.now() + '_' + idx,
-        title: u.title,
-        category: u.category,
-        deliverable: u.deliverable,
-        uxFocus: u.uxFocus,
-        color: PALETTE[(this.topics.length + idx) % PALETTE.length]
-      }));
+      generatedList = universals.map((u, idx) => {
+        const vis = resolveTopicVisuals({ text: u.title, category: u.category });
+        return {
+          id: 'gen_' + Date.now() + '_' + idx,
+          title: u.title,
+          icon: vis.icon,
+          shortLabel: vis.shortLabel,
+          category: u.category,
+          deliverable: u.deliverable,
+          uxFocus: u.uxFocus,
+          color: PALETTE[(this.topics.length + idx) % PALETTE.length]
+        };
+      });
     }
 
     return generatedList;
