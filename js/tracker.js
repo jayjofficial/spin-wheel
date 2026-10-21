@@ -313,7 +313,7 @@ class DesignTracker {
               <div class="card-deadline-row">
                 <span class="deadline-pill ${urgencyClass}">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  Deadline: ${design.deadlineFormatted || 'Next Week'} • ${statusInfo.label}
+                  Deadline: ${design.deadlineFormatted || '1 Week'} • ${statusInfo.label}
                 </span>
               </div>
             `;
@@ -326,10 +326,17 @@ class DesignTracker {
 
           <div class="card-footer-actions">
             <div class="link-buttons-group">
+              <button class="btn-card-case-study" data-action="case-study" title="Read & Download UX Case Study (.doc)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Case Study</span>
+              </button>
               ${figmaLink}
               ${postLink}
             </div>
             <div class="card-manage-btns">
+              <button class="btn-card-icon" data-action="download-doc" title="Download Word Case Study (.doc)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
               <button class="btn-card-icon" data-action="view-details" title="View Challenge Information">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               </button>
@@ -351,6 +358,24 @@ class DesignTracker {
       const id = card.dataset.id;
       const design = this.designs.find(d => d.id === id);
       if (!design) return;
+
+      // Case Study action (in-app viewer)
+      card.querySelector('[data-action="case-study"]')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.app && window.app.openCaseStudyModal) {
+          window.app.openCaseStudyModal(design);
+        }
+      });
+
+      // Quick download Word Document (.doc) action
+      card.querySelector('[data-action="download-doc"]')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.app && window.app.downloadCaseStudyWordDoc) {
+          window.app.downloadCaseStudyWordDoc(design);
+        } else if (window.UXCaseStudyEngine) {
+          window.UXCaseStudyEngine.downloadWordDocument(design);
+        }
+      });
 
       // View details action
       card.querySelector('[data-action="view-details"]')?.addEventListener('click', (e) => {

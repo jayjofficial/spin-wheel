@@ -89,7 +89,8 @@ class StorageManager {
     return `${startStr} – ${endStr}`;
   }
 
-  // --- Next-Week Deadline & Countdown Helpers ---
+  // --- 1-Week Deadline & Countdown Helpers ---
+  // The deadline is exactly 1 week (7 days) after the challenge has been selected
   static getNextWeekDeadline(dateInput) {
     let d;
     if (typeof dateInput === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
@@ -103,14 +104,8 @@ class StorageManager {
       d = new Date();
     }
 
-    // Days until the Sunday of NEXT week:
-    // Sunday is day 0 in JS Date.getDay(), Monday is 1, ..., Saturday is 6.
-    // Current week's Sunday is in (7 - currentDay) % 7 days.
-    // Next week's Sunday is exactly 7 days after current week's Sunday.
-    const currentDay = d.getDay();
-    const daysUntilNextSunday = ((7 - currentDay) % 7) + 7;
-
-    const targetDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + daysUntilNextSunday);
+    // Exactly 1 week (7 days) after the challenge selection date
+    const targetDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7);
 
     const yyyy = targetDate.getFullYear();
     const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
@@ -212,15 +207,13 @@ class StorageManager {
     if (!design) return design;
     StorageManager.normalizeDesignStyle(design);
 
-    // Ensure next-week deadline is automatically assigned if missing
-    if (!design.deadlineDate) {
-      const baseDate = design.date || design.createdAt || new Date().toISOString().split('T')[0];
-      const dl = StorageManager.getNextWeekDeadline(baseDate);
-      design.deadlineDate = dl.deadlineDate;
-      design.deadlineFormatted = dl.deadlineFormatted;
-      design.deadlineWeek = dl.deadlineWeek;
-      design.deadlineYear = dl.deadlineYear;
-    }
+    // Ensure 1-week deadline is always synchronized to 7 days after selection date
+    const baseDate = design.date || design.createdAt || new Date().toISOString().split('T')[0];
+    const dl = StorageManager.getNextWeekDeadline(baseDate);
+    design.deadlineDate = dl.deadlineDate;
+    design.deadlineFormatted = dl.deadlineFormatted;
+    design.deadlineWeek = dl.deadlineWeek;
+    design.deadlineYear = dl.deadlineYear;
     return design;
   }
 

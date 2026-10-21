@@ -22,6 +22,7 @@ class App {
     this.initInfluenceInput();
     this.initWinningModal();
     this.initArchiveDetailsModal();
+    this.initCaseStudyModal();
     this.initDesignModal();
     this.initLightbox();
     this.initTopicMatrix();
@@ -580,7 +581,7 @@ class App {
     const statusInfo = StorageManager.getDeadlineStatus(dlInfo.deadlineDate);
     const deadlineDateEl = document.getElementById('winner-deadline-date-str');
     const deadlineBadgeEl = document.getElementById('winner-deadline-badge');
-    if (deadlineDateEl) deadlineDateEl.textContent = dlInfo.deadlineFormatted || 'Next Week';
+    if (deadlineDateEl) deadlineDateEl.textContent = dlInfo.deadlineFormatted || '1 Week';
     if (deadlineBadgeEl) {
       deadlineBadgeEl.textContent = statusInfo.label;
       deadlineBadgeEl.className = `deadline-countdown-badge ${statusInfo.urgency}`;
@@ -618,9 +619,30 @@ class App {
     const closeBtn = document.getElementById('btn-close-archive-details');
     const editBtn = document.getElementById('btn-archive-detail-edit');
     const deleteBtn = document.getElementById('btn-archive-detail-delete');
+    const downloadDocBtn = document.getElementById('btn-archive-detail-download-doc');
+    const readStudyBtn = document.getElementById('btn-archive-detail-read-study');
 
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.closeModal('modal-challenge-details'));
+    }
+
+    if (downloadDocBtn) {
+      downloadDocBtn.addEventListener('click', () => {
+        const target = this.currentInspectingDesign;
+        if (target) {
+          this.downloadCaseStudyWordDoc(target);
+        }
+      });
+    }
+
+    if (readStudyBtn) {
+      readStudyBtn.addEventListener('click', () => {
+        const target = this.currentInspectingDesign;
+        if (target) {
+          this.closeModal('modal-challenge-details');
+          this.openCaseStudyModal(target);
+        }
+      });
     }
 
     if (editBtn) {
@@ -646,6 +668,72 @@ class App {
           }
         }
       });
+    }
+  }
+
+  // --- Interactive UX Case Study Modal Controller ---
+  initCaseStudyModal() {
+    const closeBtn = document.getElementById('btn-close-case-study');
+    const closeBottomBtn = document.getElementById('btn-cs-modal-close-bottom');
+    const downloadTopBtn = document.getElementById('btn-cs-modal-download-top');
+    const downloadBottomBtn = document.getElementById('btn-cs-modal-download-bottom');
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => this.closeModal('modal-case-study'));
+    }
+
+    if (closeBottomBtn) {
+      closeBottomBtn.addEventListener('click', () => this.closeModal('modal-case-study'));
+    }
+
+    const triggerDownload = () => {
+      const target = this.currentCaseStudyDesign || this.currentInspectingDesign;
+      if (target) {
+        this.downloadCaseStudyWordDoc(target);
+      }
+    };
+
+    if (downloadTopBtn) downloadTopBtn.addEventListener('click', triggerDownload);
+    if (downloadBottomBtn) downloadBottomBtn.addEventListener('click', triggerDownload);
+  }
+
+  openCaseStudyModal(design) {
+    if (!design) return;
+    this.currentCaseStudyDesign = design;
+
+    if (!window.UXCaseStudyEngine) {
+      this.showToast('Case study engine is loading...', 'info');
+      return;
+    }
+
+    const data = window.UXCaseStudyEngine.generateCaseStudyData(design);
+    const titleEl = document.getElementById('case-study-modal-title');
+    const contentEl = document.getElementById('case-study-modal-content');
+
+    if (titleEl) {
+      titleEl.textContent = `${design.title} - UX Case Study`;
+    }
+
+    if (contentEl) {
+      contentEl.innerHTML = window.UXCaseStudyEngine.buildInAppHTML(data);
+      contentEl.scrollTop = 0;
+    }
+
+    this.openModal('modal-case-study');
+  }
+
+  downloadCaseStudyWordDoc(design) {
+    if (!design) return;
+    if (!window.UXCaseStudyEngine) {
+      this.showToast('Case study engine is loading...', 'info');
+      return;
+    }
+
+    const success = window.UXCaseStudyEngine.downloadWordDocument(design);
+    if (success) {
+      this.showToast(`Word Document downloaded: ${design.title}`, 'success');
+    } else {
+      this.showToast('Could not generate Word document', 'error');
     }
   }
 
@@ -686,7 +774,7 @@ class App {
     const statusInfo = StorageManager.getDeadlineStatus(design.deadlineDate);
     const deadlineDateEl = document.getElementById('archive-detail-deadline-date-str');
     const deadlineBadgeEl = document.getElementById('archive-detail-deadline-badge');
-    if (deadlineDateEl) deadlineDateEl.textContent = design.deadlineFormatted || 'Next Week';
+    if (deadlineDateEl) deadlineDateEl.textContent = design.deadlineFormatted || '1 Week';
     if (deadlineBadgeEl) {
       deadlineBadgeEl.textContent = statusInfo.label;
       deadlineBadgeEl.className = `deadline-countdown-badge ${statusInfo.urgency}`;

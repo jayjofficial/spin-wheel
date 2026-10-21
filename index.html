@@ -499,12 +499,12 @@
         <div class="deadline-card-header">
           <div class="deadline-header-left">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>NEXT-WEEK DEADLINE</span>
+            <span>1-WEEK DEADLINE</span>
           </div>
-          <span class="deadline-countdown-badge" id="winner-deadline-badge">Next Week</span>
+          <span class="deadline-countdown-badge" id="winner-deadline-badge">1 Week</span>
         </div>
         <p class="deadline-card-text">
-          Target completion date: <strong id="winner-deadline-date-str">Sunday of Next Week</strong>. Daily reminders will guide you to finish this design before the deadline.
+          Target completion date: <strong id="winner-deadline-date-str">1 Week After Selection</strong>. Daily reminders will guide you to finish this design before the deadline.
         </p>
       </div>
 
@@ -593,12 +593,12 @@
         <div class="deadline-card-header">
           <div class="deadline-header-left">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span>NEXT-WEEK DEADLINE</span>
+            <span>1-WEEK DEADLINE</span>
           </div>
-          <span class="deadline-countdown-badge" id="archive-detail-deadline-badge">Next Week</span>
+          <span class="deadline-countdown-badge" id="archive-detail-deadline-badge">1 Week</span>
         </div>
         <p class="deadline-card-text">
-          Target completion date: <strong id="archive-detail-deadline-date-str">Sunday of Next Week</strong>. Daily reminders are active for this challenge.
+          Target completion date: <strong id="archive-detail-deadline-date-str">1 Week After Selection</strong>. Daily reminders are active for this challenge.
         </p>
       </div>
 
@@ -632,6 +632,18 @@
         </div>
       </div>
 
+      <!-- Case Study Action Row -->
+      <div class="archive-case-study-actions">
+        <button class="btn-case-study-download" id="btn-archive-detail-download-doc">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          <span>Download Case Study (.doc)</span>
+        </button>
+        <button class="btn-case-study-read" id="btn-archive-detail-read-study">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Read Case Study</span>
+        </button>
+      </div>
+
       <!-- Actions -->
       <div class="winner-actions-group">
         <button class="btn-primary-glow" id="btn-archive-detail-edit">
@@ -641,6 +653,43 @@
         <button class="btn-secondary" id="btn-archive-detail-delete" style="color: #fb7185;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           <span>Delete Challenge</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 1C: INTERACTIVE UX CASE STUDY VIEWER
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-case-study" role="dialog" aria-modal="true" aria-labelledby="case-study-modal-title">
+    <div class="modal-dialog modal-dialog-case-study">
+      <div class="case-study-topbar">
+        <div class="cs-topbar-left">
+          <span class="cs-topbar-badge">PROFESSIONAL UX DOSSIER</span>
+          <h3 class="cs-topbar-title" id="case-study-modal-title">Case Study Viewer</h3>
+        </div>
+        <div class="cs-topbar-actions">
+          <button class="btn-download-word" id="btn-cs-modal-download-top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+            <span>Download Word (.doc)</span>
+          </button>
+          <button class="modal-close-btn relative" id="btn-close-case-study" aria-label="Close modal">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Document Viewport -->
+      <div class="case-study-viewport" id="case-study-modal-content">
+        <!-- Rendered by UXCaseStudyEngine.buildInAppHTML -->
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="case-study-bottom-bar">
+        <button class="btn-secondary" id="btn-cs-modal-close-bottom">Close Viewer</button>
+        <button class="btn-primary-glow" id="btn-cs-modal-download-bottom">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          <span>Download Word Document (.doc)</span>
         </button>
       </div>
     </div>
@@ -832,6 +881,7 @@
   <script src="js/topics.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/wheel.js"></script>
+  <script src="js/case-study.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>
 
