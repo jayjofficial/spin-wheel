@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Roulette — Creative Design Wheel & Weekly Portfolio Tracker</title>
+  <meta name="description" content="Inspiration roulette for UI/UX designers to pick what to design, influence prompts with smart topic generation, and log designs by week.">
+
+  <!-- Google Fonts: Space Grotesk & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Fullscreen Celebration Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Main App Shell -->
+  <div class="app-container">
+
+    <!-- Header / Navbar -->
+    <header class="site-header">
+      <div class="brand-wrapper" id="brand-home-btn">
+        <div class="brand-icon">✨</div>
+        <div class="brand-title">
+          <span>UX <span class="highlight">ROULETTE</span></span>
+          <span class="brand-subtitle">Design Studio & Weekly Tracker</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button class="nav-tab-btn active" data-tab="roulette" id="tab-btn-roulette">
+          <span>🎡</span> Roulette
+        </button>
+        <button class="nav-tab-btn" data-tab="tracker" id="tab-btn-tracker">
+          <span>📂</span> Design Archive & Tracker
+        </button>
+        <button class="nav-tab-btn" data-tab="matrix" id="tab-btn-matrix">
+          <span>🧩</span> Topic Matrix
+        </button>
+      </nav>
+
+      <!-- Header Actions: Convex Environment, Streak & Sound -->
+      <div class="header-actions">
+        <!-- Convex Environment Selector & Status Pill -->
+        <div class="convex-env-pill" title="Convex Cloud Backend Status">
+          <span class="convex-dot" id="convex-status-dot"></span>
+          <select id="convex-env-selector" class="convex-select" aria-label="Convex Environment">
+            <option value="dev">🟢 Dev: adorable-sturgeon</option>
+            <option value="prod">🟣 Prod: beaming-capybara</option>
+            <option value="offline">💾 Local Offline</option>
+          </select>
+        </div>
+
+        <div class="streak-pill" title="Weekly Design Streak: Weeks with at least one logged design">
+          <span class="fire-icon">🔥</span>
+          <span id="header-streak-count">0 Weeks</span>
+        </div>
+        <button class="sound-toggle-btn" id="btn-sound-toggle" title="Toggle Wheel Sound Effects" aria-label="Toggle Sound">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         TAB 1: ROULETTE STUDIO
+         ==================================================================== -->
+    <main id="tab-roulette" class="tab-content active">
+      <div class="roulette-grid">
+        
+        <!-- Left Column: Wheel Canvas Stage -->
+        <section class="wheel-stage-card" aria-label="Roulette Wheel Stage">
+          <div class="stage-badge-row">
+            <span class="live-badge">
+              <span class="live-dot"></span> Ready to Spin
+            </span>
+            <span class="segment-count-pill" id="wheel-segment-count">10 Challenges on Wheel</span>
+          </div>
+
+          <div class="wheel-wrapper">
+            <!-- Physical Top Needle Pointer -->
+            <div class="wheel-pointer" id="wheel-pointer">
+              <div class="pointer-triangle"></div>
+            </div>
+
+            <!-- Canvas Element -->
+            <canvas id="roulette-wheel-canvas" class="wheel-canvas" width="480" height="480"></canvas>
+
+            <!-- Center Hub Spin Button -->
+            <button class="center-spin-btn" id="btn-center-spin" aria-label="Spin the wheel">
+              <span class="spin-text">SPIN</span>
+            </button>
+          </div>
+
+          <!-- Bottom Wheel Controls -->
+          <div class="wheel-controls-row">
+            <button class="btn-primary-glow" id="btn-main-spin">
+              <span>🎲 Spin the Roulette</span>
+            </button>
+          </div>
+
+          <div class="spin-hint">
+            <span>Pro tip: Press</span> <span class="kbd-shortcut">Space</span> <span>to spin anytime</span>
+          </div>
+        </section>
+
+        <!-- Right Column: Influence Panel & Topic Generator -->
+        <aside class="influence-panel" aria-label="Influence & Topic Generator">
+
+          <!-- Card: Influence The Wheel -->
+          <div class="card-glass">
+            <div class="card-header-styled">
+              <div>
+                <h2>✨ Influence The Wheel</h2>
+                <p class="card-desc">Type what you want to design. We'll add it to the wheel and generate similar design prompts for you!</p>
+              </div>
+            </div>
+
+            <div class="topic-input-container">
+              <div class="input-with-action">
+                <input 
+                  type="text" 
+                  id="influence-topic-input" 
+                  class="styled-input" 
+                  placeholder="e.g. Coffee subscription, Crypto wallet, EV Charging..." 
+                  autocomplete="off"
+                >
+                <button class="input-icon-btn" id="btn-influence-add" title="Add to Wheel & Generate Similar">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Quick Inspiration Tags -->
+              <div>
+                <span style="font-size: 0.76rem; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;">Quick Inspiration:</span>
+                <div class="quick-inspiration-tags">
+                  <button class="inspire-tag" data-topic="Coffee Subscription Box">☕ Coffee Box</button>
+                  <button class="inspire-tag" data-topic="Fintech Crypto Staking">🪙 Crypto Staking</button>
+                  <button class="inspire-tag" data-topic="Fitness Activity Wearable">⚡ Fitness Watch</button>
+                  <button class="inspire-tag" data-topic="Travel Flight Concierge">✈️ Flight Booking</button>
+                  <button class="inspire-tag" data-topic="Mental Health Mood Journal">🧘 Mood Journal</button>
+                  <button class="inspire-tag" data-topic="AI Canvas Copilot">🤖 AI Copilot</button>
+                </div>
+              </div>
+
+              <!-- Generated Similar Topics Section (Dynamic) -->
+              <div class="generated-topics-section" id="generated-similar-section" style="display: none;">
+                <div class="generated-header">
+                  <div class="generated-title" id="generated-topics-headline">
+                    <span>✨</span> Similar Generated Challenges:
+                  </div>
+                  <button class="add-all-btn" id="btn-add-all-similar">+ Add All to Wheel</button>
+                </div>
+                <div class="similar-topics-list" id="similar-topics-list">
+                  <!-- Populated dynamically by app.js -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Card: Active Wheel Topics Mini-List -->
+          <div class="card-glass active-topics-card">
+            <div class="card-header-styled">
+              <div>
+                <h3>🎯 Active Wheel Challenges</h3>
+                <p class="card-desc">Challenges currently loaded in the roulette slices.</p>
+              </div>
+            </div>
+            <div class="active-topics-list" id="active-topics-mini-list">
+              <!-- Populated dynamically by app.js -->
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 2: DESIGN TRACKER & WEEKLY ARCHIVE
+         ==================================================================== -->
+    <section id="tab-tracker" class="tab-content">
+      <div class="tracker-wrapper">
+
+        <!-- Weekly Summary Dashboard Banner -->
+        <div class="weekly-summary-banner">
+          <div class="week-headline-group">
+            <div class="current-week-tag" id="banner-current-week-tag">
+              📅 Current: Week 43, 2026
+            </div>
+            <h2 class="weekly-title">Your Weekly Design Cadence</h2>
+            <p class="weekly-date-range" id="banner-date-range">
+              Oct 19 – Oct 25 • Let's build your design habit!
+            </p>
+          </div>
+
+          <!-- Key Metrics -->
+          <div class="weekly-stats-grid">
+            <div class="stat-box">
+              <span class="stat-value" id="stat-this-week">0</span>
+              <span class="stat-label">This Week</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value" id="stat-total">0</span>
+              <span class="stat-label">Total Designs</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-value" id="stat-streak">0 Weeks</span>
+              <span class="stat-label">Active Streak 🔥</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toolbar: Filters & Action Button -->
+        <div class="tracker-toolbar">
+          <div class="filter-group-left">
+            <!-- Week Dropdown Selector -->
+            <select id="filter-week-select" class="styled-select" aria-label="Filter by week">
+              <option value="all">🗓️ All Weeks</option>
+            </select>
+
+            <!-- Status Filter Pills -->
+            <div class="filter-pills">
+              <button class="filter-pill-btn active" data-status="all">All</button>
+              <button class="filter-pill-btn" data-status="published">🚀 Published</button>
+              <button class="filter-pill-btn" data-status="completed">✨ Completed</button>
+              <button class="filter-pill-btn" data-status="in_progress">⏳ In Progress</button>
+              <button class="filter-pill-btn" data-status="planned">📌 Planned</button>
+            </div>
+
+            <!-- Search Field -->
+            <input 
+              type="text" 
+              id="tracker-search-input" 
+              class="styled-input" 
+              style="padding: 0.5rem 1rem; width: 190px;" 
+              placeholder="Search designs or tags..."
+            >
+          </div>
+
+          <!-- Add Design Button -->
+          <button class="btn-primary-glow" id="btn-log-new-design">
+            <span>➕ Log New Design</span>
+          </button>
+        </div>
+
+        <!-- Designs Gallery Grid -->
+        <div class="designs-gallery-grid" id="designs-gallery-grid">
+          <!-- Rendered dynamically by tracker.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 3: TOPIC MATRIX & CONVEX CLOUD SETTINGS
+         ==================================================================== -->
+    <section id="tab-matrix" class="tab-content">
+      <div class="tracker-wrapper">
+
+        <!-- Convex Cloud Status & Sync Card -->
+        <div class="card-glass" style="border-color: rgba(99, 102, 241, 0.35);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem;">
+                <span style="font-size: 1.5rem;">☁️</span>
+                <h2 style="font-family: var(--font-heading); font-size: 1.45rem;">Convex Cloud Deployments</h2>
+                <span class="live-badge" id="convex-connection-pill" style="margin-left: 0.5rem;">
+                  <span class="live-dot" id="convex-panel-dot"></span> <span id="convex-panel-status">Connected to Dev</span>
+                </span>
+              </div>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Real-time reactive cloud database, portfolio storage, and HTTP endpoints.
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <button class="btn-primary-glow" id="btn-sync-to-convex" style="padding: 0.65rem 1.4rem; font-size: 0.88rem;">
+                <span>☁️ Push Local Data to Convex</span>
+              </button>
+              <button class="btn-secondary" id="btn-fetch-from-convex" style="padding: 0.65rem 1.2rem; font-size: 0.88rem;">
+                <span>🔄 Pull Latest Cloud Data</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Deployments Table / Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            <!-- Dev Box -->
+            <div style="background: rgba(14, 18, 30, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 1.2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-family: var(--font-heading); font-weight: 700; color: #34d399; font-size: 0.95rem;">🟢 Development Environment</span>
+                <span class="status-pill in_progress" style="font-size: 0.68rem;">Dev</span>
+              </div>
+              <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-muted);">
+                <div><strong>Cloud:</strong> <a href="https://adorable-sturgeon-291.convex.cloud" target="_blank" rel="noopener" style="color: #67e8f9; word-break: break-all;">https://adorable-sturgeon-291.convex.cloud</a></div>
+                <div><strong>HTTP Actions:</strong> <a href="https://adorable-sturgeon-291.convex.site" target="_blank" rel="noopener" style="color: #a5b4fc; word-break: break-all;">https://adorable-sturgeon-291.convex.site</a></div>
+              </div>
+            </div>
+
+            <!-- Prod Box -->
+            <div style="background: rgba(14, 18, 30, 0.7); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: var(--radius-lg); padding: 1.2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-family: var(--font-heading); font-weight: 700; color: #c084fc; font-size: 0.95rem;">🟣 Production Environment</span>
+                <span class="status-pill completed" style="font-size: 0.68rem;">Production</span>
+              </div>
+              <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-muted);">
+                <div><strong>Cloud:</strong> <a href="https://beaming-capybara-489.convex.cloud" target="_blank" rel="noopener" style="color: #67e8f9; word-break: break-all;">https://beaming-capybara-489.convex.cloud</a></div>
+                <div><strong>HTTP Actions:</strong> <a href="https://beaming-capybara-489.convex.site" target="_blank" rel="noopener" style="color: #a5b4fc; word-break: break-all;">https://beaming-capybara-489.convex.site</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-glass" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.5rem;">🧩 Topic Library & Presets</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Browse curated design categories, toggle topics on/off, or backup your data.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button class="btn-secondary" id="btn-matrix-reset-default">
+              🔄 Reset to Defaults
+            </button>
+            <button class="btn-secondary" id="btn-export-backup">
+              💾 Export Backup (JSON)
+            </button>
+            <label class="btn-secondary" style="cursor: pointer;">
+              📂 Restore Backup
+              <input type="file" id="input-import-backup" accept=".json" style="display: none;">
+            </label>
+          </div>
+        </div>
+
+        <div class="matrix-grid" id="matrix-categories-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ====================================================================
+       MODAL 1: WINNING RESULT MODAL
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-winner" role="dialog" aria-modal="true" aria-labelledby="winner-modal-title">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btn-close-winner" aria-label="Close modal">✕</button>
+
+      <div class="winner-header-icon">🎯</div>
+      <div class="winner-subtitle">Roulette Landed On</div>
+      <h3 class="winner-topic-title" id="winner-modal-title">Fintech Staking & Yield Portfolio Dashboard</h3>
+
+      <div class="creative-specs-box">
+        <div class="spec-item">
+          <span class="spec-label">Target Deliverable</span>
+          <span class="spec-val" id="winner-spec-platform">Web Dashboard</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Category Domain</span>
+          <span class="spec-val" id="winner-spec-category">Fintech</span>
+        </div>
+        <div class="spec-item" style="grid-column: 1 / -1;">
+          <span class="spec-label">UX Focus & Challenge</span>
+          <span class="spec-val" id="winner-spec-focus">High-Density Financial Hierarchy & Micro-interactions</span>
+        </div>
+      </div>
+
+      <div class="winner-actions-group">
+        <button class="btn-primary-glow" id="btn-winner-start-design" style="width: 100%; justify-content: center;">
+          <span>🚀 Start & Log This Design</span>
+        </button>
+        <button class="btn-secondary" id="btn-winner-generate-more" style="width: 100%; justify-content: center;">
+          <span>✨ Generate Similar Challenges to This</span>
+        </button>
+        <button class="btn-secondary" id="btn-winner-spin-again" style="width: 100%; justify-content: center;">
+          <span>🔄 Spin Again</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 2: LOG / EDIT DESIGN FORM
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-design-form" role="dialog" aria-modal="true" aria-labelledby="modal-design-form-title">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <button class="modal-close-btn" id="btn-close-design-form" aria-label="Close modal">✕</button>
+
+      <h3 id="modal-design-form-title" style="font-family: var(--font-heading); font-size: 1.45rem; margin-bottom: 0.25rem;">
+        🎨 Log Design Entry
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        Keep track of your UI/UX content, publication links, and weekly consistency.
+      </p>
+
+      <form id="form-log-design" class="form-grid">
+        
+        <!-- Title -->
+        <div class="form-group">
+          <label class="form-label" for="input-design-title">
+            Design Title <span class="req">*</span>
+          </label>
+          <input type="text" id="input-design-title" class="form-input" placeholder="e.g. Artisan Coffee Subscription Mobile App" required>
+        </div>
+
+        <!-- Original Prompt / Challenge -->
+        <div class="form-group">
+          <label class="form-label" for="input-design-prompt">
+            Original Challenge / Prompt
+          </label>
+          <input type="text" id="input-design-prompt" class="form-input" placeholder="e.g. Daily Cold Brew Taste Quiz & One-Click Reorder Flow">
+        </div>
+
+        <!-- Date & Week Indicator -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="input-design-date">
+              Date Designed <span class="req">*</span>
+              <span id="form-week-preview" style="color: var(--accent-cyan); font-weight: 700; font-size: 0.8rem;">📆 Week 43, 2026</span>
+            </label>
+            <input type="date" id="input-design-date" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="select-design-platform">
+              Deliverable Platform
+            </label>
+            <select id="select-design-platform" class="form-select">
+              <option value="Mobile App">📱 Mobile App</option>
+              <option value="Web / Dashboard">💻 Web / Dashboard</option>
+              <option value="Smartwatch">⌚ Smartwatch</option>
+              <option value="Tablet">📲 Tablet</option>
+              <option value="Spatial / AR">🥽 Spatial / AR</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Status & Tags -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="select-design-status">
+              Current Status
+            </label>
+            <select id="select-design-status" class="form-select">
+              <option value="planned">📌 Planned</option>
+              <option value="in_progress">⏳ In Progress</option>
+              <option value="completed">✨ Completed</option>
+              <option value="published">🚀 Published on Social / Portfolio</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-design-tags">
+              Tags / Keywords
+            </label>
+            <input type="text" id="input-design-tags" class="form-input" placeholder="e.g. mobile, fintech, darkmode">
+          </div>
+        </div>
+
+        <!-- Image Upload Zone -->
+        <div class="form-group">
+          <label class="form-label">
+            Design Screenshot / Mockup Preview
+            <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: 500;">(File, Drag & Drop, or Ctrl+V to paste!)</span>
+          </label>
+          <div class="upload-dropzone" id="image-dropzone">
+            <input type="file" id="input-design-image" accept="image/*" style="display: none;">
+            
+            <div id="dropzone-placeholder-content" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
+              <span style="font-size: 1.8rem;">🖼️</span>
+              <span style="font-size: 0.88rem; font-weight: 600; color: #fff;">Click to upload or drag image here</span>
+              <span style="font-size: 0.78rem; color: var(--text-dim);">Paste image directly from clipboard (Ctrl+V)</span>
+            </div>
+
+            <div class="upload-preview-container" id="upload-preview-container">
+              <img id="upload-preview-img" alt="Preview">
+              <button type="button" class="remove-img-btn" id="btn-remove-img">✕ Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- External Links: Figma & Social Post -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="input-design-figma">
+              Figma Link
+            </label>
+            <input type="url" id="input-design-figma" class="form-input" placeholder="https://figma.com/file/...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-design-post">
+              Portfolio / Post Link
+            </label>
+            <input type="url" id="input-design-post" class="form-input" placeholder="e.g. Instagram, Dribbble, X URL">
+          </div>
+        </div>
+
+        <!-- Reflection / UX Notes -->
+        <div class="form-group">
+          <label class="form-label" for="textarea-design-reflection">
+            UX Reflections & Key Decisions
+          </label>
+          <textarea id="textarea-design-reflection" class="form-textarea" placeholder="What UX friction did you solve? What did you learn during this design sprint?"></textarea>
+        </div>
+
+        <!-- Submit Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 0.85rem; margin-top: 0.5rem;">
+          <button type="button" class="btn-secondary" id="btn-cancel-design-form">Cancel</button>
+          <button type="submit" class="btn-primary-glow">
+            <span>💾 Save Design</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 3: LIGHTBOX PREVIEW
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-lightbox" role="dialog" aria-modal="true">
+    <div style="position: relative; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center;">
+      <button class="modal-close-btn" id="btn-close-lightbox" style="top: -15px; right: -15px;">✕</button>
+      <img id="lightbox-img" src="" alt="Full view" style="max-width: 100%; max-height: 85vh; border-radius: var(--radius-lg); object-fit: contain; box-shadow: var(--shadow-lg);">
+      <div id="lightbox-caption" style="margin-top: 0.75rem; color: #fff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600;"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/convex.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/topics.js"></script>
+  <script src="js/wheel.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

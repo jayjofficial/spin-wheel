@@ -1,0 +1,22 @@
+{
+  "name": "spin-wheel",
+  "version": "1.0.0",
+  "description": "UX Roulette & Weekly Design Tracker with Convex Backend",
+  "main": "index.html",
+  "scripts": {
+    "dev:convex": "convex dev",
+    "deploy:prod": "convex deploy --cmd-url https://beaming-capybara-489.convex.cloud",
+    "deploy:dev": "convex deploy --cmd-url https://adorable-sturgeon-291.convex.cloud"
+  },
+  "keywords": [
+    "ui-ux",
+    "roulette",
+    "convex",
+    "portfolio-tracker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "convex": "^1.17.4"
+  }
+}
