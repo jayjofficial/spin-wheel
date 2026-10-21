@@ -60,7 +60,7 @@ const GLOBAL_UI_STYLES = [
   // --- African UI Design Styles ---
   {
     id: 'afro_futurism',
-    name: 'Afro-Futurism High-Contrast',
+    name: 'Afro-Modernist Tech',
     region: 'Africa',
     subRegion: 'Pan-African & Silicon Savannah',
     vibe: 'High-contrast dark mode with electric cyan and solar gold accents, woven geometric card borders, and battery-efficient layout.',
@@ -70,7 +70,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'naija_fintech',
-    name: 'Naija FinTech High-Trust Neo-Bank',
+    name: 'Lagos FinTech Neo-Bank',
     region: 'Africa',
     subRegion: 'Nigeria (Lagos Tech Hub)',
     vibe: 'Deep midnight obsidian with crisp emerald verification green, prominent numeric hierarchy, and biometric one-touch cards.',
@@ -80,7 +80,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'sahel_terracotta',
-    name: 'Sahelian Terracotta & Ochre Rhythm',
+    name: 'Sahelian Earth-Tone Minimal',
     region: 'Africa',
     subRegion: 'West & North Africa (Sahel Belt)',
     vibe: 'Warm desert sand, baked terracotta clay, deep indigo accents, and organic card curves with subtle textile dividers.',
@@ -90,7 +90,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'kente_modular',
-    name: 'Kente Geometrics & Modular Craft',
+    name: 'Geometric Modular Bento',
     region: 'Africa',
     subRegion: 'Ghana (Accra)',
     vibe: 'Structured interlocking bento grid with golden yellow, royal crimson, and forest emerald accents over deep charcoal.',
@@ -100,7 +100,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'swahili_glass',
-    name: 'Swahili Coast Oceanic Glass',
+    name: 'Swahili Glassmorphism',
     region: 'Africa',
     subRegion: 'East African Coast (Zanzibar & Mombasa)',
     vibe: 'Breezy coastal whitespace, frosted glass cards over deep sea teal, soft mother-of-pearl accents, and tranquil rounded pills.',
@@ -110,7 +110,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'joburg_industrial',
-    name: 'Joburg Industrial Modernism',
+    name: 'Joburg Industrial Modern',
     region: 'Africa',
     subRegion: 'South Africa (Johannesburg)',
     vibe: 'Raw slate grey, crisp industrial typography, punchy warning orange highlights, and structured card borders with brutalist precision.',
@@ -122,7 +122,7 @@ const GLOBAL_UI_STYLES = [
   // --- Asian UI Design Styles ---
   {
     id: 'japan_zen',
-    name: 'Japanese Wabi-Sabi & Digital Zen',
+    name: 'Japanese Minimalist Zen',
     region: 'Asia',
     subRegion: 'Japan (Kyoto & Tokyo)',
     vibe: 'Delicate hairline dividers, generous intentional whitespace, muted stone & sumi ink accents, and serene focus.',
@@ -132,7 +132,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'korean_pastel',
-    name: 'Korean Soft Neo-Card & Marshmallow',
+    name: 'Korean Soft Neo-Card',
     region: 'Asia',
     subRegion: 'South Korea (Seoul)',
     vibe: 'Pillowy rounded cards (24px+), soft diffused shadows, gentle friendly pastel badges, and welcoming micro-copy.',
@@ -142,7 +142,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'tokyo_hud',
-    name: 'Tokyo Cyberpunk Neo-HUD',
+    name: 'Cyberpunk HUD Interface',
     region: 'Asia',
     subRegion: 'Japan (Tokyo / Shinjuku)',
     vibe: 'Dense dark telemetry, electric magenta & cyan borders, mono-spaced data tags, and glowing status markers.',
@@ -154,7 +154,7 @@ const GLOBAL_UI_STYLES = [
   // --- European UI Design Styles ---
   {
     id: 'swiss_typo',
-    name: 'Swiss International Typographic Style',
+    name: 'Swiss International Style',
     region: 'Europe',
     subRegion: 'Switzerland (Zurich & Basel)',
     vibe: 'Mathematical grid alignment, stark black/white contrast with vivid red accent, heavy grotesque typography, and zero decoration.',
@@ -164,17 +164,17 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'scandi_functional',
-    name: 'Scandinavian Warm Functionalism',
+    name: 'Scandinavian Functionalism',
     region: 'Europe',
     subRegion: 'Denmark & Sweden (Nordic)',
     vibe: 'Soft muted slate, forest sage, warm birchwood accents, generous ergonomics, and natural breathing room.',
     principles: 'Democratic design, honest ergonomics, accessible for all ages, and clutter-free utility.',
-    palette: ['#181a1b', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
+    palette: ['#181a1d', '#10b981', '#94a3b8', '#f59e0b', '#f1f5f9'],
     typography: 'Warm Humanist Grotesk'
   },
   {
     id: 'french_editorial',
-    name: 'French Haute Editorial & Serif Luxury',
+    name: 'Editorial Serif & Luxury Minimal',
     region: 'Europe',
     subRegion: 'France (Paris)',
     vibe: 'Sophisticated serif headlines, hairline gold & cream borders, editorial multi-column flow, and restrained elegance.',
@@ -186,7 +186,7 @@ const GLOBAL_UI_STYLES = [
   // --- Americas & Contemporary Global UI Styles ---
   {
     id: 'brazil_modern',
-    name: 'Brazilian Tropical Modernism',
+    name: 'Brazilian Organic Modernism',
     region: 'Americas',
     subRegion: 'Brazil (São Paulo & Rio)',
     vibe: 'Sweeping Niemeyer-inspired wave curves, deep botanical green, terracotta highlights, and vibrant lively rhythm.',
@@ -196,7 +196,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'bento_grid',
-    name: 'Modern Bento Grid Functionalism',
+    name: 'Modern Bento Grid',
     region: 'Global',
     subRegion: 'Modern Tech & Silicon Valley',
     vibe: 'Asymmetrical modular compartments, inner-glow borders, interactive status pills, and dense glanceable hierarchy.',
@@ -206,7 +206,7 @@ const GLOBAL_UI_STYLES = [
   },
   {
     id: 'neo_brutalism',
-    name: 'Neo-Brutalism with Thick Ink Lines',
+    name: 'High-Contrast Neo-Brutalism',
     region: 'Global',
     subRegion: 'Global Indie Web',
     vibe: '2.5px solid black borders, hard dropped 4px box shadows without blur, saturated color blocks, and high affordance.',

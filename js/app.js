@@ -8,6 +8,7 @@ class App {
     this.wheel = null;
     this.currentWinningTopic = null;
     this.currentEditingDesign = null;
+    this.currentInspectingDesign = null;
     this.tempUploadedImage = null;
 
     window.addEventListener('DOMContentLoaded', () => this.init());
@@ -20,6 +21,7 @@ class App {
     this.initFullscreen();
     this.initInfluenceInput();
     this.initWinningModal();
+    this.initArchiveDetailsModal();
     this.initDesignModal();
     this.initLightbox();
     this.initTopicMatrix();
@@ -83,13 +85,16 @@ class App {
     }
   }
 
-  handleWheelStop(winner) {
+  async handleWheelStop(winner) {
     this.currentWinningTopic = winner;
 
     const spinCenterBtn = document.getElementById('btn-center-spin');
     const spinMainBtn = document.getElementById('btn-main-spin');
     if (spinCenterBtn) spinCenterBtn.classList.remove('spinning');
     if (spinMainBtn) spinMainBtn.disabled = false;
+
+    // Auto-archive new challenge immediately to the Archive section
+    await this.archiveNewChallenge(winner);
 
     // Confetti celebration
     if (window.confettiEngine) {
@@ -103,6 +108,46 @@ class App {
 
     // Open Winner Modal
     this.openWinnerModal(winner);
+  }
+
+  async archiveNewChallenge(winner) {
+    if (!winner) return null;
+
+    if (!winner.style) {
+      winner.style = winner.styleId ? window.getUIStyleById(winner.styleId) : window.getRandomUIStyle();
+    }
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const weekData = StorageManager.getISOWeekData(todayStr);
+
+    const challengeRecord = {
+      title: winner.text || 'Design Challenge',
+      about: winner.about || `A dedicated product design challenge focused on solving everyday user needs for ${winner.text}.`,
+      problem: winner.problem || 'Reduce user cognitive load, eliminate confusing friction points, and make core actions accessible on small mobile screens.',
+      prompt: winner.about || winner.text,
+      category: winner.category || 'General UI/UX',
+      platform: winner.deliverable || 'Mobile App',
+      uiStyle: winner.style?.name || '',
+      uiStyleRegion: winner.style?.region ? `${winner.style.region} • ${winner.style.subRegion}` : '',
+      uiStyleVibe: winner.style?.vibe || '',
+      uiStylePrinciples: winner.style?.principles || '',
+      uiStyleTypography: winner.style?.typography || '',
+      uiStylePalette: Array.isArray(winner.style?.palette) ? winner.style.palette : [],
+      status: 'planned',
+      date: todayStr,
+      week: weekData.week,
+      year: weekData.year,
+      weekString: weekData.weekString,
+      tags: ['roulette', 'challenge', (winner.category || 'design').toLowerCase().replace(/[^a-z0-9]/g, '')].filter(Boolean),
+      source: 'roulette'
+    };
+
+    const saved = await window.storageManager.saveDesign(challengeRecord);
+    winner.archivedDesignId = saved.id;
+    if (window.designTracker) {
+      await window.designTracker.refresh();
+    }
+    return saved;
   }
 
   updateSegmentCount() {
@@ -422,12 +467,20 @@ class App {
         this.closeModal('modal-winner');
         // Switch to Design Log Modal with pre-filled winner data including UI Style
         this.openDesignModal({
+          id: this.currentWinningTopic?.archivedDesignId,
           title: this.currentWinningTopic?.text || 'Design Challenge',
-          prompt: this.currentWinningTopic?.text,
+          prompt: this.currentWinningTopic?.about || this.currentWinningTopic?.text,
+          about: this.currentWinningTopic?.about || '',
+          problem: this.currentWinningTopic?.problem || '',
           platform: this.currentWinningTopic?.deliverable || 'Mobile App',
           uiStyle: this.currentWinningTopic?.style?.name || '',
-          status: 'planned',
-          tags: ['#roulette', '#uiux', `#${(this.currentWinningTopic?.category || 'design').toLowerCase().replace(/\s+/g, '')}`]
+          uiStyleRegion: this.currentWinningTopic?.style?.region ? `${this.currentWinningTopic.style.region} • ${this.currentWinningTopic.style.subRegion}` : '',
+          uiStyleVibe: this.currentWinningTopic?.style?.vibe || '',
+          uiStylePrinciples: this.currentWinningTopic?.style?.principles || '',
+          uiStyleTypography: this.currentWinningTopic?.style?.typography || '',
+          uiStylePalette: this.currentWinningTopic?.style?.palette || [],
+          status: 'in_progress',
+          tags: ['roulette', 'uiux', (this.currentWinningTopic?.category || 'design').toLowerCase().replace(/[^a-z0-9]/g, '')]
         });
       });
     }
@@ -451,7 +504,7 @@ class App {
     }
 
     if (rerollStyleBtn) {
-      rerollStyleBtn.addEventListener('click', () => {
+      rerollStyleBtn.addEventListener('click', async () => {
         if (!this.currentWinningTopic) return;
         const currentStyleId = this.currentWinningTopic.style?.id;
         const newStyle = window.getRandomUIStyle(currentStyleId);
@@ -459,6 +512,22 @@ class App {
         this.renderWinnerStyleCard(newStyle);
         if (window.soundEngine) window.soundEngine.playPop();
         this.showToast(`Swapped UI style to: ${newStyle.name}`, 'info');
+
+        // Sync with archived entry
+        if (this.currentWinningTopic.archivedDesignId) {
+          const designs = await window.storageManager.getAllDesigns();
+          const existing = designs.find(d => d.id === this.currentWinningTopic.archivedDesignId);
+          if (existing) {
+            existing.uiStyle = newStyle.name;
+            existing.uiStyleRegion = `${newStyle.region} • ${newStyle.subRegion}`;
+            existing.uiStyleVibe = newStyle.vibe;
+            existing.uiStylePrinciples = newStyle.principles;
+            existing.uiStyleTypography = newStyle.typography;
+            existing.uiStylePalette = newStyle.palette;
+            await window.storageManager.saveDesign(existing);
+            if (window.designTracker) await window.designTracker.refresh();
+          }
+        }
       });
     }
   }
@@ -519,6 +588,103 @@ class App {
         `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
       ).join('');
     }
+  }
+
+  // --- Archive Challenge Details Viewer ---
+  initArchiveDetailsModal() {
+    const closeBtn = document.getElementById('btn-close-archive-details');
+    const editBtn = document.getElementById('btn-archive-detail-edit');
+    const deleteBtn = document.getElementById('btn-archive-detail-delete');
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => this.closeModal('modal-challenge-details'));
+    }
+
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        const target = this.currentInspectingDesign;
+        this.closeModal('modal-challenge-details');
+        if (target) {
+          this.openDesignModal(target);
+        }
+      });
+    }
+
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', async () => {
+        const target = this.currentInspectingDesign;
+        if (!target) return;
+        if (confirm(`Delete "${target.title}"?`)) {
+          await window.storageManager.deleteDesign(target.id);
+          this.closeModal('modal-challenge-details');
+          this.showToast('Challenge deleted from archive', 'info');
+          if (window.designTracker) {
+            await window.designTracker.refresh();
+          }
+        }
+      });
+    }
+  }
+
+  openArchiveChallengeDetails(design) {
+    if (!design) return;
+    this.currentInspectingDesign = design;
+
+    const titleEl = document.getElementById('archive-detail-title');
+    const catEl = document.getElementById('archive-detail-category');
+    const platEl = document.getElementById('archive-detail-platform');
+    const weekEl = document.getElementById('archive-detail-week');
+    const statusPill = document.getElementById('archive-detail-status-pill');
+    const aboutEl = document.getElementById('archive-detail-about');
+    const problemEl = document.getElementById('archive-detail-problem');
+
+    if (titleEl) titleEl.textContent = design.title;
+    if (catEl) catEl.textContent = (design.category || 'UI/UX').toUpperCase();
+    if (platEl) platEl.textContent = (design.platform || 'MOBILE APP').toUpperCase();
+    if (weekEl) weekEl.textContent = `WEEK ${design.week || '1'}, ${design.year || '2026'}`;
+    if (statusPill) statusPill.textContent = (design.status || 'PLANNED').toUpperCase() + ' CHALLENGE';
+
+    if (aboutEl) {
+      aboutEl.textContent = design.about || design.prompt || `Dedicated UI design challenge for ${design.title}.`;
+    }
+
+    if (problemEl) {
+      problemEl.textContent = design.problem || 'Standard usability optimization, clarity of actions, and reduced cognitive load.';
+    }
+
+    // UI Style details
+    const styleNameEl = document.getElementById('archive-detail-style-name');
+    const styleRegionEl = document.getElementById('archive-detail-style-region');
+    const styleVibeEl = document.getElementById('archive-detail-style-vibe');
+    const stylePaletteEl = document.getElementById('archive-detail-palette');
+    const stylePrinciplesEl = document.getElementById('archive-detail-principles');
+    const styleTypoEl = document.getElementById('archive-detail-typography');
+
+    let styleObj = null;
+    if (design.uiStyle && window.GLOBAL_UI_STYLES) {
+      styleObj = window.GLOBAL_UI_STYLES.find(s => s.name === design.uiStyle) || null;
+    }
+
+    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'Industry Standard Minimal');
+    const styleRegion = design.uiStyleRegion || (styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : 'Global');
+    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Clear visual hierarchy, ergonomic spacing, and modern typography.');
+    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Clarity, direct affordances, and accessible contrast.');
+    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Modern clean sans-serif');
+    const stylePalette = (design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : (styleObj ? styleObj.palette : ['#3b82f6', '#10b981', '#06b6d4', '#f59e0b', '#ffffff']);
+
+    if (styleNameEl) styleNameEl.textContent = styleName;
+    if (styleRegionEl) styleRegionEl.textContent = styleRegion;
+    if (styleVibeEl) styleVibeEl.textContent = styleVibe;
+    if (stylePrinciplesEl) stylePrinciplesEl.textContent = stylePrinciples;
+    if (styleTypoEl) styleTypoEl.textContent = styleTypography;
+
+    if (stylePaletteEl) {
+      stylePaletteEl.innerHTML = stylePalette.map(hex =>
+        `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
+      ).join('');
+    }
+
+    this.openModal('modal-challenge-details');
   }
 
   // --- Design Log & Tracker Modal ---
@@ -622,7 +788,11 @@ class App {
 
     if (initialData) {
       titleInput.value = initialData.title || '';
-      promptInput.value = initialData.prompt || '';
+      promptInput.value = initialData.prompt || initialData.about || '';
+      const problemInput = document.getElementById('input-design-problem');
+      if (problemInput) {
+        problemInput.value = initialData.problem || '';
+      }
       if (initialData.platform) platformSelect.value = initialData.platform;
       if (initialData.status) statusSelect.value = initialData.status;
       figmaInput.value = initialData.figmaUrl || '';
@@ -760,7 +930,14 @@ class App {
       id: this.currentEditingDesign?.id,
       title,
       prompt: document.getElementById('input-design-prompt').value.trim(),
-      uiStyle: document.getElementById('input-design-style')?.value.trim() || '',
+      about: document.getElementById('input-design-prompt').value.trim() || this.currentEditingDesign?.about || '',
+      problem: document.getElementById('input-design-problem')?.value.trim() || this.currentEditingDesign?.problem || '',
+      uiStyle: document.getElementById('input-design-style')?.value.trim() || this.currentEditingDesign?.uiStyle || '',
+      uiStyleRegion: this.currentEditingDesign?.uiStyleRegion || '',
+      uiStyleVibe: this.currentEditingDesign?.uiStyleVibe || '',
+      uiStylePrinciples: this.currentEditingDesign?.uiStylePrinciples || '',
+      uiStyleTypography: this.currentEditingDesign?.uiStyleTypography || '',
+      uiStylePalette: this.currentEditingDesign?.uiStylePalette || [],
       date: dateVal,
       week: weekData.week,
       year: weekData.year,

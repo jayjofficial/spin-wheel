@@ -251,9 +251,27 @@ class DesignTracker {
         </div>
         <div class="card-content">
           <h4 class="card-title">${this.escapeHTML(design.title)}</h4>
-          <p class="card-prompt-snippet" title="${this.escapeHTML(design.prompt || '')}">${this.escapeHTML(design.prompt || 'Custom prompt')}</p>
+          <p class="card-prompt-snippet" title="${this.escapeHTML(design.about || design.prompt || '')}">${this.escapeHTML(design.about || design.prompt || 'Custom prompt')}</p>
           
-          ${design.uiStyle ? `<div style="margin-top: 0.35rem; margin-bottom: 0.45rem;"><span class="style-badge-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>${this.escapeHTML(design.uiStyle)}</span></div>` : ''}
+          ${design.problem ? `
+            <div class="archive-card-problem">
+              <div class="archive-problem-header">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span>UX Problem to Solve:</span>
+              </div>
+              <p class="archive-problem-text">${this.escapeHTML(design.problem)}</p>
+            </div>
+          ` : ''}
+
+          ${design.uiStyle ? `
+            <div class="archive-style-tag">
+              <span class="style-badge-pill">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                ${this.escapeHTML(design.uiStyle)}
+              </span>
+              ${design.uiStylePrinciples ? `<span class="archive-style-subprinciple" title="${this.escapeHTML(design.uiStylePrinciples)}">${this.escapeHTML(design.uiStylePrinciples)}</span>` : ''}
+            </div>
+          ` : ''}
 
           ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
 
@@ -268,10 +286,13 @@ class DesignTracker {
               ${postLink}
             </div>
             <div class="card-manage-btns">
-              <button class="btn-card-icon" data-action="edit" title="Edit Design">
+              <button class="btn-card-icon" data-action="view-details" title="View Challenge Information">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              </button>
+              <button class="btn-card-icon" data-action="edit" title="Edit / Log Deliverables">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               </button>
-              <button class="btn-card-icon delete" data-action="delete" title="Delete Design">
+              <button class="btn-card-icon delete" data-action="delete" title="Delete Challenge">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
               </button>
             </div>
@@ -287,6 +308,16 @@ class DesignTracker {
       const design = this.designs.find(d => d.id === id);
       if (!design) return;
 
+      // View details action
+      card.querySelector('[data-action="view-details"]')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.app && window.app.openArchiveChallengeDetails) {
+          window.app.openArchiveChallengeDetails(design);
+        } else {
+          window.app.openDesignModal(design);
+        }
+      });
+
       // Edit action
       card.querySelector('[data-action="edit"]')?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -298,15 +329,17 @@ class DesignTracker {
         e.stopPropagation();
         if (confirm(`Delete "${design.title}"?`)) {
           await window.storageManager.deleteDesign(id);
-          window.app.showToast('Design deleted', 'info');
+          window.app.showToast('Challenge deleted', 'info');
           this.refresh();
         }
       });
 
-      // Preview Image click
+      // Preview Image or open challenge details
       card.querySelector('[data-action="preview-image"]')?.addEventListener('click', () => {
         if (design.image) {
           window.app.openImageLightbox(design.image, design.title);
+        } else if (window.app && window.app.openArchiveChallengeDetails) {
+          window.app.openArchiveChallengeDetails(design);
         } else {
           window.app.openDesignModal(design);
         }
