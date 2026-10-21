@@ -253,6 +253,8 @@ class DesignTracker {
           <h4 class="card-title">${this.escapeHTML(design.title)}</h4>
           <p class="card-prompt-snippet" title="${this.escapeHTML(design.prompt || '')}">${this.escapeHTML(design.prompt || 'Custom prompt')}</p>
           
+          ${design.uiStyle ? `<div style="margin-top: 0.35rem; margin-bottom: 0.45rem;"><span class="style-badge-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>${this.escapeHTML(design.uiStyle)}</span></div>` : ''}
+
           ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
 
           <div class="card-meta-row">

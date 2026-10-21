@@ -35,7 +35,6 @@ class App {
   // --- Shuffle Creative Topics System ---
   initShuffle() {
     const shuffleStageBtn = document.getElementById('btn-stage-shuffle');
-    const shuffleBottomBtn = document.getElementById('btn-shuffle-topics');
 
     const handleShuffle = () => {
       if (this.wheel && this.wheel.isSpinning) return;
@@ -46,11 +45,10 @@ class App {
 
       if (window.soundEngine) window.soundEngine.playPop();
       if (this.wheel) this.wheel.spin(0.24);
-      this.showToast('Shuffled! Loaded 10 fresh creative design challenges.', 'success');
+      this.showToast('Shuffled! Loaded 10 fresh everyday design challenges.', 'success');
     };
 
     if (shuffleStageBtn) shuffleStageBtn.addEventListener('click', handleShuffle);
-    if (shuffleBottomBtn) shuffleBottomBtn.addEventListener('click', handleShuffle);
     this.handleShuffleAction = handleShuffle;
   }
 
@@ -415,17 +413,19 @@ class App {
     const startDesignBtn = document.getElementById('btn-winner-start-design');
     const spinAgainBtn = document.getElementById('btn-winner-spin-again');
     const generateMoreBtn = document.getElementById('btn-winner-generate-more');
+    const rerollStyleBtn = document.getElementById('btn-winner-reroll-style');
 
     if (closeBtn) closeBtn.addEventListener('click', () => this.closeModal('modal-winner'));
 
     if (startDesignBtn) {
       startDesignBtn.addEventListener('click', () => {
         this.closeModal('modal-winner');
-        // Switch to Design Log Modal with pre-filled winner data
+        // Switch to Design Log Modal with pre-filled winner data including UI Style
         this.openDesignModal({
           title: this.currentWinningTopic?.text || 'Design Challenge',
           prompt: this.currentWinningTopic?.text,
           platform: this.currentWinningTopic?.deliverable || 'Mobile App',
+          uiStyle: this.currentWinningTopic?.style?.name || '',
           status: 'planned',
           tags: ['#roulette', '#uiux', `#${(this.currentWinningTopic?.category || 'design').toLowerCase().replace(/\s+/g, '')}`]
         });
@@ -449,18 +449,76 @@ class App {
         }
       });
     }
+
+    if (rerollStyleBtn) {
+      rerollStyleBtn.addEventListener('click', () => {
+        if (!this.currentWinningTopic) return;
+        const currentStyleId = this.currentWinningTopic.style?.id;
+        const newStyle = window.getRandomUIStyle(currentStyleId);
+        this.currentWinningTopic.style = newStyle;
+        this.renderWinnerStyleCard(newStyle);
+        if (window.soundEngine) window.soundEngine.playPop();
+        this.showToast(`Swapped UI style to: ${newStyle.name}`, 'info');
+      });
+    }
   }
 
   openWinnerModal(topic) {
     const modal = document.getElementById('modal-winner');
     if (!modal) return;
 
-    document.getElementById('winner-modal-title').textContent = topic.text;
-    document.getElementById('winner-spec-platform').textContent = topic.deliverable || 'Mobile App';
-    document.getElementById('winner-spec-focus').textContent = topic.uxFocus || 'Visual Hierarchy & Interaction';
-    document.getElementById('winner-spec-category').textContent = topic.category || 'General UI/UX';
+    this.currentWinningTopic = topic;
+
+    // Header info
+    const titleEl = document.getElementById('winner-modal-title');
+    const catEl = document.getElementById('winner-spec-category');
+    const platEl = document.getElementById('winner-spec-platform');
+    const aboutEl = document.getElementById('winner-spec-about');
+    const problemEl = document.getElementById('winner-spec-problem');
+
+    if (titleEl) titleEl.textContent = topic.text;
+    if (catEl) catEl.textContent = topic.category || 'General UI/UX';
+    if (platEl) platEl.textContent = topic.deliverable || 'Mobile App';
+
+    // What this design is about
+    if (aboutEl) {
+      aboutEl.textContent = topic.about || `A dedicated product design challenge focused on solving everyday user needs for ${topic.text}.`;
+    }
+
+    // UX Problem to solve
+    if (problemEl) {
+      problemEl.textContent = topic.problem || 'Reduce user cognitive load, eliminate confusing friction points, and make core actions accessible on small mobile screens.';
+    }
+
+    // Resolve & render assigned global UI style
+    if (!topic.style) {
+      topic.style = topic.styleId ? window.getUIStyleById(topic.styleId) : window.getRandomUIStyle();
+    }
+    this.renderWinnerStyleCard(topic.style);
 
     this.openModal('modal-winner');
+  }
+
+  renderWinnerStyleCard(style) {
+    if (!style) return;
+    const nameEl = document.getElementById('winner-style-name');
+    const regionEl = document.getElementById('winner-style-region');
+    const vibeEl = document.getElementById('winner-style-vibe');
+    const principlesEl = document.getElementById('winner-style-principles');
+    const typoEl = document.getElementById('winner-style-typography');
+    const paletteEl = document.getElementById('winner-style-palette');
+
+    if (nameEl) nameEl.textContent = style.name;
+    if (regionEl) regionEl.textContent = `${style.region} • ${style.subRegion}`;
+    if (vibeEl) vibeEl.textContent = style.vibe;
+    if (principlesEl) principlesEl.textContent = style.principles;
+    if (typoEl) typoEl.textContent = style.typography;
+
+    if (paletteEl && Array.isArray(style.palette)) {
+      paletteEl.innerHTML = style.palette.map(hex => 
+        `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
+      ).join('');
+    }
   }
 
   // --- Design Log & Tracker Modal ---
@@ -556,6 +614,11 @@ class App {
 
     const wData = StorageManager.getISOWeekData(dateInput.value);
     if (weekIndicator) weekIndicator.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${wData.weekString}`;
+
+    const styleInput = document.getElementById('input-design-style');
+    if (styleInput) {
+      styleInput.value = initialData?.uiStyle || (this.currentWinningTopic?.style?.name || '');
+    }
 
     if (initialData) {
       titleInput.value = initialData.title || '';
@@ -697,6 +760,7 @@ class App {
       id: this.currentEditingDesign?.id,
       title,
       prompt: document.getElementById('input-design-prompt').value.trim(),
+      uiStyle: document.getElementById('input-design-style')?.value.trim() || '',
       date: dateVal,
       week: weekData.week,
       year: weekData.year,

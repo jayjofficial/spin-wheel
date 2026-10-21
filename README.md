@@ -11,15 +11,37 @@ A studio tool designed for UI/UX designers to overcome creative block, generate 
 - **Realistic Deceleration Physics**: Damped friction inertia with physical needle deflection on every passing pin.
 - **Web Audio Mechanical Ticks & Fanfare**: Procedural audio engine that clicks with wheel velocity and plays a celebration chord when landing on a winner.
 - **Confetti Explosion**: Custom particle physics celebration when your challenge is picked.
-- **Creative Specs Modal**: Breaks down the winning topic into **Platform** (Mobile, Web Dashboard, Watch, AR), **UX Challenge Focus**, and **Domain**.
+- **UI/UX Problem-Solving Brief**: Breaks down the winning topic into:
+  - **What This Design Is About**: Clear overview of the digital product/service.
+  - **The UX Problem to Solve**: The specific human friction, ergonomics, or usability challenge to address.
+  - **Assigned Global UI Design Style**: A paired international UI design style complete with regional origin, color palette swatches, typography pairing, and core UX principles (with easy one-click style swapping).
 
-### 2. Influence & Dynamic Topic Generator
-- **Influence the Wheel**: Type any idea or industry (e.g. *Coffee shop app*, *Split bills*, *Plant care*, *Pet adoption*).
-- **Smart Semantic Variation Engine**: Instantly generates 5 contextual, everyday human UI/UX challenges tailored to your idea.
-- **One-Click Inclusion**: Add individual generated challenges or add all with a single click.
+### 2. Authentic Global UI Design Styles
+Includes 15 authentic UI design styles from around the world, prominently featuring African UI design aesthetics:
+- **Africa**:
+  - *Afro-Futurism High-Contrast* (Pan-African / Silicon Savannah)
+  - *Naija FinTech High-Trust Neo-Bank* (Nigeria / Lagos)
+  - *Sahelian Terracotta & Ochre Rhythm* (West & North Africa)
+  - *Kente Geometrics & Modular Craft* (Ghana / Accra)
+  - *Swahili Coast Oceanic Glass* (East African Coast / Zanzibar & Mombasa)
+  - *Joburg Industrial Modernism* (South Africa / Johannesburg)
+- **Asia**:
+  - *Japanese Wabi-Sabi & Digital Zen* (Japan / Kyoto & Tokyo)
+  - *Korean Soft Neo-Card & Marshmallow* (South Korea / Seoul)
+  - *Tokyo Cyberpunk Neo-HUD* (Japan / Tokyo)
+- **Europe**:
+  - *Swiss International Typographic Style* (Switzerland / Zurich)
+  - *Scandinavian Warm Functionalism* (Denmark & Sweden)
+  - *French Haute Editorial & Serif Luxury* (France / Paris)
+- **Americas & Global**:
+  - *Brazilian Tropical Modernism* (Brazil / São Paulo & Rio)
+  - *Modern Bento Grid Functionalism* (Global Modern Tech)
+  - *Neo-Brutalism with Thick Ink Lines* (Global Indie Web)
 
-### 3. Creative Shuffle Engine
-- **Shuffle Ideas Button (or Press `S`)**: Instantly picks 10 random, unexpected, and imaginative design challenges from an expansive 50+ creative concept library (Sci-Fi, Whimsical, Retro Gear, Niche Passions, Nature, and Audio).
+### 3. Everyday Human Challenge Pool & Shuffle
+- **Natural Phrasing**: Challenges use names everyday people say (e.g., *Roommate expense & bill splitter*, *Grocery delivery & weekly meal box*, *Doctor appointment & clinic check-in*, *Bus countdown & digital transit pass*, *Apartment hunting & rent lease*).
+- **Stage Shuffle Pill (or Press `S`)**: Instantly loads 10 fresh, realistic challenges from a pool of 40+ everyday product ideas across finance, healthcare, transit, food, housing, education, and community.
+- **Influence Generator**: Type any idea or industry to instantly generate 4-5 contextual, natural UI/UX challenges.
 
 ### 4. Weekly Design Archive & Habit Tracker
 - **Automatic ISO-8601 Week Calculation**: Accurately tracks which week each design belongs to (e.g., `Week 43, 2026`) and calculates date ranges.
