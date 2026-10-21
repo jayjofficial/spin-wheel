@@ -14,7 +14,7 @@ class App {
   }
 
   init() {
-    this.initThemeSwitcher();
+    this.initShuffle();
     this.initWheel();
     this.initNavigation();
     this.initFullscreen();
@@ -32,95 +32,26 @@ class App {
     this.switchTab('roulette');
   }
 
-  // --- Theme Switcher System ---
-  initThemeSwitcher() {
-    const wrapper = document.getElementById('theme-switcher-wrapper');
-    const triggerBtn = document.getElementById('btn-theme-switcher');
-    const menu = document.getElementById('theme-dropdown-menu');
+  // --- Shuffle Creative Topics System ---
+  initShuffle() {
+    const shuffleStageBtn = document.getElementById('btn-stage-shuffle');
+    const shuffleBottomBtn = document.getElementById('btn-shuffle-topics');
 
-    const savedTheme = localStorage.getItem('ux_roulette_theme') || 'linear';
-    this.applyTheme(savedTheme, false);
+    const handleShuffle = () => {
+      if (this.wheel && this.wheel.isSpinning) return;
+      const newTopics = window.topicEngine.shuffleTopics(10);
+      this.wheel.setTopics(newTopics);
+      this.updateSegmentCount();
+      this.renderActiveTopicsMiniList();
 
-    if (triggerBtn && menu) {
-      triggerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = menu.classList.contains('open');
-        menu.classList.toggle('open', !isOpen);
-        triggerBtn.setAttribute('aria-expanded', String(!isOpen));
-      });
-
-      document.addEventListener('click', (e) => {
-        if (wrapper && !wrapper.contains(e.target)) {
-          menu.classList.remove('open');
-          triggerBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('open')) {
-          menu.classList.remove('open');
-          triggerBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      const optionBtns = menu.querySelectorAll('.theme-option-btn');
-      optionBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetTheme = btn.dataset.theme;
-          this.applyTheme(targetTheme, true);
-          menu.classList.remove('open');
-          triggerBtn.setAttribute('aria-expanded', 'false');
-        });
-      });
-    }
-  }
-
-  applyTheme(themeName, showToast = true) {
-    this.currentTheme = themeName || 'linear';
-    document.documentElement.setAttribute('data-theme', this.currentTheme);
-    try {
-      localStorage.setItem('ux_roulette_theme', this.currentTheme);
-    } catch (e) {}
-
-    const themeMetadata = {
-      linear: { label: 'Linear', name: 'Linear Studio' },
-      editorial: { label: 'Editorial', name: 'Nordic Editorial' },
-      spatial: { label: 'Spatial', name: 'Apple Spatial' },
-      arcade: { label: 'Arcade', name: 'Neo-Arcade' }
+      if (window.soundEngine) window.soundEngine.playPop();
+      if (this.wheel) this.wheel.spin(0.24);
+      this.showToast('Shuffled! Loaded 10 fresh creative design challenges.', 'success');
     };
 
-    const meta = themeMetadata[this.currentTheme] || themeMetadata.linear;
-    const labelEl = document.getElementById('theme-current-label');
-    if (labelEl) labelEl.textContent = meta.label;
-
-    // Highlight active option in menu
-    const menu = document.getElementById('theme-dropdown-menu');
-    if (menu) {
-      menu.querySelectorAll('.theme-option-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.theme === this.currentTheme);
-      });
-    }
-
-    // Update wheel canvas theme
-    if (this.wheel) {
-      this.wheel.setTheme(this.currentTheme);
-    }
-
-    // Update confetti palette
-    if (window.confettiEngine) {
-      const themeCfg = window.THEME_WHEEL_CONFIGS?.[this.currentTheme];
-      if (themeCfg && themeCfg.confettiColors) {
-        window.confettiEngine.setColors(themeCfg.confettiColors);
-      }
-    }
-
-    // Refresh mini-list chip colors to match current palette
-    this.renderActiveTopicsMiniList();
-
-    if (showToast) {
-      this.showToast(`Switched aesthetic to ${meta.name}`, 'info');
-      if (window.soundEngine) window.soundEngine.playPop();
-    }
+    if (shuffleStageBtn) shuffleStageBtn.addEventListener('click', handleShuffle);
+    if (shuffleBottomBtn) shuffleBottomBtn.addEventListener('click', handleShuffle);
+    this.handleShuffleAction = handleShuffle;
   }
 
   // --- Wheel Initialization ---
@@ -1045,6 +976,17 @@ class App {
         e.preventDefault();
         const spinBtn = document.getElementById('btn-main-spin');
         if (spinBtn) spinBtn.click();
+      }
+
+      // 'S' to shuffle topics if no modal or input is focused
+      if (e.key === 's' || e.key === 'S') {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+        const openModal = document.querySelector('.modal-backdrop.open');
+        if (openModal) return;
+
+        e.preventDefault();
+        if (this.handleShuffleAction) this.handleShuffleAction();
       }
 
       // Escape to close theater mode or modals

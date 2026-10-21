@@ -32,90 +32,6 @@ const THEME_WHEEL_CONFIGS = {
     podBorder: 'rgba(255, 255, 255, 0.22)',
     gradientDarken: 0.38,
     confettiColors: ['#3b82f6', '#60a5fa', '#94a3b8', '#ffffff', '#818cf8', '#0ea5e9']
-  },
-  editorial: {
-    name: 'Nordic Editorial',
-    palette: [
-      '#c25e3d', // Terracotta Clay
-      '#476856', // Swedish Sage
-      '#c9893d', // Warm Ochre
-      '#3a3d45', // Warm Slate
-      '#8c586a', // Dusty Rose
-      '#596e57', // Forest Olive
-      '#ad6c47', // Burnished Sienna
-      '#384852'  // Nordic Sea
-    ],
-    fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif",
-    accentText: '#faf8f5',
-    textShadow: 'rgba(28, 25, 23, 0.85)',
-    centerDarken: '#2d2724',
-    outerRingGlow: 'rgba(194, 94, 61, 0.35)',
-    separatorColor: 'rgba(250, 248, 245, 0.35)',
-    bezelOuter: 'rgba(194, 94, 61, 0.35)',
-    bezelInner: 'rgba(217, 119, 6, 0.25)',
-    bezelTick: 'rgba(194, 94, 61, 0.4)',
-    pegColor: '#fef3c7',
-    pegCore: '#d97706',
-    podBg: 'rgba(255, 255, 255, 0.88)',
-    podBorder: 'rgba(194, 94, 61, 0.45)',
-    gradientDarken: 0.2,
-    confettiColors: ['#c25e3d', '#476856', '#c9893d', '#d97706', '#8c586a', '#fef3c7']
-  },
-  spatial: {
-    name: 'Apple Spatial',
-    palette: [
-      '#0071e3', // System Blue
-      '#bf5af2', // Royal Purple
-      '#30d158', // Mint Emerald
-      '#ff375f', // Sunset Rose
-      '#06b6d4', // Liquid Cyan
-      '#ff9f0a', // Luminous Amber
-      '#5e5ce6', // Electric Indigo
-      '#32d74b'  // Vibrant Green
-    ],
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-    accentText: '#ffffff',
-    textShadow: 'rgba(0, 0, 0, 0.75)',
-    centerDarken: 'rgba(255, 255, 255, 0.18)',
-    outerRingGlow: 'rgba(56, 189, 248, 0.5)',
-    separatorColor: 'rgba(255, 255, 255, 0.3)',
-    bezelOuter: 'rgba(255, 255, 255, 0.4)',
-    bezelInner: 'rgba(56, 189, 248, 0.45)',
-    bezelTick: 'rgba(255, 255, 255, 0.45)',
-    pegColor: '#ffffff',
-    pegCore: '#38bdf8',
-    podBg: 'rgba(255, 255, 255, 0.22)',
-    podBorder: 'rgba(255, 255, 255, 0.4)',
-    gradientDarken: 0.28,
-    confettiColors: ['#0071e3', '#30d158', '#bf5af2', '#ff375f', '#ff9f0a', '#64d2ff', '#ffffff']
-  },
-  arcade: {
-    name: 'Neo-Arcade',
-    palette: [
-      '#00f2fe', // Hyper Cyan
-      '#ff007f', // Laser Magenta
-      '#7928ca', // Cyber Violet
-      '#10e598', // Radioactive Emerald
-      '#ff5e00', // Turbo Orange
-      '#0070f3', // Electric Blue
-      '#e00070', // Hot Pink
-      '#ffd600'  // Cyber Yellow
-    ],
-    fontFamily: "'Space Grotesk', -apple-system, sans-serif",
-    accentText: '#ffffff',
-    textShadow: 'rgba(0, 0, 0, 0.95)',
-    centerDarken: '#06060e',
-    outerRingGlow: 'rgba(0, 242, 254, 0.65)',
-    separatorColor: 'rgba(0, 242, 254, 0.5)',
-    bezelOuter: 'rgba(255, 0, 127, 0.6)',
-    bezelInner: 'rgba(0, 242, 254, 0.5)',
-    bezelTick: 'rgba(0, 242, 254, 0.6)',
-    pegColor: '#ffffff',
-    pegCore: '#ff007f',
-    podBg: 'rgba(6, 6, 16, 0.85)',
-    podBorder: 'rgba(0, 242, 254, 0.5)',
-    gradientDarken: 0.45,
-    confettiColors: ['#00f2fe', '#ff007f', '#ffd600', '#10e598', '#7928ca', '#ffffff']
   }
 };
 
@@ -157,26 +73,26 @@ class RouletteWheel {
 
     let size;
     if (isTheater) {
-      const avail = Math.min(window.innerWidth * 0.88, window.innerHeight * 0.74);
-      size = Math.min(Math.max(avail, 480), 720);
+      const avail = Math.min(window.innerWidth * 0.92, window.innerHeight * 0.74);
+      size = Math.min(Math.max(avail, 320), 720);
     } else {
       const wrapper = document.getElementById('wheel-wrapper') || this.canvas.parentElement;
       const rect = wrapper ? wrapper.getBoundingClientRect() : this.canvas.getBoundingClientRect();
-      size = Math.min(rect.width || 480, 520);
-      if (size < 300) size = 340;
+      const parentAvail = Math.min(window.innerWidth - 32, rect.width || 440);
+      size = Math.max(Math.min(parentAvail, 480), 240);
     }
 
     this.width = size;
     this.height = size;
 
-    this.canvas.width = size * dpr;
-    this.canvas.height = size * dpr;
+    this.canvas.width = Math.floor(size * dpr);
+    this.canvas.height = Math.floor(size * dpr);
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
 
     this.centerX = size / 2;
     this.centerY = size / 2;
-    this.radius = size / 2 - 18; // Outer wheel padding
+    this.radius = Math.max(size / 2 - (size < 340 ? 12 : 18), 80);
 
     this.draw();
   }
@@ -354,7 +270,7 @@ class RouletteWheel {
       const podDist = radius * 0.74;
       const arcWidth = (radius * Math.PI / numSlices);
       const maxPodR = arcWidth * 0.38;
-      const podR = Math.max(14, Math.min(22, maxPodR));
+      const podR = Math.max(radius < 140 ? 11 : 13, Math.min(22, maxPodR));
 
       // 3A. Draw Pictorial Icon Pod
       ctx.save();
@@ -398,9 +314,11 @@ class RouletteWheel {
 
       // 3B. Draw Clean Concise Label
       ctx.save();
-      const labelDist = podDist - podR - 7;
+      const labelDist = podDist - podR - (radius < 140 ? 4 : 7);
       ctx.fillStyle = themeCfg.accentText;
-      const fontSize = numSlices > 12 ? 11 : numSlices > 8 ? 12 : 13;
+      const fontSize = radius < 140 
+        ? (numSlices > 10 ? 9.5 : 10.5) 
+        : (numSlices > 12 ? 11 : numSlices > 8 ? 12 : 13);
       ctx.font = `700 ${fontSize}px ${themeCfg.fontFamily}`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
