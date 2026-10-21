@@ -6,13 +6,23 @@
   <title>UX Roulette — Creative Design Wheel & Weekly Portfolio Tracker</title>
   <meta name="description" content="Inspiration roulette for UI/UX designers to pick what to design, influence prompts with smart topic generation, and log designs by week.">
 
-  <!-- Google Fonts: Space Grotesk & Plus Jakarta Sans -->
+  <!-- Google Fonts: Instrument Serif, Inter, Plus Jakarta Sans, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Instant Theme Hydration to prevent flash -->
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('ux_roulette_theme') || 'linear';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -45,8 +55,63 @@
         </button>
       </nav>
 
-      <!-- Header Actions: Convex Environment, Streak & Sound -->
+      <!-- Header Actions: Theme Switcher, Convex Environment, Streak & Sound -->
       <div class="header-actions">
+        <!-- Theme Switcher Dropdown -->
+        <div class="theme-switcher-wrapper" id="theme-switcher-wrapper">
+          <button class="theme-switcher-btn" id="btn-theme-switcher" aria-haspopup="true" aria-expanded="false" title="Switch Design Aesthetic Theme">
+            <span class="theme-btn-icon" id="theme-current-icon">⚡</span>
+            <span class="theme-btn-label" id="theme-current-label">Linear</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="theme-dropdown-menu" id="theme-dropdown-menu" role="menu">
+            <div class="theme-menu-header">Design Aesthetic</div>
+            <button class="theme-option-btn active" data-theme="linear" role="menuitem">
+              <span class="theme-preview-dot theme-dot-linear"></span>
+              <div class="theme-info">
+                <div class="theme-title-row">
+                  <span class="theme-name">⚡ Linear Studio</span>
+                  <span class="theme-badge-pill default">Default</span>
+                </div>
+                <span class="theme-desc">Obsidian dark mode, precision steel & sapphire</span>
+              </div>
+            </button>
+            <button class="theme-option-btn" data-theme="editorial" role="menuitem">
+              <span class="theme-preview-dot theme-dot-editorial"></span>
+              <div class="theme-info">
+                <div class="theme-title-row">
+                  <span class="theme-name">📜 Nordic Editorial</span>
+                  <span class="theme-badge-pill warm">Warm Light</span>
+                </div>
+                <span class="theme-desc">Gallery cream, terracotta, sage & ink</span>
+              </div>
+            </button>
+            <button class="theme-option-btn" data-theme="spatial" role="menuitem">
+              <span class="theme-preview-dot theme-dot-spatial"></span>
+              <div class="theme-info">
+                <div class="theme-title-row">
+                  <span class="theme-name">🫧 Apple Spatial</span>
+                  <span class="theme-badge-pill glass">VisionOS</span>
+                </div>
+                <span class="theme-desc">Frosted glass blur, jewel tones & fluid light</span>
+              </div>
+            </button>
+            <button class="theme-option-btn" data-theme="arcade" role="menuitem">
+              <span class="theme-preview-dot theme-dot-arcade"></span>
+              <div class="theme-info">
+                <div class="theme-title-row">
+                  <span class="theme-name">🕹️ Neo-Arcade</span>
+                  <span class="theme-badge-pill neon">Cyber</span>
+                </div>
+                <span class="theme-desc">Tokyo midnight, laser cyan & hot magenta</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
         <!-- Convex Environment Selector & Status Pill -->
         <div class="convex-env-pill" title="Convex Cloud Backend Status">
           <span class="convex-dot" id="convex-status-dot"></span>

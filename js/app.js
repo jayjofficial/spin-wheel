@@ -14,6 +14,7 @@ class App {
   }
 
   init() {
+    this.initThemeSwitcher();
     this.initWheel();
     this.initNavigation();
     this.initInfluenceInput();
@@ -28,6 +29,99 @@ class App {
 
     // Check query params or defaults
     this.switchTab('roulette');
+  }
+
+  // --- Theme Switcher System ---
+  initThemeSwitcher() {
+    const wrapper = document.getElementById('theme-switcher-wrapper');
+    const triggerBtn = document.getElementById('btn-theme-switcher');
+    const menu = document.getElementById('theme-dropdown-menu');
+
+    const savedTheme = localStorage.getItem('ux_roulette_theme') || 'linear';
+    this.applyTheme(savedTheme, false);
+
+    if (triggerBtn && menu) {
+      triggerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = menu.classList.contains('open');
+        menu.classList.toggle('open', !isOpen);
+        triggerBtn.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      document.addEventListener('click', (e) => {
+        if (wrapper && !wrapper.contains(e.target)) {
+          menu.classList.remove('open');
+          triggerBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('open')) {
+          menu.classList.remove('open');
+          triggerBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const optionBtns = menu.querySelectorAll('.theme-option-btn');
+      optionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetTheme = btn.dataset.theme;
+          this.applyTheme(targetTheme, true);
+          menu.classList.remove('open');
+          triggerBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  }
+
+  applyTheme(themeName, showToast = true) {
+    this.currentTheme = themeName || 'linear';
+    document.documentElement.setAttribute('data-theme', this.currentTheme);
+    try {
+      localStorage.setItem('ux_roulette_theme', this.currentTheme);
+    } catch (e) {}
+
+    const themeMetadata = {
+      linear: { icon: '⚡', label: 'Linear', name: 'Linear Studio' },
+      editorial: { icon: '📜', label: 'Editorial', name: 'Nordic Editorial' },
+      spatial: { icon: '🫧', label: 'Spatial', name: 'Apple Spatial' },
+      arcade: { icon: '🕹️', label: 'Arcade', name: 'Neo-Arcade' }
+    };
+
+    const meta = themeMetadata[this.currentTheme] || themeMetadata.linear;
+    const iconEl = document.getElementById('theme-current-icon');
+    const labelEl = document.getElementById('theme-current-label');
+    if (iconEl) iconEl.textContent = meta.icon;
+    if (labelEl) labelEl.textContent = meta.label;
+
+    // Highlight active option in menu
+    const menu = document.getElementById('theme-dropdown-menu');
+    if (menu) {
+      menu.querySelectorAll('.theme-option-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === this.currentTheme);
+      });
+    }
+
+    // Update wheel canvas theme
+    if (this.wheel) {
+      this.wheel.setTheme(this.currentTheme);
+    }
+
+    // Update confetti palette
+    if (window.confettiEngine) {
+      const themeCfg = window.THEME_WHEEL_CONFIGS?.[this.currentTheme];
+      if (themeCfg && themeCfg.confettiColors) {
+        window.confettiEngine.setColors(themeCfg.confettiColors);
+      }
+    }
+
+    // Refresh mini-list chip colors to match current palette
+    this.renderActiveTopicsMiniList();
+
+    if (showToast) {
+      this.showToast(`Switched aesthetic to ${meta.name} ✨`, 'info');
+      if (window.soundEngine) window.soundEngine.playPop();
+    }
   }
 
   // --- Wheel Initialization ---
@@ -262,10 +356,14 @@ class App {
     if (!list) return;
 
     const topics = window.topicEngine.getAllTopics();
-    list.innerHTML = topics.map(t => `
+    const themeCfg = window.THEME_WHEEL_CONFIGS?.[this.currentTheme || 'linear'] || window.THEME_WHEEL_CONFIGS?.linear;
+
+    list.innerHTML = topics.map((t, idx) => {
+      const chipColor = themeCfg ? themeCfg.palette[idx % themeCfg.palette.length] : (t.color || '#3b82f6');
+      return `
       <div class="active-topic-chip" style="opacity: ${t.active !== false ? '1' : '0.45'};">
         <div class="topic-chip-left">
-          <span class="color-indicator" style="background-color: ${t.color};"></span>
+          <span class="color-indicator" style="background-color: ${chipColor};"></span>
           <span class="topic-name" title="${this.escapeHTML(t.text)}">${this.escapeHTML(t.text)}</span>
         </div>
         <div class="topic-chip-actions">
@@ -277,7 +375,8 @@ class App {
           </button>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     list.querySelectorAll('[data-action="toggle-active"]').forEach(btn => {
       btn.addEventListener('click', () => {

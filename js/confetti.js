@@ -9,10 +9,16 @@ class ConfettiEngine {
     this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
     this.particles = [];
     this.animationFrame = null;
-    this.colors = ['#6366f1', '#a855f7', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#f43f5e', '#ffffff'];
+    this.colors = ['#3b82f6', '#60a5fa', '#94a3b8', '#ffffff', '#818cf8', '#0ea5e9'];
 
     this.resize();
     window.addEventListener('resize', () => this.resize());
+  }
+
+  setColors(colors) {
+    if (Array.isArray(colors) && colors.length > 0) {
+      this.colors = colors;
+    }
   }
 
   resize() {
