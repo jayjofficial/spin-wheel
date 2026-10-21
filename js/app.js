@@ -619,30 +619,9 @@ class App {
     const closeBtn = document.getElementById('btn-close-archive-details');
     const editBtn = document.getElementById('btn-archive-detail-edit');
     const deleteBtn = document.getElementById('btn-archive-detail-delete');
-    const downloadDocBtn = document.getElementById('btn-archive-detail-download-doc');
-    const readStudyBtn = document.getElementById('btn-archive-detail-read-study');
 
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.closeModal('modal-challenge-details'));
-    }
-
-    if (downloadDocBtn) {
-      downloadDocBtn.addEventListener('click', () => {
-        const target = this.currentInspectingDesign;
-        if (target) {
-          this.downloadCaseStudyWordDoc(target);
-        }
-      });
-    }
-
-    if (readStudyBtn) {
-      readStudyBtn.addEventListener('click', () => {
-        const target = this.currentInspectingDesign;
-        if (target) {
-          this.closeModal('modal-challenge-details');
-          this.openCaseStudyModal(target);
-        }
-      });
     }
 
     if (editBtn) {
