@@ -1891,267 +1891,259 @@ body::before {
   margin-bottom: 1.5rem;
 }
 
-/* Compact Professional Winner Modal Layout */
-.modal-dialog-compact {
-  max-width: 680px;
+/* Stacked Card Layout (Exact visual match to screenshot, with optimized compact spacing) */
+.modal-dialog-stacked {
+  max-width: 530px;
   width: 95%;
-  padding: 1.25rem 1.35rem;
+  padding: 1.15rem 1.25rem;
   background: var(--bg-surface-elevated);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.modal-dialog-compact .modal-close-btn {
+.modal-dialog-stacked .modal-close-btn {
   top: 0.85rem;
   right: 0.85rem;
   width: 30px;
   height: 30px;
 }
 
-.winner-compact-header {
-  margin-bottom: 0.85rem;
-  text-align: left;
+.winner-header-stacked {
+  text-align: center;
+  margin-bottom: 0.65rem;
 }
 
-.winner-top-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #34d399;
-  text-transform: uppercase;
-  margin-bottom: 0.25rem;
-}
-
-.winner-title-row {
+.winner-meta-badges {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.45rem;
+  margin-bottom: 0.35rem;
   flex-wrap: wrap;
 }
 
-.winner-compact-header .winner-topic-title {
-  text-align: left;
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1.25;
-  margin: 0;
-}
-
-.winner-compact-header .winner-meta-badges {
-  display: inline-flex;
-  gap: 0.4rem;
-  margin: 0;
-}
-
 .winner-badge-pill {
-  padding: 0.22rem 0.65rem;
+  padding: 0.22rem 0.7rem;
   border-radius: var(--radius-full);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   background: rgba(56, 189, 248, 0.12);
   color: var(--accent-cyan);
   border: 1px solid rgba(56, 189, 248, 0.28);
 }
 
-/* 2-Column Bento Grid */
-.winner-bento-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 0.75rem;
-  margin-bottom: 0.95rem;
+.modal-dialog-stacked .winner-topic-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: center;
+  margin: 0;
+  line-height: 1.25;
 }
 
-.bento-card {
+/* Card 1: What this design is about */
+.winner-brief-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 0.9rem 1rem;
+  padding: 0.75rem 0.95rem;
+  margin-bottom: 0.5rem;
   text-align: left;
-  display: flex;
-  flex-direction: column;
 }
 
-.bento-card-brief {
-  gap: 0.65rem;
-}
-
-.bento-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.bento-section-problem {
-  padding-top: 0.55rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.bento-header {
+.brief-card-header {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.7rem;
+  gap: 0.4rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent-cyan);
+  margin-bottom: 0.25rem;
 }
 
-.bento-header-problem {
-  color: #fb7185;
-}
-
-.bento-body-text {
-  font-size: 0.82rem;
+.brief-card-text {
+  font-size: 0.84rem;
   line-height: 1.45;
   color: var(--text-main);
   margin: 0;
 }
 
-.bento-problem-text {
-  color: #f1f5f9;
+/* Card 2: The UX problem to solve */
+.winner-problem-card {
+  background: rgba(244, 63, 94, 0.04);
+  border: 1px solid rgba(244, 63, 94, 0.22);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.95rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
 }
 
-/* Style Column Card */
-.bento-card-style {
-  background: linear-gradient(145deg, rgba(30, 41, 59, 0.55) 0%, rgba(15, 23, 42, 0.75) 100%);
-  border-color: rgba(168, 85, 247, 0.25);
-  gap: 0.5rem;
-}
-
-.bento-style-top {
+.problem-card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fb7185;
+  margin-bottom: 0.25rem;
 }
 
-.btn-reroll-compact {
-  background: rgba(168, 85, 247, 0.12);
+.problem-card-text {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text-main);
+  margin: 0;
+}
+
+/* Card 3: Design in this UI style */
+.winner-style-card {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
   border: 1px solid rgba(168, 85, 247, 0.3);
-  color: #c084fc;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.style-badge-label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.style-name-heading {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 0.35rem;
+  line-height: 1.25;
+}
+
+.style-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.style-region-pill {
+  padding: 0.18rem 0.55rem;
+  background: rgba(168, 85, 247, 0.16);
+  border: 1px solid rgba(168, 85, 247, 0.35);
   border-radius: var(--radius-full);
-  padding: 0.2rem 0.55rem;
-  font-size: 0.7rem;
+  color: #c084fc;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.btn-reroll-style {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  padding: 0.18rem 0.55rem;
+  font-size: 0.72rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.btn-reroll-compact:hover {
-  background: rgba(168, 85, 247, 0.25);
-  color: #fff;
-}
-
-.bento-style-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.bento-style-name {
-  font-family: var(--font-heading);
-  font-size: 0.98rem;
-  font-weight: 700;
+.btn-reroll-style:hover {
   color: var(--text-main);
-  margin: 0;
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.15);
 }
 
-.bento-region-pill {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #c084fc;
-  background: rgba(168, 85, 247, 0.15);
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-full);
-  white-space: nowrap;
-}
-
-.bento-vibe-text {
-  font-size: 0.76rem;
-  line-height: 1.4;
+.style-vibe-text {
+  font-size: 0.8rem;
+  line-height: 1.42;
   color: var(--text-muted);
-  margin: 0;
+  margin: 0 0 0.45rem;
 }
 
-.bento-meta-table {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-top: auto;
-  padding-top: 0.45rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.bento-meta-row {
+.style-palette-row {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.74rem;
+  gap: 0.55rem;
+  margin-bottom: 0.35rem;
 }
 
-.bento-meta-label {
+.style-sublabel {
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-dim);
-  min-width: 48px;
-  flex-shrink: 0;
+  min-width: 85px;
 }
 
-.bento-meta-val {
-  color: var(--text-main);
-  font-size: 0.74rem;
-  line-height: 1.3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.palette-swatches-compact {
+.palette-swatches {
   display: inline-flex;
-  gap: 0.3rem;
+  gap: 0.35rem;
   align-items: center;
 }
 
-.palette-swatches-compact .palette-dot {
+.palette-dot {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-/* Action Buttons Compact Single Row */
-.winner-actions-compact {
+.style-rule-item {
   display: flex;
+  align-items: baseline;
   gap: 0.55rem;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  line-height: 1.35;
+}
+
+.style-rule-text {
+  color: var(--text-main);
+  font-size: 0.8rem;
+}
+
+/* Action Buttons */
+.winner-actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.winner-actions-group .btn-primary-glow {
+  padding: 0.7rem 1.25rem;
+  font-size: 0.9rem;
   width: 100%;
+  justify-content: center;
 }
 
-.btn-action-primary {
-  flex: 1.4;
+.winner-actions-group .btn-secondary {
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  width: 100%;
   justify-content: center;
-  padding: 0.65rem 1rem;
-  font-size: 0.88rem;
-}
-
-.btn-action-secondary {
-  flex: 1;
-  justify-content: center;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.84rem;
 }
 
 /* Card Style Badge Pill in Design Archive */
@@ -2626,23 +2618,18 @@ body::before {
     font-size: 1.35rem;
   }
 
-  .winner-bento-grid {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
+  .modal-dialog-stacked {
+    padding: 1rem 0.85rem;
+    max-height: 92vh;
   }
 
-  .winner-actions-compact {
-    flex-wrap: wrap;
+  .modal-dialog-stacked .winner-topic-title {
+    font-size: 1.15rem;
   }
 
-  .btn-action-primary {
-    width: 100%;
-    flex: 1 1 100%;
-    padding: 0.75rem 1rem;
-  }
-
-  .btn-action-secondary {
-    flex: 1 1 45%;
+  .winner-brief-card,
+  .winner-problem-card,
+  .winner-style-card {
     padding: 0.65rem 0.75rem;
   }
 
