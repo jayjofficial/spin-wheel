@@ -1,22 +1,22 @@
-# ☁️ Convex Cloud Backend Integration Guide
+# Convex Cloud Backend Integration Guide
 
 This application is configured with two Convex cloud deployment environments: **Development** and **Production**.
 
 ---
 
-## 📡 Deployment URLs
+## Deployment URLs
 
-### 🟢 Development Deployment
+### Development Deployment
 - **Cloud URL**: `https://adorable-sturgeon-291.convex.cloud`
 - **HTTP Actions URL**: `https://adorable-sturgeon-291.convex.site`
 
-### 🟣 Production Deployment
+### Production Deployment
 - **Cloud URL**: `https://beaming-capybara-489.convex.cloud`
 - **HTTP Actions URL**: `https://beaming-capybara-489.convex.site`
 
 ---
 
-## 🏗️ Backend Structure (`convex/` directory)
+## Backend Structure (`convex/` directory)
 
 The backend code is already structured and ready in your project:
 
@@ -50,7 +50,7 @@ The backend code is already structured and ready in your project:
 
 ---
 
-## 🚀 How to Deploy Convex Backend Functions
+## How to Deploy Convex Backend Functions
 
 When you have Node.js / npm installed on your terminal or CI/CD:
 
@@ -71,14 +71,14 @@ npx convex deploy --cmd-url https://beaming-capybara-489.convex.cloud
 
 ---
 
-## 🔄 In-App Environment Switcher & Hybrid Sync
+## In-App Environment Switcher and Hybrid Sync
 
 In the top header of the web app, you will find a status pill:
-- **`🟢 Dev: adorable-sturgeon`**: Queries and mutations route to your Convex Dev Cloud.
-- **`🟣 Prod: beaming-capybara`**: Queries and mutations route to your Convex Production Cloud.
-- **`💾 Local Offline`**: Routes exclusively to local IndexedDB/LocalStorage.
+- **`Dev: adorable-sturgeon`**: Queries and mutations route to your Convex Dev Cloud.
+- **`Prod: beaming-capybara`**: Queries and mutations route to your Convex Production Cloud.
+- **`Local Offline`**: Routes exclusively to local IndexedDB/LocalStorage.
 
 ### Cloud Sync Features:
 - **Automatic Fallback**: If offline or if the backend functions haven't been pushed yet, the app works 100% offline using IndexedDB so you never lose work.
-- **Push to Cloud**: In the **Topic Matrix** tab, click **"☁️ Push Local Data to Convex"** to sync all your local designs and topics to your active Convex cloud.
-- **Pull from Cloud**: Click **"🔄 Pull Latest Cloud Data"** to refresh your local view with the cloud state.
+- **Push to Cloud**: In the **Topic Matrix** tab, click **"Push Local Data to Convex"** to sync all your local designs and topics to your active Convex cloud.
+- **Pull from Cloud**: Click **"Pull Latest Cloud Data"** to refresh your local view with the cloud state.

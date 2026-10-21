@@ -22,6 +22,12 @@ class DesignTracker {
   async refresh() {
     this.designs = await window.storageManager.getAllDesigns();
     this.render();
+    if (window.notificationManager) {
+      await window.notificationManager.updateBadgeCount();
+      if (window.notificationManager.panelOpen) {
+        window.notificationManager.renderDropdownPanel();
+      }
+    }
   }
 
   // Calculate and update top stats
@@ -279,6 +285,39 @@ class DesignTracker {
           })() : ''}
 
           ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
+
+          ${(() => {
+            if (!design.deadlineDate) {
+              const dl = StorageManager.getNextWeekDeadline(design.date || design.createdAt);
+              design.deadlineDate = dl.deadlineDate;
+              design.deadlineFormatted = dl.deadlineFormatted;
+              design.deadlineWeek = dl.deadlineWeek;
+              design.deadlineYear = dl.deadlineYear;
+            }
+            const statusInfo = StorageManager.getDeadlineStatus(design.deadlineDate);
+            const urgencyClass = statusInfo.urgency;
+            const isCompleted = design.status === 'completed' || design.status === 'published';
+
+            if (isCompleted) {
+              return `
+                <div class="card-deadline-row">
+                  <span class="deadline-pill completed">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Completed
+                  </span>
+                </div>
+              `;
+            }
+
+            return `
+              <div class="card-deadline-row">
+                <span class="deadline-pill ${urgencyClass}">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Deadline: ${design.deadlineFormatted || 'Next Week'} • ${statusInfo.label}
+                </span>
+              </div>
+            `;
+          })()}
 
           <div class="card-meta-row">
             <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${dateFormatted}</span>

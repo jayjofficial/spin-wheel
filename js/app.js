@@ -30,6 +30,10 @@ class App {
     this.initKeyboardShortcuts();
     this.renderActiveTopicsMiniList();
 
+    if (window.notificationManager) {
+      window.notificationManager.init();
+    }
+
     // Check query params or defaults
     this.switchTab('roulette');
   }
@@ -119,6 +123,7 @@ class App {
 
     const todayStr = new Date().toISOString().split('T')[0];
     const weekData = StorageManager.getISOWeekData(todayStr);
+    const deadlineInfo = StorageManager.getNextWeekDeadline(todayStr);
 
     const challengeRecord = {
       title: winner.text || 'Design Challenge',
@@ -139,14 +144,23 @@ class App {
       week: weekData.week,
       year: weekData.year,
       weekString: weekData.weekString,
+      deadlineDate: deadlineInfo.deadlineDate,
+      deadlineFormatted: deadlineInfo.deadlineFormatted,
+      deadlineWeek: deadlineInfo.deadlineWeek,
+      deadlineYear: deadlineInfo.deadlineYear,
       tags: ['roulette', 'challenge', (winner.category || 'design').toLowerCase().replace(/[^a-z0-9]/g, '')].filter(Boolean),
       source: 'roulette'
     };
 
     const saved = await window.storageManager.saveDesign(challengeRecord);
     winner.archivedDesignId = saved.id;
+    winner.deadlineInfo = deadlineInfo;
+
     if (window.designTracker) {
       await window.designTracker.refresh();
+    }
+    if (window.notificationManager) {
+      await window.notificationManager.updateBadgeCount();
     }
     return saved;
   }
@@ -561,6 +575,17 @@ class App {
       problemEl.textContent = topic.problem || 'Reduce user cognitive load, eliminate confusing friction points, and make core actions accessible on small mobile screens.';
     }
 
+    // Next-Week Deadline info
+    const dlInfo = topic.deadlineInfo || StorageManager.getNextWeekDeadline(new Date());
+    const statusInfo = StorageManager.getDeadlineStatus(dlInfo.deadlineDate);
+    const deadlineDateEl = document.getElementById('winner-deadline-date-str');
+    const deadlineBadgeEl = document.getElementById('winner-deadline-badge');
+    if (deadlineDateEl) deadlineDateEl.textContent = dlInfo.deadlineFormatted || 'Next Week';
+    if (deadlineBadgeEl) {
+      deadlineBadgeEl.textContent = statusInfo.label;
+      deadlineBadgeEl.className = `deadline-countdown-badge ${statusInfo.urgency}`;
+    }
+
     // Resolve & render assigned global UI style
     if (!topic.style) {
       topic.style = topic.styleId ? window.getUIStyleById(topic.styleId) : window.getRandomUIStyle();
@@ -575,41 +600,16 @@ class App {
     const nameEl = document.getElementById('winner-style-name');
     const regionEl = document.getElementById('winner-style-region');
     const vibeEl = document.getElementById('winner-style-vibe');
-    const typoEl = document.getElementById('winner-style-typography');
     const paletteEl = document.getElementById('winner-style-palette');
-    const specsEl = document.getElementById('winner-figma-specs');
 
     if (nameEl) nameEl.textContent = style.name;
     if (regionEl) regionEl.textContent = `${style.region} • ${style.subRegion}`;
     if (vibeEl) vibeEl.textContent = style.vibe;
-    if (typoEl) typoEl.textContent = style.typography;
 
     if (paletteEl && Array.isArray(style.palette)) {
       paletteEl.innerHTML = style.palette.map(hex => 
         `<span class="palette-dot" style="background-color: ${hex};" title="${hex}"></span>`
       ).join('');
-    }
-
-    if (specsEl) {
-      const guide = style.figmaGuide || {};
-      specsEl.innerHTML = `
-        <div class="figma-spec-row">
-          <span class="spec-badge">Buttons</span>
-          <span class="spec-text">${guide.buttons || style.principles}</span>
-        </div>
-        <div class="figma-spec-row">
-          <span class="spec-badge">Cards</span>
-          <span class="spec-text">${guide.cards || 'Structured rectangular cards with crisp contrast'}</span>
-        </div>
-        <div class="figma-spec-row">
-          <span class="spec-badge">Layout</span>
-          <span class="spec-text">${guide.layout || 'Disciplined grid alignment'}</span>
-        </div>
-        <div class="figma-spec-row highlight">
-          <span class="spec-badge signature-badge">Signature</span>
-          <span class="spec-text">${guide.signature || style.vibe}</span>
-        </div>
-      `;
     }
   }
 
@@ -673,6 +673,23 @@ class App {
 
     if (problemEl) {
       problemEl.textContent = design.problem || 'Standard usability optimization, clarity of actions, and reduced cognitive load.';
+    }
+
+    // Next-Week Deadline info
+    if (!design.deadlineDate) {
+      const dl = StorageManager.getNextWeekDeadline(design.date || design.createdAt);
+      design.deadlineDate = dl.deadlineDate;
+      design.deadlineFormatted = dl.deadlineFormatted;
+      design.deadlineWeek = dl.deadlineWeek;
+      design.deadlineYear = dl.deadlineYear;
+    }
+    const statusInfo = StorageManager.getDeadlineStatus(design.deadlineDate);
+    const deadlineDateEl = document.getElementById('archive-detail-deadline-date-str');
+    const deadlineBadgeEl = document.getElementById('archive-detail-deadline-badge');
+    if (deadlineDateEl) deadlineDateEl.textContent = design.deadlineFormatted || 'Next Week';
+    if (deadlineBadgeEl) {
+      deadlineBadgeEl.textContent = statusInfo.label;
+      deadlineBadgeEl.className = `deadline-countdown-badge ${statusInfo.urgency}`;
     }
 
     // Resolve UI Style using robust mapping
@@ -746,15 +763,33 @@ class App {
       });
     }
 
-    // Dynamic Week calculation on date change
+    // Dynamic Week & Next-Week Deadline calculation on date change
     const dateInput = document.getElementById('input-design-date');
     const weekIndicator = document.getElementById('form-week-preview');
+    const deadlineInput = document.getElementById('input-design-deadline');
+    const deadlineCountdown = document.getElementById('form-deadline-countdown');
+
     if (dateInput) {
       dateInput.addEventListener('change', () => {
         const d = dateInput.value;
         if (d) {
           const wData = StorageManager.getISOWeekData(d);
           if (weekIndicator) weekIndicator.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${wData.weekString}`;
+          const nextDl = StorageManager.getNextWeekDeadline(d);
+          if (deadlineInput) deadlineInput.value = nextDl.deadlineDate;
+          if (deadlineCountdown) {
+            const st = StorageManager.getDeadlineStatus(nextDl.deadlineDate);
+            deadlineCountdown.textContent = `${st.label} (Next Week)`;
+          }
+        }
+      });
+    }
+
+    if (deadlineInput) {
+      deadlineInput.addEventListener('change', () => {
+        if (deadlineCountdown && deadlineInput.value) {
+          const st = StorageManager.getDeadlineStatus(deadlineInput.value);
+          deadlineCountdown.textContent = st.label;
         }
       });
     }
@@ -823,6 +858,19 @@ class App {
 
     const wData = StorageManager.getISOWeekData(dateInput.value);
     if (weekIndicator) weekIndicator.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${wData.weekString}`;
+
+    // Next-Week Deadline field & countdown preview
+    const deadlineInput = document.getElementById('input-design-deadline');
+    const deadlineCountdown = document.getElementById('form-deadline-countdown');
+    const nextDl = StorageManager.getNextWeekDeadline(dateInput.value);
+    const chosenDeadline = initialData?.deadlineDate || nextDl.deadlineDate;
+    if (deadlineInput) {
+      deadlineInput.value = chosenDeadline;
+    }
+    if (deadlineCountdown) {
+      const st = StorageManager.getDeadlineStatus(chosenDeadline);
+      deadlineCountdown.textContent = `${st.label} (Next Week)`;
+    }
 
     const styleInput = document.getElementById('input-design-style');
     if (styleInput) {
@@ -962,6 +1010,8 @@ class App {
 
     const dateVal = document.getElementById('input-design-date').value;
     const weekData = StorageManager.getISOWeekData(dateVal);
+    const deadlineVal = document.getElementById('input-design-deadline')?.value || StorageManager.getNextWeekDeadline(dateVal).deadlineDate;
+    const dlInfo = StorageManager.getNextWeekDeadline(deadlineVal);
 
     const tagsRaw = document.getElementById('input-design-tags').value;
     const tags = tagsRaw
@@ -985,6 +1035,10 @@ class App {
       week: weekData.week,
       year: weekData.year,
       weekString: weekData.weekString,
+      deadlineDate: deadlineVal,
+      deadlineFormatted: dlInfo.deadlineFormatted,
+      deadlineWeek: dlInfo.deadlineWeek,
+      deadlineYear: dlInfo.deadlineYear,
       platform: document.getElementById('select-design-platform').value,
       status: document.getElementById('select-design-status').value,
       figmaUrl: document.getElementById('input-design-figma').value.trim(),
@@ -1003,6 +1057,13 @@ class App {
     // Switch to tracker tab and refresh
     this.switchTab('tracker');
     await window.designTracker.refresh();
+
+    if (window.notificationManager) {
+      await window.notificationManager.updateBadgeCount();
+      if (window.notificationManager.panelOpen) {
+        window.notificationManager.renderDropdownPanel();
+      }
+    }
 
     if (window.soundEngine) window.soundEngine.playPop();
   }

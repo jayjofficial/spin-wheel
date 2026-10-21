@@ -80,7 +80,7 @@ start index.html
 
 ---
 
-## ☁️ Convex Cloud Backend
+## Convex Cloud Backend
 
 This app connects to your Convex Dev and Production deployments:
 - **Dev Cloud**: `https://adorable-sturgeon-291.convex.cloud`

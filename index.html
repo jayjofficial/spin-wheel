@@ -58,8 +58,63 @@
         </button>
       </nav>
 
-      <!-- Header Actions: Fullscreen, Sound, Streak & Theme Switcher -->
+      <!-- Header Actions: Notifications, Fullscreen, Sound, Streak -->
       <div class="header-actions">
+        <!-- Notification & Daily Reminder Toggle -->
+        <div class="notification-dropdown-wrapper">
+          <button class="header-icon-btn" id="btn-notification-toggle" title="Daily Reminders & Deadlines" aria-label="Design Reminders & Deadlines">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notification-badge-count" id="header-notification-badge" style="display: none;">0</span>
+          </button>
+
+          <!-- Notification Dropdown Panel -->
+          <div class="notification-dropdown-panel" id="notification-panel" style="display: none;">
+            <div class="notif-panel-header">
+              <div class="notif-header-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span>Design Reminders & Deadlines</span>
+              </div>
+              <button class="btn-notif-close" id="btn-close-notif-panel" aria-label="Close panel">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            <!-- Permission & Daily Reminder Status Bar -->
+            <div class="notif-status-box" id="notif-status-box">
+              <div class="notif-status-info">
+                <span class="notif-status-indicator" id="notif-perm-dot"></span>
+                <span class="notif-status-text" id="notif-perm-text">Desktop Alerts: Checking...</span>
+              </div>
+              <button class="btn-notif-action" id="btn-request-notif-perm">Enable Alerts</button>
+            </div>
+
+            <!-- Upcoming Designs List -->
+            <div class="notif-designs-section">
+              <div class="notif-section-title">
+                <span>ACTIVE DESIGNS TO WORK ON</span>
+                <span class="notif-count-label" id="notif-active-count">0 active</span>
+              </div>
+              <div class="notif-designs-list" id="notif-designs-list">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+
+            <!-- Panel Footer Actions -->
+            <div class="notif-panel-footer">
+              <button class="btn-secondary-sm" id="btn-test-notification">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Test Daily Reminder</span>
+              </button>
+              <button class="btn-primary-sm" id="btn-view-archive-from-notif">
+                <span>Open Archive</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Fullscreen Mode Button -->
         <button class="header-icon-btn" id="btn-fullscreen-toggle" title="Full Screen Studio Mode (Press F)" aria-label="Toggle Fullscreen">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -82,6 +137,23 @@
         </div>
       </div>
     </header>
+
+    <!-- Global Daily Reminder Banner -->
+    <div class="daily-reminder-banner" id="daily-reminder-banner" style="display: none;" role="alert">
+      <div class="reminder-banner-content">
+        <div class="reminder-banner-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="reminder-banner-text">
+          <strong id="reminder-banner-title">Daily Design Habit Reminder:</strong>
+          <span id="reminder-banner-message">You have designs scheduled before next week's deadline.</span>
+        </div>
+      </div>
+      <div class="reminder-banner-actions">
+        <button class="btn-banner-action primary" id="btn-reminder-action">Work on Design</button>
+        <button class="btn-banner-action dismiss" id="btn-reminder-dismiss" aria-label="Dismiss banner for today">Dismiss</button>
+      </div>
+    </div>
 
     <!-- ====================================================================
          TAB 1: ROULETTE STUDIO
@@ -422,6 +494,20 @@
         </p>
       </div>
 
+      <!-- Card 2B: Next-Week Deadline & Reminders -->
+      <div class="winner-deadline-card" id="winner-deadline-card">
+        <div class="deadline-card-header">
+          <div class="deadline-header-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>NEXT-WEEK DEADLINE</span>
+          </div>
+          <span class="deadline-countdown-badge" id="winner-deadline-badge">Next Week</span>
+        </div>
+        <p class="deadline-card-text">
+          Target completion date: <strong id="winner-deadline-date-str">Sunday of Next Week</strong>. Daily reminders will guide you to finish this design before the deadline.
+        </p>
+      </div>
+
       <!-- Card 3: Design in this UI style -->
       <div class="winner-style-card" id="winner-style-card">
         <div class="style-badge-label">DESIGN IN THIS UI STYLE</div>
@@ -444,31 +530,6 @@
           <div class="palette-swatches" id="winner-style-palette">
             <!-- Injected dynamically -->
           </div>
-        </div>
-
-        <!-- Actionable Figma Design Guide -->
-        <div class="figma-specs-grid" id="winner-figma-specs">
-          <div class="figma-spec-row">
-            <span class="spec-badge">Buttons</span>
-            <span class="spec-text">Warm Gold (#f59e0b) primary CTA with dark text (#0f1015) and 10px rounded corners</span>
-          </div>
-          <div class="figma-spec-row">
-            <span class="spec-badge">Cards</span>
-            <span class="spec-text">Dark obsidian (#1a1d26) with 14px corner radius and subtle 1px gold hairline border</span>
-          </div>
-          <div class="figma-spec-row">
-            <span class="spec-badge">Layout</span>
-            <span class="spec-text">Structured multi-column card grid with warm yellow/gold section headers</span>
-          </div>
-          <div class="figma-spec-row highlight">
-            <span class="spec-badge" style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border-color: rgba(245, 158, 11, 0.35);">Signature</span>
-            <span class="spec-text">Warm golden primary button paired with geometric status badges inspired by Ghanaian textiles</span>
-          </div>
-        </div>
-
-        <div class="style-rule-item">
-          <span class="style-sublabel">TYPOGRAPHY:</span>
-          <span class="style-rule-text" id="winner-style-typography">Bold modern headings paired with clear, friendly body text</span>
         </div>
       </div>
 
@@ -524,6 +585,20 @@
         </div>
         <p class="problem-card-text" id="archive-detail-problem">
           UX problem statement.
+        </p>
+      </div>
+
+      <!-- Card 2B: Next-Week Deadline & Reminders -->
+      <div class="winner-deadline-card" id="archive-detail-deadline-card">
+        <div class="deadline-card-header">
+          <div class="deadline-header-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>NEXT-WEEK DEADLINE</span>
+          </div>
+          <span class="deadline-countdown-badge" id="archive-detail-deadline-badge">Next Week</span>
+        </div>
+        <p class="deadline-card-text">
+          Target completion date: <strong id="archive-detail-deadline-date-str">Sunday of Next Week</strong>. Daily reminders are active for this challenge.
         </p>
       </div>
 
@@ -657,12 +732,22 @@
           </div>
         </div>
 
-        <!-- Tags / Keywords -->
-        <div class="form-group">
-          <label class="form-label" for="input-design-tags">
-            <span>Tags / Keywords</span>
-          </label>
-          <input type="text" id="input-design-tags" class="form-input" placeholder="e.g. mobile, fintech, darkmode">
+        <!-- Next-Week Deadline & Tags Row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="input-design-deadline">
+              <span>Next-Week Deadline</span>
+              <span id="form-deadline-countdown" style="color: #fbbf24; font-weight: 700; font-size: 0.8rem;">Automatic (Next Week)</span>
+            </label>
+            <input type="date" id="input-design-deadline" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-design-tags">
+              <span>Tags / Keywords</span>
+            </label>
+            <input type="text" id="input-design-tags" class="form-input" placeholder="e.g. mobile, fintech, darkmode">
+          </div>
         </div>
 
         <!-- Image Upload Zone -->
@@ -745,6 +830,7 @@
   <script src="js/convex.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/topics.js"></script>
+  <script src="js/notifications.js"></script>
   <script src="js/wheel.js"></script>
   <script src="js/tracker.js"></script>
   <script src="js/app.js"></script>

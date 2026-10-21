@@ -89,7 +89,107 @@ class StorageManager {
     return `${startStr} – ${endStr}`;
   }
 
-  // --- Auto-Migration for Legacy Design UI Styles ---
+  // --- Next-Week Deadline & Countdown Helpers ---
+  static getNextWeekDeadline(dateInput) {
+    let d;
+    if (typeof dateInput === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
+      const [y, m, day] = dateInput.split('-').map(Number);
+      d = new Date(y, m - 1, day);
+    } else {
+      d = dateInput ? new Date(dateInput) : new Date();
+    }
+
+    if (isNaN(d.getTime())) {
+      d = new Date();
+    }
+
+    // Days until the Sunday of NEXT week:
+    // Sunday is day 0 in JS Date.getDay(), Monday is 1, ..., Saturday is 6.
+    // Current week's Sunday is in (7 - currentDay) % 7 days.
+    // Next week's Sunday is exactly 7 days after current week's Sunday.
+    const currentDay = d.getDay();
+    const daysUntilNextSunday = ((7 - currentDay) % 7) + 7;
+
+    const targetDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + daysUntilNextSunday);
+
+    const yyyy = targetDate.getFullYear();
+    const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(targetDate.getDate()).padStart(2, '0');
+    const deadlineDateStr = `${yyyy}-${mm}-${dd}`;
+
+    const weekData = StorageManager.getISOWeekData(deadlineDateStr);
+
+    return {
+      deadlineDate: deadlineDateStr,
+      deadlineFormatted: targetDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      deadlineWeek: weekData.week,
+      deadlineYear: weekData.year,
+      deadlineWeekString: weekData.weekString
+    };
+  }
+
+  static getDeadlineStatus(deadlineDateStr) {
+    if (!deadlineDateStr) {
+      return { days: null, urgency: 'none', label: 'No deadline', isUrgent: false };
+    }
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    let deadline;
+    if (typeof deadlineDateStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(deadlineDateStr)) {
+      const [y, m, d] = deadlineDateStr.split('-').map(Number);
+      deadline = new Date(y, m - 1, d);
+    } else {
+      deadline = new Date(deadlineDateStr);
+    }
+
+    if (isNaN(deadline.getTime())) {
+      return { days: null, urgency: 'none', label: 'Invalid deadline', isUrgent: false };
+    }
+
+    const diffMs = deadline.getTime() - today.getTime();
+    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+      const overdueBy = Math.abs(diffDays);
+      return {
+        days: diffDays,
+        urgency: 'overdue',
+        label: `Overdue (${overdueBy} day${overdueBy > 1 ? 's' : ''} ago)`,
+        isUrgent: true
+      };
+    } else if (diffDays === 0) {
+      return {
+        days: 0,
+        urgency: 'due_today',
+        label: 'Due Today',
+        isUrgent: true
+      };
+    } else if (diffDays === 1) {
+      return {
+        days: 1,
+        urgency: 'urgent',
+        label: '1 day left (Tomorrow)',
+        isUrgent: true
+      };
+    } else if (diffDays <= 3) {
+      return {
+        days: diffDays,
+        urgency: 'urgent',
+        label: `${diffDays} days left`,
+        isUrgent: true
+      };
+    } else {
+      return {
+        days: diffDays,
+        urgency: 'normal',
+        label: `${diffDays} days left`,
+        isUrgent: false
+      };
+    }
+  }
+
+  // --- Auto-Migration for Legacy Design UI Styles & Next-Week Deadlines ---
   static normalizeDesignStyle(design) {
     if (!design) return design;
     const rawStyle = design.uiStyle || '';
@@ -108,6 +208,22 @@ class StorageManager {
     return design;
   }
 
+  static normalizeDesign(design) {
+    if (!design) return design;
+    StorageManager.normalizeDesignStyle(design);
+
+    // Ensure next-week deadline is automatically assigned if missing
+    if (!design.deadlineDate) {
+      const baseDate = design.date || design.createdAt || new Date().toISOString().split('T')[0];
+      const dl = StorageManager.getNextWeekDeadline(baseDate);
+      design.deadlineDate = dl.deadlineDate;
+      design.deadlineFormatted = dl.deadlineFormatted;
+      design.deadlineWeek = dl.deadlineWeek;
+      design.deadlineYear = dl.deadlineYear;
+    }
+    return design;
+  }
+
   // --- Design CRUD with Convex Cloud Sync ---
   async getAllDesigns() {
     await this.ready;
@@ -116,9 +232,9 @@ class StorageManager {
     if (window.convexManager && window.convexManager.currentEnv !== 'offline') {
       const cloudList = await window.convexManager.getCloudDesigns();
       if (Array.isArray(cloudList) && cloudList.length > 0) {
-        // Cache to local IndexedDB & normalize styles
+        // Cache to local IndexedDB & normalize styles + deadlines
         for (const item of cloudList) {
-          StorageManager.normalizeDesignStyle(item);
+          StorageManager.normalizeDesign(item);
           await this.saveLocalOnly(item);
         }
         cloudList.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
@@ -137,8 +253,9 @@ class StorageManager {
           let modified = false;
           list.forEach(item => {
             const oldName = item.uiStyle;
-            StorageManager.normalizeDesignStyle(item);
-            if (oldName !== item.uiStyle) modified = true;
+            const hadDeadline = !!item.deadlineDate;
+            StorageManager.normalizeDesign(item);
+            if (oldName !== item.uiStyle || !hadDeadline) modified = true;
           });
           list.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           if (modified) {
@@ -172,6 +289,9 @@ class StorageManager {
       design.year = weekData.year;
       design.weekString = weekData.weekString;
     }
+
+    // Ensure style and next-week deadline are normalized
+    StorageManager.normalizeDesign(design);
 
     // Save locally
     await this.saveLocalOnly(design);
@@ -243,8 +363,9 @@ class StorageManager {
       let modified = false;
       list.forEach(d => {
         const old = d.uiStyle;
-        StorageManager.normalizeDesignStyle(d);
-        if (old !== d.uiStyle) modified = true;
+        const hadDeadline = !!d.deadlineDate;
+        StorageManager.normalizeDesign(d);
+        if (old !== d.uiStyle || !hadDeadline) modified = true;
       });
       if (modified) {
         localStorage.setItem('ux_roulette_designs', JSON.stringify(list));
