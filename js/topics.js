@@ -622,7 +622,7 @@ const PRACTICE_TOPIC_POOL = [
     styleId: 'neo_brutalism'
   },
   {
-    text: 'Self-service parcel locker pickup',
+    text: 'Package locker pickup',
     shortLabel: 'Locker Pickup',
     category: 'Logistics',
     deliverable: 'Mobile App',
@@ -994,6 +994,10 @@ class TopicEngine {
     // If no saved topics or old jargon exists, upgrade directly to natural topics
     if (saved && Array.isArray(saved) && saved.length > 0 && !hasOldJargon) {
       this.topics = saved.map(t => {
+        if (t.text === 'Self-service parcel locker pickup') {
+          t.text = 'Package locker pickup';
+          t.shortLabel = 'Locker Pickup';
+        }
         const vis = resolveTopicVisuals(t);
         t.iconKey = t.iconKey || vis.iconKey;
         t.shortLabel = t.shortLabel || vis.shortLabel;

@@ -1912,6 +1912,17 @@ body::before {
 .winner-header-stacked {
   text-align: center;
   margin-bottom: 0.65rem;
+  padding: 0 28px;
+}
+
+.modal-dialog-stacked .winner-topic-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: center;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.25;
 }
 
 .winner-meta-badges {
@@ -1919,7 +1930,7 @@ body::before {
   justify-content: center;
   align-items: center;
   gap: 0.45rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
   flex-wrap: wrap;
 }
 
@@ -1933,16 +1944,6 @@ body::before {
   background: rgba(56, 189, 248, 0.12);
   color: var(--accent-cyan);
   border: 1px solid rgba(56, 189, 248, 0.28);
-}
-
-.modal-dialog-stacked .winner-topic-title {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--text-main);
-  text-align: center;
-  margin: 0;
-  line-height: 1.25;
 }
 
 /* Card 1: What this design is about */
