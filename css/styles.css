@@ -364,6 +364,7 @@ body::before {
 .brand-title span.highlight {
   background: var(--grad-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1072,6 +1073,7 @@ body.fullscreen-active {
 [data-theme="linear"] .center-spin-btn span.spin-text {
   background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1089,6 +1091,7 @@ body.fullscreen-active {
 [data-theme="arcade"] .center-spin-btn span.spin-text {
   background: linear-gradient(135deg, #00f2fe 0%, #ff007f 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1671,6 +1674,7 @@ body.fullscreen-active {
   font-weight: 800;
   background: var(--grad-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1920,6 +1924,7 @@ body.fullscreen-active {
   margin-bottom: 1rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
