@@ -3398,6 +3398,57 @@ body::before {
 }
 
 /* ==========================================================================
+   Winner Modal UI/UX Case Study Showcase Card
+   ========================================================================== */
+.winner-case-study-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.32);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.65rem;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.case-study-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.cs-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a5b4fc;
+}
+
+.cs-ready-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cs-card-subtext {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ==========================================================================
    Archive Card Deadline Row & Pills
    ========================================================================== */
 .card-deadline-row {

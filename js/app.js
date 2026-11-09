@@ -156,6 +156,7 @@ class App {
     const saved = await window.storageManager.saveDesign(challengeRecord);
     winner.archivedDesignId = saved.id;
     winner.deadlineInfo = deadlineInfo;
+    winner.savedDesign = saved;
 
     if (window.designTracker) {
       await window.designTracker.refresh();
@@ -163,6 +164,12 @@ class App {
     if (window.notificationManager) {
       await window.notificationManager.updateBadgeCount();
     }
+
+    // Automatically trigger downloadable professional UI/UX case study
+    setTimeout(() => {
+      this.autoDownloadCaseStudy(saved, 'Roulette challenge logged');
+    }, 400);
+
     return saved;
   }
 
@@ -475,6 +482,42 @@ class App {
     const spinAgainBtn = document.getElementById('btn-winner-spin-again');
     const generateMoreBtn = document.getElementById('btn-winner-generate-more');
     const rerollStyleBtn = document.getElementById('btn-winner-reroll-style');
+    const downloadWinnerCsBtn = document.getElementById('btn-winner-download-cs');
+    const viewWinnerCsBtn = document.getElementById('btn-winner-view-cs');
+
+    const getWinnerDesignPayload = () => {
+      const topic = this.currentWinningTopic;
+      return topic?.savedDesign || {
+        title: topic?.text || 'Design Challenge',
+        prompt: topic?.about || topic?.text,
+        about: topic?.about || '',
+        problem: topic?.problem || '',
+        platform: topic?.deliverable || 'Mobile App',
+        category: topic?.category || 'General UI/UX',
+        uiStyle: topic?.style?.name || '',
+        uiStyleRegion: topic?.style?.region ? `${topic.style.region} • ${topic.style.subRegion}` : '',
+        uiStyleVibe: topic?.style?.vibe || '',
+        uiStylePrinciples: topic?.style?.principles || '',
+        uiStyleTypography: topic?.style?.typography || '',
+        uiStylePalette: topic?.style?.palette || [],
+        figmaGuide: topic?.style?.figmaGuide || null,
+        deadlineFormatted: topic?.deadlineInfo?.deadlineFormatted
+      };
+    };
+
+    if (downloadWinnerCsBtn) {
+      downloadWinnerCsBtn.addEventListener('click', () => {
+        const payload = getWinnerDesignPayload();
+        this.downloadCaseStudyWordDoc(payload);
+      });
+    }
+
+    if (viewWinnerCsBtn) {
+      viewWinnerCsBtn.addEventListener('click', () => {
+        const payload = getWinnerDesignPayload();
+        this.openCaseStudyModal(payload);
+      });
+    }
 
     if (closeBtn) closeBtn.addEventListener('click', () => this.closeModal('modal-winner'));
 
@@ -542,6 +585,7 @@ class App {
             existing.uiStylePalette = newStyle.palette;
             existing.figmaGuide = newStyle.figmaGuide;
             await window.storageManager.saveDesign(existing);
+            this.currentWinningTopic.savedDesign = existing;
             if (window.designTracker) await window.designTracker.refresh();
           }
         }
@@ -619,9 +663,27 @@ class App {
     const closeBtn = document.getElementById('btn-close-archive-details');
     const editBtn = document.getElementById('btn-archive-detail-edit');
     const deleteBtn = document.getElementById('btn-archive-detail-delete');
+    const downloadCsBtn = document.getElementById('btn-archive-detail-download-cs');
+    const viewCsBtn = document.getElementById('btn-archive-detail-view-cs');
 
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.closeModal('modal-challenge-details'));
+    }
+
+    if (downloadCsBtn) {
+      downloadCsBtn.addEventListener('click', () => {
+        if (this.currentInspectingDesign) {
+          this.downloadCaseStudyWordDoc(this.currentInspectingDesign);
+        }
+      });
+    }
+
+    if (viewCsBtn) {
+      viewCsBtn.addEventListener('click', () => {
+        if (this.currentInspectingDesign) {
+          this.openCaseStudyModal(this.currentInspectingDesign);
+        }
+      });
     }
 
     if (editBtn) {
@@ -713,6 +775,24 @@ class App {
       this.showToast(`Word Document downloaded: ${design.title}`, 'success');
     } else {
       this.showToast('Could not generate Word document', 'error');
+    }
+  }
+
+  autoDownloadCaseStudy(design, reason = '') {
+    if (!design) return;
+    if (!window.UXCaseStudyEngine) {
+      console.warn('UXCaseStudyEngine not ready for auto-download');
+      return;
+    }
+
+    try {
+      const success = window.UXCaseStudyEngine.downloadWordDocument(design);
+      if (success) {
+        this.showToast(`UX Case Study (.doc) created & downloaded: ${design.title || design.text}`, 'success');
+        if (window.soundEngine && window.soundEngine.playPop) window.soundEngine.playPop();
+      }
+    } catch (err) {
+      console.error('Auto case study download failed:', err);
     }
   }
 
@@ -944,6 +1024,11 @@ class App {
       styleInput.value = initialData?.uiStyle || (this.currentWinningTopic?.style?.name || '');
     }
 
+    const autoDownloadCheckbox = document.getElementById('checkbox-auto-download-case-study');
+    if (autoDownloadCheckbox) {
+      autoDownloadCheckbox.checked = true;
+    }
+
     if (initialData) {
       titleInput.value = initialData.title || '';
       promptInput.value = initialData.prompt || initialData.about || '';
@@ -1075,6 +1160,10 @@ class App {
       return;
     }
 
+    const isNewDesign = !this.currentEditingDesign?.id;
+    const autoDownloadCheckbox = document.getElementById('checkbox-auto-download-case-study');
+    const shouldDownload = autoDownloadCheckbox ? autoDownloadCheckbox.checked : true;
+
     const dateVal = document.getElementById('input-design-date').value;
     const weekData = StorageManager.getISOWeekData(dateVal);
     const deadlineVal = document.getElementById('input-design-deadline')?.value || StorageManager.getNextWeekDeadline(dateVal).deadlineDate;
@@ -1113,13 +1202,21 @@ class App {
       reflection: document.getElementById('textarea-design-reflection').value.trim(),
       tags,
       image: this.tempUploadedImage,
+      source: this.currentEditingDesign?.source || 'manual',
       createdAt: this.currentEditingDesign?.createdAt || new Date().toISOString()
     };
 
-    await window.storageManager.saveDesign(designRecord);
+    const saved = await window.storageManager.saveDesign(designRecord);
 
     this.closeModal('modal-design-form');
     this.showToast(`Saved to ${weekData.weekString}!`, 'success');
+
+    // Automatically trigger downloadable professional UI/UX case study
+    if (shouldDownload || isNewDesign) {
+      setTimeout(() => {
+        this.autoDownloadCaseStudy(saved, isNewDesign ? 'Manually added design' : 'Design update');
+      }, 350);
+    }
 
     // Switch to tracker tab and refresh
     this.switchTab('tracker');

@@ -33,18 +33,23 @@ class UXCaseStudyEngine {
   static generateCaseStudyData(design) {
     if (!design) return null;
 
-    const title = design.title || 'Product Design Challenge';
+    const title = design.title || design.text || 'Product Design Challenge';
     const category = design.category || 'General UI/UX';
-    const platform = design.platform || 'Mobile App';
-    const about = design.about || design.prompt || `A dedicated product design challenge focused on solving everyday user needs for ${title}.`;
+    const platform = design.platform || design.deliverable || 'Mobile App';
+    const about = design.about || design.prompt || design.text || `A dedicated product design challenge focused on solving everyday user needs for ${title}.`;
     const problem = design.problem || 'Reduce user cognitive load, eliminate confusing friction points, and make core actions accessible on modern devices.';
+    const figmaUrl = design.figmaUrl || '';
+    const postUrl = design.postUrl || '';
+    const reflection = design.reflection || '';
+    const status = design.status || 'planned';
+    const tags = Array.isArray(design.tags) ? design.tags : [];
 
     // Resolve assigned UI Style
     let styleObj = null;
     if (window.getUIStyleById) {
-      styleObj = window.getUIStyleById(design.uiStyle);
+      styleObj = window.getUIStyleById(design.uiStyle || design.style?.name || design.style);
     }
-    const styleName = styleObj ? styleObj.name : (design.uiStyle || 'Ghana Style');
+    const styleName = styleObj ? styleObj.name : (design.uiStyle || design.style?.name || 'Ghana Style');
     const styleRegion = styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : (design.uiStyleRegion || 'West Africa • Ghana');
     const styleVibe = styleObj ? styleObj.vibe : (design.uiStyleVibe || 'Warm, vibrant, and proud modern aesthetic with high contrast surfaces.');
     const stylePrinciples = styleObj ? styleObj.principles : (design.uiStylePrinciples || 'Structured grid alignment, accessible touch targets, and balanced color emphasis.');
@@ -118,7 +123,12 @@ class UXCaseStudyEngine {
       researchFindings,
       screenFlows,
       testingPlan,
-      defenseQA
+      defenseQA,
+      figmaUrl,
+      postUrl,
+      reflection,
+      status,
+      tags
     };
   }
 
@@ -163,7 +173,14 @@ class UXCaseStudyEngine {
       'Logistics': { name: 'Eleni Berhane', age: '26', role: 'Supply Chain Coordinator', tech: 'High' },
       'Health': { name: 'Farai Moyo', age: '31', role: 'Community Health Program Officer', tech: 'Medium' },
       'E-Commerce': { name: 'Zara Al-Mansoor', age: '27', role: 'Boutique Store Founder', tech: 'High' },
-      'Productivity': { name: 'David Kimani', age: '33', role: 'Senior Remote Software Engineer', tech: 'Very High' }
+      'Food & E-Commerce': { name: 'Zara Al-Mansoor', age: '27', role: 'Artisan Food Entrepreneur', tech: 'High' },
+      'Productivity': { name: 'David Kimani', age: '33', role: 'Senior Remote Software Engineer', tech: 'Very High' },
+      'Wellness': { name: 'Farai Moyo', age: '31', role: 'Mindfulness & Wellness Practitioner', tech: 'Medium' },
+      'Education': { name: 'Amina Diallo', age: '24', role: 'Graduate Research Scholar', tech: 'High' },
+      'Entertainment': { name: 'Kwame Asante', age: '28', role: 'Digital Media Creator', tech: 'High' },
+      'Lifestyle': { name: 'Maya Osei', age: '30', role: 'Creative Director & Consultant', tech: 'High' },
+      'Smart Home': { name: 'Tariq Benali', age: '35', role: 'Systems Engineer & Connected Home Lead', tech: 'Very High' },
+      'Social': { name: 'Nia Adebayo', age: '25', role: 'Community Architect & Content Strategist', tech: 'High' }
     };
 
     const match = names[category] || {
@@ -732,6 +749,19 @@ class UXCaseStudyEngine {
           </p>
           ${defenseRows}
 
+          <!-- Section 11: Designer Deliverables & Retrospective -->
+          <h2>11. Designer Deliverables &amp; Sprint Retrospective</h2>
+          <div class="callout-box">
+            <p><strong>Deliverable Status:</strong> ${this.escapeHTML(data.status ? data.status.toUpperCase() : 'PLANNED')}</p>
+            ${data.figmaUrl ? `<p><strong>Interactive Figma Prototype:</strong> <a href="${this.escapeHTML(data.figmaUrl)}" style="color: #2563eb; text-decoration: underline;">${this.escapeHTML(data.figmaUrl)}</a></p>` : '<p><strong>Interactive Figma Prototype:</strong> Ready for canvas implementation based on master UI specifications above.</p>'}
+            ${data.postUrl ? `<p><strong>Live Case Study / Publication:</strong> <a href="${this.escapeHTML(data.postUrl)}" style="color: #2563eb; text-decoration: underline;">${this.escapeHTML(data.postUrl)}</a></p>` : ''}
+          </div>
+          <div class="spec-box" style="margin-top: 8pt;">
+            <p style="margin: 0; font-size: 10pt; line-height: 1.55;">
+              <strong>Strategic Sprint Reflection:</strong> ${this.escapeHTML(data.reflection || `During this design challenge for ${data.title}, we focused on eliminating friction points outlined in the UX problem statement, adhering to the ${data.styleName} design guidelines, and validating accessibility with WCAG 2.1 AA touch target standards.`)}
+            </p>
+          </div>
+
           <!-- Document Footer -->
           <div style="margin-top: 24pt; border-top: 1pt solid #cbd5e1; padding-top: 8pt; font-size: 8.5pt; color: #94a3b8; text-align: center;">
             Document generated by UX Roulette Design Habit Tracker &bull; Confidential Design Study &bull; All design style specifications strictly verified.
@@ -1049,6 +1079,25 @@ class UXCaseStudyEngine {
           </div>
         </section>
 
+        <!-- Section 11: Deliverables & Retrospective -->
+        <section class="cs-section">
+          <div class="cs-section-header">
+            <span class="cs-sec-num">11</span>
+            <h3 class="cs-sec-heading">Designer Deliverables &amp; Retrospective</h3>
+          </div>
+          <div class="cs-highlight-box primary">
+            <p><strong>Status:</strong> ${this.escapeHTML(data.status ? data.status.toUpperCase() : 'PLANNED')}</p>
+            ${data.figmaUrl ? `<p><strong>Figma Prototype:</strong> <a href="${this.escapeHTML(data.figmaUrl)}" target="_blank" rel="noopener" style="color: #38bdf8; text-decoration: underline;">${this.escapeHTML(data.figmaUrl)}</a></p>` : '<p><strong>Figma Prototype:</strong> Ready for canvas design implementation based on style specs.</p>'}
+            ${data.postUrl ? `<p><strong>Publication / Live Post:</strong> <a href="${this.escapeHTML(data.postUrl)}" target="_blank" rel="noopener" style="color: #38bdf8; text-decoration: underline;">${this.escapeHTML(data.postUrl)}</a></p>` : ''}
+          </div>
+          <div class="cs-jtbd-box" style="margin-top: 0.8rem;">
+            <span class="cs-jtbd-tag">SPRINT REFLECTION &amp; LEARNINGS</span>
+            <p class="cs-jtbd-text" style="font-style: normal; font-size: 0.92rem;">
+              ${this.escapeHTML(data.reflection || `In this sprint for ${data.title}, we prioritized user clarity, ergonomic thumb reachability, and high-contrast styling under the ${data.styleName} design system.`)}
+            </p>
+          </div>
+        </section>
+
       </div>
     `;
   }
@@ -1069,8 +1118,9 @@ class UXCaseStudyEngine {
     const cleanTitle = (data.title || 'UX_Case_Study')
       .replace(/[^a-zA-Z0-9_-]/g, '_')
       .replace(/_+/g, '_')
-      .slice(0, 40);
-    const filename = `${cleanTitle}_UX_Case_Study.doc`;
+      .replace(/^_+|_+$/g, '')
+      .slice(0, 45);
+    const filename = `${cleanTitle || 'UX_Challenge'}_UX_Case_Study.doc`;
 
     // Download trigger
     const link = document.createElement('a');
@@ -1081,7 +1131,54 @@ class UXCaseStudyEngine {
     setTimeout(() => {
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
-    }, 200);
+    }, 400);
+
+    return true;
+  }
+
+  /**
+   * Generates and triggers download of an HTML case study file for offline reading
+   */
+  static downloadHTMLDocument(design) {
+    if (!design) return false;
+
+    const data = this.generateCaseStudyData(design);
+    if (!data) return false;
+
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${this.escapeHTML(data.title)} - UI/UX Case Study</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: #0b0d14; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 2rem 1rem; }
+    .case-study-document { max-width: 860px; margin: 0 auto; background: #111420; padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+  </style>
+</head>
+<body>
+  ${this.buildInAppHTML(data)}
+</body>
+</html>`;
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+
+    const cleanTitle = (data.title || 'UX_Case_Study')
+      .replace(/[^a-zA-Z0-9_-]/g, '_')
+      .replace(/_+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .slice(0, 45);
+    const filename = `${cleanTitle || 'UX_Challenge'}_UX_Case_Study.html`;
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }, 400);
 
     return true;
   }

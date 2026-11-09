@@ -533,6 +533,33 @@
         </div>
       </div>
 
+      <!-- Card 4: Downloadable Professional UI/UX Case Study -->
+      <div class="winner-case-study-card" id="winner-case-study-card">
+        <div class="case-study-card-header">
+          <div class="cs-card-header-left">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+            <span>PROFESSIONAL UI/UX CASE STUDY</span>
+          </div>
+          <span class="cs-ready-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Word (.doc) Auto-Created</span>
+          </span>
+        </div>
+        <p class="cs-card-subtext">
+          A comprehensive 11-section UI/UX case study was automatically created with complete style specs, user personas, JTBD, WCAG 2.1 AA audit, and portfolio defense Q&amp;A.
+        </p>
+        <div class="archive-case-study-actions" style="margin-top: 0.65rem; padding-top: 0.65rem;">
+          <button class="btn-case-study-download" id="btn-winner-download-cs" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download Case Study (.doc)</span>
+          </button>
+          <button class="btn-case-study-read" id="btn-winner-view-cs" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Preview Case Study</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Action Buttons -->
       <div class="winner-actions-group">
         <button class="btn-primary-glow" id="btn-winner-start-design">
@@ -629,6 +656,18 @@
         <div class="style-rule-item" id="archive-detail-typography-row">
           <span class="style-sublabel">TYPOGRAPHY:</span>
           <span class="style-rule-text" id="archive-detail-typography">Typography notes.</span>
+        </div>
+
+        <!-- Actionable Case Study Dossier -->
+        <div class="archive-case-study-actions" style="margin-top: 0.85rem; padding-top: 0.85rem;">
+          <button class="btn-case-study-download" id="btn-archive-detail-download-cs" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download Case Study (.doc)</span>
+          </button>
+          <button class="btn-case-study-read" id="btn-archive-detail-view-cs" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Read Case Study</span>
+          </button>
         </div>
       </div>
 
@@ -832,6 +871,17 @@
             <span>UX Reflections & Key Decisions</span>
           </label>
           <textarea id="textarea-design-reflection" class="form-textarea" placeholder="What UX friction did you solve? What did you learn during this design sprint?"></textarea>
+        </div>
+
+        <!-- Auto Case Study Option -->
+        <div class="form-checkbox-group" style="display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 0.4rem; margin-bottom: 1.25rem; padding: 0.85rem 1rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.28); border-radius: var(--radius-md);">
+          <input type="checkbox" id="checkbox-auto-download-case-study" checked style="accent-color: var(--primary); width: 17px; height: 17px; margin-top: 2px; cursor: pointer;">
+          <label for="checkbox-auto-download-case-study" style="font-size: 0.85rem; color: var(--text-main); cursor: pointer; user-select: none; line-height: 1.45;">
+            <strong>Automatically create &amp; download professional UI/UX case study (.doc)</strong>
+            <span style="display: block; font-size: 0.76rem; color: var(--text-muted); font-weight: normal; margin-top: 0.2rem;">
+              Auto-generates a comprehensive 11-section Word dossier (.doc) with design specs, user personas, JTBD, WCAG 2.1 AA audit, and portfolio defense.
+            </span>
+          </label>
         </div>
 
         <!-- Submit Actions -->
