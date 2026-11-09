@@ -52,16 +52,144 @@ function getTopicIconSVG(iconKey, size = 14) {
 window.getTopicIconSVG = getTopicIconSVG;
 
 // ============================================================================
-// GLOBAL UI DESIGN STYLES CATALOG
-// Grounded in real-world regional design philosophies, with special prominence
-// given to authentic African UI styles, Asian, European, and American aesthetics.
 // ============================================================================
 // GLOBAL UI DESIGN STYLES CATALOG
-// Intuitive country-based design styles (prominently featuring African styles)
-// with direct, easy-to-understand design instructions anyone can design in Figma.
+// Grounded in realistic industry standards and authentic design philosophies:
+// International Diplomatic/Civic, Enterprise SaaS, High-Trust FinTech,
+// Minimalist Systems, and Authentic Cultural & Regional UI Styles.
 // ============================================================================
 const GLOBAL_UI_STYLES = [
-  // --- African Design Styles ---
+  // --- Realistic Modern Product Design & International Styles ---
+  {
+    id: 'international_diplomatic',
+    name: 'International, Diplomatic and Professional',
+    region: 'Global • Diplomatic & Civic Affairs',
+    subRegion: 'Multilateral Forums & Model UN',
+    vibe: 'Prestigious, dignified, and authoritative. Deep diplomatic navy and slate foundations, United Nations azure and sovereign gold accents, pristine high-contrast reading surfaces, and formal institutional clarity.',
+    principles: 'Establish institutional trust, maintain multilingual accessibility and WCAG AAA readability, structure official documents with clear hierarchical numbering, and use dignified restrained interactive feedback.',
+    palette: ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff'],
+    typography: 'Stately Editorial Serif headlines (Merriweather / Times / Playfair) paired with crisp Diplomatic Grotesque sans-serif body',
+    figmaGuide: {
+      buttons: 'Diplomatic Azure (#1d70b8) or Stately Gold (#c59b27) primary CTA with crisp white text, 8px restrained radius, and subtle focus ring',
+      cards: 'Deep embassy slate cards (#14213d) with 10px rounded corners, solid 1px hairline border (rgba(29, 112, 184, 0.25)), and structured padding',
+      layout: 'Formal multi-column grid with structured agenda/resolution hierarchy, official status pills, and prominent delegate action bars',
+      signature: 'Stately editorial serif typography, diplomatic azure action triggers, and gold seal status indicators'
+    }
+  },
+  {
+    id: 'enterprise_saas',
+    name: 'Clean Enterprise SaaS',
+    region: 'Global • Enterprise & B2B Products',
+    subRegion: 'Modern Digital Workspaces',
+    vibe: 'High-efficiency clarity inspired by Linear, Stripe, and Notion. Deep slate backgrounds, electric indigo primary triggers, refined 1px micro-borders, dense glanceable metrics, and distraction-free usability.',
+    principles: 'Maximize data density with clear hierarchical scannability, use an uncompromising 4px/8px component grid, ensure accessible contrast across all table states, and keep primary actions distinct.',
+    palette: ['#090d16', '#111827', '#6366f1', '#06b6d4', '#10b981', '#f8fafc'],
+    typography: 'Neutral high-legibility geometric grotesque (Inter/Geist) with compact tracking',
+    figmaGuide: {
+      buttons: 'Electric Indigo (#6366f1) or Solid White, 8px subtle corner radius, 36px/40px compact height',
+      cards: 'Modular slate cards (#111827) with 10px corner radius, hairline 1px border (rgba(255, 255, 255, 0.08))',
+      layout: 'Dense modular dashboard grid with quick-filter pills, telemetry tables, and keyboard shortcut hints',
+      signature: 'Compact 36px primary buttons, subtle 1px border strokes, and glanceable metric counters'
+    }
+  },
+  {
+    id: 'fintech_high_trust',
+    name: 'High-Trust FinTech',
+    region: 'Global • Financial Services',
+    subRegion: 'Consumer & Business Neo-Banking',
+    vibe: 'Bank-grade confidence and security. Deep obsidian slate surfaces, electric emerald verification accents, big legible balance figures, and crystal-clear transaction receipts.',
+    principles: 'Highlight numerical metrics with large bold typography, provide immediate visual feedback for financial operations, include visible security assurance badges, and minimize checkout friction.',
+    palette: ['#090d1a', '#111827', '#10b981', '#38bdf8', '#6366f1', '#ffffff'],
+    typography: 'Crisp modern sans-serif with bold tabular figures (32px+ balance displays)',
+    figmaGuide: {
+      buttons: 'Electric Emerald Green (#10b981) with bold white text and 12px rounded corners',
+      cards: 'Midnight slate cards (#111827), 14px corner radius, soft 1px border (rgba(16, 185, 129, 0.2))',
+      layout: 'Thumb-reachable mobile bottom sheets with large numerical cards and fast-action icon rows',
+      signature: 'Electric emerald action buttons, glanceable financial summary cards, and security verification shields'
+    }
+  },
+  {
+    id: 'minimalist_system',
+    name: 'Minimalist Design System',
+    region: 'Global • Utility & Core Systems',
+    subRegion: 'Accessibility-First Frameworks',
+    vibe: 'Stark utilitarian precision. Monochromatic black-and-white foundation, razor-sharp 4px/6px corners, surgical 1px dividers, and zero decorative noise.',
+    principles: 'Strip away all visual fluff. Let content, hierarchy, and micro-typography communicate state and intent with maximum contrast.',
+    palette: ['#0a0a0c', '#141416', '#ffffff', '#71717a', '#27272a', '#f4f4f5'],
+    typography: 'Ultra-clean grotesque sans-serif with wide letter-spacing on subheaders and labels',
+    figmaGuide: {
+      buttons: 'Pure Solid White on dark (or solid black on light), 4px minimal radius, 14px medium type',
+      cards: 'Pure dark surface (#141416), 6px crisp corners, hairline border (rgba(255, 255, 255, 0.1))',
+      layout: 'Strict left alignment, generous mathematical padding (24px/32px), single primary focal point',
+      signature: 'Monochromatic contrast, 4px crisp radius, and distraction-free content presentation'
+    }
+  },
+  {
+    id: 'civic_accessible',
+    name: 'Accessible Civic & GovTech',
+    region: 'Global • Public Sector & Civic Tech',
+    subRegion: 'Citizen Services & Public Portals',
+    vibe: 'Inclusive, welcoming, and crystal clear. WCAG 2.1 AAA accessible navy and cobalt blue, high-contrast readable cards, large touch targets, and plain-language guidance.',
+    principles: 'Guarantee accessibility for all abilities and devices. Use plain language, high-contrast text ratios exceeding 7:1, generous 48px+ touch targets, and unmistakable error states.',
+    palette: ['#0f172a', '#1e293b', '#2563eb', '#059669', '#d97706', '#ffffff'],
+    typography: 'Highly legible humanist sans-serif with distinct letterforms (Atkinson Hyperlegible / Inter)',
+    figmaGuide: {
+      buttons: 'High-visibility Cobalt Blue (#2563eb), 8px rounded corners, minimum 48px touch height',
+      cards: 'High-contrast slate cards (#1e293b) with 12px corners, distinct 1.5px border, and clear section titles',
+      layout: 'Single-column linear progression with breadcrumb trails, step counters, and assistance callouts',
+      signature: 'High-visibility 48px touch targets, plain-language guidance banners, and high-contrast accessibility tags'
+    }
+  },
+  {
+    id: 'dark_pro_hud',
+    name: 'Dark Pro HUD & Developer Tools',
+    region: 'Global • Developer & Engineering Tools',
+    subRegion: 'CLI, Telemetry & Terminal Consoles',
+    vibe: 'Engineering precision and high telemetry density. Pitch-black OLED canvas, glowing neon syntax accents (cyan, amber, violet), monospace code blocks, and real-time status pulses.',
+    principles: 'Optimize for dark room environments and power users. Display live telemetry, keyboard shortcut hints, and monospace logs with high-contrast color coding.',
+    palette: ['#050508', '#0d0d12', '#06b6d4', '#f59e0b', '#a855f7', '#10b981'],
+    typography: 'Engineering monospace (JetBrains Mono / Space Grotesk) with compact vertical rhythm',
+    figmaGuide: {
+      buttons: 'Cyber Cyan (#06b6d4) or Neon Amber (#f59e0b) with dark text, 4px tight radius',
+      cards: 'OLED dark containers (#0d0d12), 6px corners, 1px glowing hairline stroke (rgba(6, 182, 212, 0.2))',
+      layout: 'Split-pane console layout with collapsible sidebars, real-time telemetry stream, and code inspectors',
+      signature: 'Monospace telemetry tags, neon syntax accents, and dark OLED command palettes'
+    }
+  },
+  {
+    id: 'bento_consumer',
+    name: 'Modern Bento Grid',
+    region: 'Global • Modern Consumer Tech',
+    subRegion: 'Interactive Product Showcases',
+    vibe: 'Playful, tactile, and modular. Asymmetric bento-box interlocking cards, subtle frosted glass depth, colorful gradient pill badges, and rich micro-interactions.',
+    principles: 'Group complex product features into glanceable modular cards (1x1, 2x1, 2x2), use smooth 16px-20px rounded corners, and guide user attention with soft gradient highlights.',
+    palette: ['#090d16', '#111728', '#6366f1', '#ec4899', '#06b6d4', '#ffffff'],
+    typography: 'Contemporary geometric display sans with tight letter tracking',
+    figmaGuide: {
+      buttons: 'Electric Gradient Indigo-Violet (#6366f1), 12px pillowy radius, soft glow shadow',
+      cards: 'Bento glass modules (#111827), 16px corner radius, 1px inner border glow (rgba(99, 102, 241, 0.2))',
+      layout: 'Interlocking bento grid with hero cards, stat modules, and mini interactive previews',
+      signature: 'Interlocking bento modular containers, subtle inner glows, and colorful status pills'
+    }
+  },
+  {
+    id: 'editorial_luxury',
+    name: 'Editorial Serif & Luxury',
+    region: 'Global • Editorial & Cultural Publications',
+    subRegion: 'High-End Publications & Portfolios',
+    vibe: 'Timeless luxury and museum-grade sophistication. High-contrast serif headlines, champagne gold accents, rich deep charcoal paper surfaces, and generous negative space.',
+    principles: 'Elevate editorial storytelling. Prioritize typographic beauty, longform readability, delicate 1px hairline dividers, and uncrowded luxury whitespace.',
+    palette: ['#141312', '#1f1d1b', '#d4af37', '#f5f5f0', '#78716c', '#ffffff'],
+    typography: 'High-contrast Display Serif (Playfair / Bodoni / Instrument Serif) paired with elegant sans body',
+    figmaGuide: {
+      buttons: 'Champagne Gold (#d4af37) or Luxe Ivory (#f5f5f0), 6px subtle radius, tracked uppercase text',
+      cards: 'Velvet dark surfaces (#1f1d1b), 8px corners, delicate 1px champagne gold border (rgba(212, 175, 55, 0.25))',
+      layout: 'Asymmetric magazine layout with pull quotes, elegant margins, and refined thin dividers',
+      signature: 'Display serif typography, champagne gold hairline accents, and generous editorial breathing room'
+    }
+  },
+
+  // --- African & Regional Design Styles ---
   {
     id: 'ghana_style',
     name: 'Ghana Style',
@@ -311,8 +439,61 @@ const GLOBAL_UI_STYLES = [
 ];
 window.GLOBAL_UI_STYLES = GLOBAL_UI_STYLES;
 
-// Comprehensive legacy migration map: converts any old ID or old style name directly to the new country style
+// Comprehensive legacy migration map: converts any old ID or old style name directly to the corresponding style
 const OLD_TO_NEW_STYLE_MAP = {
+  // International & Diplomatic Aliases (all common orderings & permutations)
+  'international_diplomatic': 'international_diplomatic',
+  'international': 'international_diplomatic',
+  'diplomatic': 'international_diplomatic',
+  'international, diplomatic and professional': 'international_diplomatic',
+  'international diplomatic and professional': 'international_diplomatic',
+  'international diplomatic professional': 'international_diplomatic',
+  'professional, diplomatic and international': 'international_diplomatic',
+  'professional diplomatic and international': 'international_diplomatic',
+  'professional diplomatic international': 'international_diplomatic',
+  'diplomatic, professional and international': 'international_diplomatic',
+  'diplomatic professional and international': 'international_diplomatic',
+  'diplomatic international and professional': 'international_diplomatic',
+  'international professional and diplomatic': 'international_diplomatic',
+  'professional, international and diplomatic': 'international_diplomatic',
+  'professional international and diplomatic': 'international_diplomatic',
+  'professional and diplomatic': 'international_diplomatic',
+  'diplomatic and professional': 'international_diplomatic',
+  'diplomatic and international': 'international_diplomatic',
+  'international and diplomatic': 'international_diplomatic',
+  'international & diplomatic': 'international_diplomatic',
+  'international diplomatic': 'international_diplomatic',
+  'diplomatic style': 'international_diplomatic',
+  'smcp mun': 'international_diplomatic',
+  'smcp mun website relook': 'international_diplomatic',
+  'smcp mun relook': 'international_diplomatic',
+  'smcp': 'international_diplomatic',
+  'model un': 'international_diplomatic',
+  'mun': 'international_diplomatic',
+
+  // Modern Enterprise & Systems Aliases
+  'enterprise_saas': 'enterprise_saas',
+  'clean enterprise saas': 'enterprise_saas',
+  'enterprise': 'enterprise_saas',
+  'saas': 'enterprise_saas',
+  'fintech_high_trust': 'fintech_high_trust',
+  'high-trust fintech': 'fintech_high_trust',
+  'fintech': 'fintech_high_trust',
+  'minimalist_system': 'minimalist_system',
+  'minimalist design system': 'minimalist_system',
+  'minimalist': 'minimalist_system',
+  'civic_accessible': 'civic_accessible',
+  'accessible civic & govtech': 'civic_accessible',
+  'civic': 'civic_accessible',
+  'govtech': 'civic_accessible',
+  'dark_pro_hud': 'dark_pro_hud',
+  'dark pro hud & developer tools': 'dark_pro_hud',
+  'dark pro hud': 'dark_pro_hud',
+  'bento_consumer': 'bento_consumer',
+  'modern bento grid': 'bento_consumer',
+  'editorial_luxury': 'editorial_luxury',
+  'editorial serif & luxury': 'editorial_luxury',
+
   // Legacy IDs
   'afro_futurism': 'ghana_style',
   'kente_modular': 'ghana_style',
@@ -346,7 +527,6 @@ const OLD_TO_NEW_STYLE_MAP = {
   'Scandinavian Functionalism': 'scandinavia_style',
   'Editorial Serif & Luxury Minimal': 'france_style',
   'Brazilian Organic Modernism': 'brazil_style',
-  'Modern Bento Grid': 'silicon_valley_style',
   'Modern Bento Grid System': 'silicon_valley_style',
   'High-Contrast Neo-Brutalism': 'indie_web_style',
   'Neo-Brutalist High-Contrast': 'indie_web_style',
@@ -356,31 +536,198 @@ const OLD_TO_NEW_STYLE_MAP = {
   'Neo-Brutalism Raw': 'indie_web_style',
   'Cyberpunk Neon Dark': 'japan_style',
   'Bento Grid Dashboard': 'silicon_valley_style',
-  'Fintech Ultra-Clean': 'nigeria_style',
-  'E-Commerce Luxury Serif': 'france_style',
+  'Fintech Ultra-Clean': 'fintech_high_trust',
+  'E-Commerce Luxury Serif': 'editorial_luxury',
   'Pastel Playful Soft': 'korea_style',
   'Swiss Typographic Grid': 'switzerland_style',
   'Material Design 3 Neo': 'germany_style',
-  'Dark Mode HUD Terminal': 'japan_style',
+  'Dark Mode HUD Terminal': 'dark_pro_hud',
   'Nordic Editorial': 'scandinavia_style',
   'Apple Spatial': 'silicon_valley_style',
   'Neo-Arcade': 'indie_web_style',
-  'Linear Studio': 'silicon_valley_style'
+  'Linear Studio': 'enterprise_saas'
 };
 window.OLD_TO_NEW_STYLE_MAP = OLD_TO_NEW_STYLE_MAP;
+
+/**
+ * Creates a dynamic custom UI style object for user-defined or manual project styles.
+ * Never overrides user values, and seeds smart contextual defaults when fields are left blank.
+ */
+function createCustomUIStyle(rawName, existingProps = {}) {
+  const cleanName = (typeof rawName === 'string' && rawName.trim().length > 0)
+    ? rawName.trim()
+    : ((typeof rawName === 'object' && rawName !== null && rawName.name) ? rawName.name.trim() : 'Custom Project Style');
+  const lower = cleanName.toLowerCase();
+
+  // Smart detect domain/intent
+  let defaultRegion = 'Custom Workspace • Project Style';
+  let defaultSubRegion = 'Tailored Design System';
+  let defaultVibe = 'Clean, professional, and purpose-built for project goals with high-contrast surfaces and deliberate visual hierarchy.';
+  let defaultPrinciples = 'Maintain clear typographic hierarchy, consistent component spacing, accessible WCAG contrast, and intuitive primary actions.';
+  let defaultTypography = 'Modern high-contrast sans-serif paired with clean geometric body text';
+  let defaultPalette = ['#0f172a', '#1e293b', '#6366f1', '#38bdf8', '#10b981', '#ffffff'];
+  let defaultGuide = {
+    buttons: 'High-contrast primary CTA button with 8px-12px rounded corners and clear action label',
+    cards: 'Structured card containers with 12px-16px corner radius and subtle 1px border stroke',
+    layout: 'Clean structured layout with prominent primary actions and organized content modules',
+    signature: 'Custom tailored palette, accessible contrast, and focused typographic hierarchy'
+  };
+
+  if (/diplomat|international|mun|united nations|embassy|civic|council|treaty|smcp/i.test(lower)) {
+    defaultRegion = 'Global • Diplomatic & Civic Affairs';
+    defaultSubRegion = 'Multilateral Forums & Model UN';
+    defaultVibe = 'Prestigious, dignified, and authoritative. Deep diplomatic navy and slate foundations, United Nations azure and sovereign gold accents, pristine high-contrast reading surfaces, and formal institutional clarity.';
+    defaultPrinciples = 'Establish institutional trust, maintain multilingual accessibility, structure official documents with clear hierarchical numbering, and use dignified restrained feedback.';
+    defaultTypography = 'Stately Editorial Serif headlines (Merriweather / Times / Playfair) paired with crisp Diplomatic Grotesque sans-serif body';
+    defaultPalette = ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff'];
+    defaultGuide = {
+      buttons: 'Diplomatic Azure (#1d70b8) or Stately Gold (#c59b27) primary CTA with crisp white text, 8px restrained radius',
+      cards: 'Deep embassy slate cards (#14213d) with 10px rounded corners and solid 1px hairline border',
+      layout: 'Formal multi-column grid with structured agenda/resolution hierarchy and official status pills',
+      signature: 'Stately editorial serif typography, diplomatic azure action triggers, and gold seal status indicators'
+    };
+  } else if (/saas|enterprise|b2b|dashboard|analytics/i.test(lower)) {
+    defaultRegion = 'Global • Enterprise & Modern SaaS';
+    defaultSubRegion = 'B2B Digital Workspaces';
+    defaultVibe = 'High-efficiency clarity inspired by Linear and Stripe. Deep slate backgrounds, electric indigo actions, dense glanceable metrics, and distraction-free usability.';
+    defaultPrinciples = 'Maximize data density with clear hierarchical scannability, use an uncompromising 4px/8px component grid, and ensure accessible contrast.';
+    defaultTypography = 'Neutral high-legibility geometric grotesque (Inter/Geist) with compact tracking';
+    defaultPalette = ['#090d16', '#111827', '#6366f1', '#06b6d4', '#10b981', '#f8fafc'];
+    defaultGuide = {
+      buttons: 'Electric Indigo (#6366f1) or Solid White, 8px subtle corner radius, compact height',
+      cards: 'Modular slate cards (#111827) with 10px corner radius, hairline 1px border',
+      layout: 'Dense modular dashboard grid with quick-filter pills and telemetry tables',
+      signature: 'Compact 36px primary buttons, subtle 1px border strokes, and glanceable metric counters'
+    };
+  } else if (/fintech|bank|pay|crypto|wallet|invest/i.test(lower)) {
+    defaultRegion = 'Global • Financial Services';
+    defaultSubRegion = 'Consumer & Business Neo-Banking';
+    defaultVibe = 'Bank-grade confidence and security. Deep obsidian slate surfaces, electric emerald verification accents, big legible balance figures, and crystal-clear transaction receipts.';
+    defaultPrinciples = 'Highlight numerical metrics with large bold typography, provide immediate visual feedback, and include visible security assurance badges.';
+    defaultTypography = 'Crisp modern sans-serif with bold tabular figures (32px+ balance displays)';
+    defaultPalette = ['#090d1a', '#111827', '#10b981', '#38bdf8', '#6366f1', '#ffffff'];
+    defaultGuide = {
+      buttons: 'Electric Emerald Green (#10b981) with bold white text and 12px rounded corners',
+      cards: 'Midnight slate cards (#111827), 14px corner radius, soft 1px border',
+      layout: 'Thumb-reachable mobile bottom sheets with large numerical cards and fast-action icon rows',
+      signature: 'Electric emerald action buttons, glanceable financial summary cards, and security verification shields'
+    };
+  } else if (/minimal|clean|swiss|mono/i.test(lower)) {
+    defaultRegion = 'Global • Modern Minimalist';
+    defaultSubRegion = 'Accessibility-First Frameworks';
+    defaultVibe = 'Stark utilitarian precision. Monochromatic black-and-white foundation, razor-sharp 4px/6px corners, surgical 1px dividers, and zero decorative noise.';
+    defaultPrinciples = 'Strip away all visual fluff. Let content, hierarchy, and micro-typography communicate state and intent with maximum contrast.';
+    defaultTypography = 'Ultra-clean grotesque sans-serif with wide letter-spacing on subheaders and labels';
+    defaultPalette = ['#0a0a0c', '#141416', '#ffffff', '#71717a', '#27272a', '#f4f4f5'];
+    defaultGuide = {
+      buttons: 'Pure Solid White on dark, 4px minimal radius, 14px medium type',
+      cards: 'Pure dark surface (#141416), 6px crisp corners, hairline border',
+      layout: 'Strict left alignment, generous mathematical padding, single primary focal point',
+      signature: 'Monochromatic contrast, 4px crisp radius, and distraction-free content presentation'
+    };
+  }
+
+  // Detect if existing properties contain stale Ghana Style data while the new style is NOT Ghana
+  const hasStaleGhana = (
+    (existingProps.region && existingProps.region.includes('Ghana')) ||
+    (existingProps.uiStyleRegion && existingProps.uiStyleRegion.includes('Ghana')) ||
+    (existingProps.vibe && existingProps.vibe.includes('Ghana')) ||
+    (existingProps.uiStyleVibe && existingProps.uiStyleVibe.includes('Ghana')) ||
+    (existingProps.principles && existingProps.principles.includes('Ghana')) ||
+    (existingProps.uiStylePrinciples && existingProps.uiStylePrinciples.includes('Ghana'))
+  ) && !cleanName.toLowerCase().includes('ghana');
+
+  const region = (!hasStaleGhana && (existingProps.region || existingProps.uiStyleRegion)) || defaultRegion;
+  const subRegion = (!hasStaleGhana && existingProps.subRegion) || defaultSubRegion;
+  const vibe = (!hasStaleGhana && (existingProps.vibe || existingProps.uiStyleVibe)) || defaultVibe;
+  const principles = (!hasStaleGhana && (existingProps.principles || existingProps.uiStylePrinciples)) || defaultPrinciples;
+  const typography = (!hasStaleGhana && (existingProps.typography || existingProps.uiStyleTypography)) || defaultTypography;
+  const palette = (!hasStaleGhana && Array.isArray(existingProps.palette) && existingProps.palette.length)
+    ? existingProps.palette
+    : ((!hasStaleGhana && Array.isArray(existingProps.uiStylePalette) && existingProps.uiStylePalette.length)
+      ? existingProps.uiStylePalette
+      : defaultPalette);
+  const figmaGuide = (!hasStaleGhana && existingProps.figmaGuide) || defaultGuide;
+
+  return {
+    id: 'custom_' + cleanName.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+    name: cleanName,
+    region,
+    subRegion,
+    vibe,
+    principles,
+    typography,
+    palette,
+    figmaGuide,
+    isCustom: true
+  };
+}
+window.createCustomUIStyle = createCustomUIStyle;
 
 function getUIStyleById(styleId) {
   if (!styleId) return GLOBAL_UI_STYLES[0];
   const query = (typeof styleId === 'object' && styleId !== null)
     ? (styleId.id || styleId.name || '')
-    : String(styleId);
-  const mappedId = OLD_TO_NEW_STYLE_MAP[query] || query;
-  return GLOBAL_UI_STYLES.find(s => 
-    s.id === mappedId || 
+    : String(styleId).trim();
+  if (!query) return GLOBAL_UI_STYLES[0];
+
+  const lower = query.toLowerCase();
+  const normalizedKey = lower.replace(/[^a-z0-9]+/g, ' ').trim();
+
+  // 1. Direct or normalized map lookup
+  const mappedId = OLD_TO_NEW_STYLE_MAP[query] || 
+                   OLD_TO_NEW_STYLE_MAP[lower] || 
+                   OLD_TO_NEW_STYLE_MAP[normalizedKey];
+
+  if (mappedId) {
+    const target = GLOBAL_UI_STYLES.find(s => s.id === mappedId);
+    if (target) return target;
+  }
+
+  // 2. Exact match in GLOBAL_UI_STYLES (by ID or full name)
+  const found = GLOBAL_UI_STYLES.find(s => 
     s.id === query || 
-    s.name.toLowerCase() === query.toLowerCase() || 
-    s.name.toLowerCase() === String(mappedId).toLowerCase()
-  ) || GLOBAL_UI_STYLES[0];
+    s.id === lower || 
+    s.name.toLowerCase() === lower
+  );
+  if (found) return found;
+
+  // 3. Intelligent fuzzy/keyword matching for presets (handles any word order)
+  if (/diplomat|international|mun|united nations|embassy|smcp/i.test(lower)) {
+    const dip = GLOBAL_UI_STYLES.find(s => s.id === 'international_diplomatic');
+    if (dip) return dip;
+  }
+  if (/enterprise|saas|b2b/i.test(lower)) {
+    const saas = GLOBAL_UI_STYLES.find(s => s.id === 'enterprise_saas');
+    if (saas) return saas;
+  }
+  if (/fintech|bank|pay/i.test(lower)) {
+    const fin = GLOBAL_UI_STYLES.find(s => s.id === 'fintech_high_trust');
+    if (fin) return fin;
+  }
+  if (/minimal|radix|carbon/i.test(lower)) {
+    const min = GLOBAL_UI_STYLES.find(s => s.id === 'minimalist_system');
+    if (min) return min;
+  }
+  if (/civic|govtech|public/i.test(lower)) {
+    const civ = GLOBAL_UI_STYLES.find(s => s.id === 'civic_accessible');
+    if (civ) return civ;
+  }
+  if (/hud|telemetry|terminal/i.test(lower)) {
+    const hud = GLOBAL_UI_STYLES.find(s => s.id === 'dark_pro_hud');
+    if (hud) return hud;
+  }
+  if (/bento/i.test(lower)) {
+    const bento = GLOBAL_UI_STYLES.find(s => s.id === 'bento_consumer');
+    if (bento) return bento;
+  }
+  if (/editorial|luxury|journal/i.test(lower)) {
+    const edit = GLOBAL_UI_STYLES.find(s => s.id === 'editorial_luxury');
+    if (edit) return edit;
+  }
+
+  // 4. Custom user-defined or manual style: dynamically create and preserve user style!
+  return createCustomUIStyle(query);
 }
 window.getUIStyleById = getUIStyleById;
 
@@ -469,7 +816,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Receipt Scanning & One-Tap Balance Settle',
     about: 'An app for housemates to log utility bills, scan shared grocery receipts, split costs unequally when needed, and settle balances instantly.',
     problem: 'Social awkwardness and calculation errors when splitting household bills, leading to delayed payments and unresolved debts between friends.',
-    style: getUIStyleById('nigeria_style'),
+    style: getUIStyleById('fintech_high_trust'),
     color: PALETTE[1],
     active: true
   },
@@ -506,12 +853,12 @@ const DEFAULT_TOPICS = [
     text: 'Home solar & electricity monitor',
     shortLabel: 'Solar Monitor',
     iconKey: 'bolt',
-    category: 'Smart Home',
+    category: 'CleanTech & Hardware',
     deliverable: 'Tablet UI',
     uxFocus: 'Live Power Flow Animation & Battery Level Gauge',
     about: 'A home dashboard displaying real-time rooftop solar generation, home battery reserve, and notifications for the cheapest hours to run laundry.',
     problem: 'Homeowners find kilowatt-hour charts confusing and need clear, plain-language recommendations on how to cut electricity bills today.',
-    style: getUIStyleById('ghana_style'),
+    style: getUIStyleById('dark_pro_hud'),
     color: PALETTE[4],
     active: true
   },
@@ -520,12 +867,12 @@ const DEFAULT_TOPICS = [
     text: 'Doctor appointment & clinic check-in',
     shortLabel: 'Doctor Visit',
     iconKey: 'activity',
-    category: 'Healthcare',
+    category: 'Healthcare & Civic',
     deliverable: 'Mobile App',
     uxFocus: 'Verified Provider Cards & Digital Medical Intake',
     about: 'A patient portal to find nearby doctors, book open appointment slots, and fill out intake forms on mobile before stepping into the clinic.',
     problem: 'Patients arrive stressed and waste 20 minutes filling out repetitive clipboards in waiting rooms with zero visibility into doctor delay times.',
-    style: getUIStyleById('kenya_style'),
+    style: getUIStyleById('civic_accessible'),
     color: PALETTE[5],
     active: true
   },
@@ -539,21 +886,21 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Clean Invoice Builder & Payment Link Generator',
     about: 'A streamlined tool for independent contractors to generate professional invoices, set automated polite payment reminders, and receive bank deposits.',
     problem: 'Freelancers feel uncomfortable chasing late client payments, and clients delay paying due to complicated PDF forms and tedious bank wire steps.',
-    style: getUIStyleById('morocco_style'),
+    style: getUIStyleById('enterprise_saas'),
     color: PALETTE[6],
     active: true
   },
   {
     id: 'top_8',
-    text: 'Gym workout & weight set counter',
-    shortLabel: 'Workout Log',
-    iconKey: 'activity',
-    category: 'Fitness',
-    deliverable: 'Smartwatch / Mobile',
-    uxFocus: 'Single-Tap Rep Entry & Barbell Weight Calculator',
-    about: 'A high-speed fitness companion to log lifting sets, track rest countdowns, and calculate barbell plate combinations in a crowded gym.',
-    problem: 'Typing on a phone while sweaty and out of breath is clumsy; lifters need massive touch targets and haptic rest-timer buzzers.',
-    style: getUIStyleById('south_africa_style'),
+    text: 'Model UN & diplomatic conference portal',
+    shortLabel: 'SMCP MUN Portal',
+    iconKey: 'globe',
+    category: 'Civic & Diplomacy',
+    deliverable: 'Responsive Web / Tablet',
+    uxFocus: 'Resolution Drafting, Live Caucus Timer & Roll Call Voting',
+    about: 'A formal digital conference portal for Model United Nations delegates and secretariat to submit position papers, review resolution amendments, and conduct real-time committee roll-call voting.',
+    problem: 'Delegates lose caucus time managing paper drafts, committee chairs struggle to track speaker queues, and resolution voting during plenary sessions suffers procedural delays.',
+    style: getUIStyleById('international_diplomatic'),
     color: PALETTE[7],
     active: true
   },
@@ -567,7 +914,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Live GPS Arrival Counter & NFC Tap-to-Board',
     about: 'A city transit app showing real-time GPS bus arrival countdowns, platform walking directions, and a quick-swipe digital boarding pass.',
     problem: 'Riders running to catch their bus cannot tell whether the bus is 2 minutes away or already gone, causing missed rides and transit anxiety.',
-    style: getUIStyleById('silicon_valley_style'),
+    style: getUIStyleById('bento_consumer'),
     color: PALETTE[8],
     active: true
   },
@@ -581,7 +928,7 @@ const DEFAULT_TOPICS = [
     uxFocus: 'Verified Landlord Badges & Digital Lease Signing',
     about: 'A rental property discovery app with verified landlord virtual tours, neighborhood safety scores, and digital lease signing.',
     problem: 'Renters waste time on misleading listings, hidden maintenance fees, and opaque application timelines from property managers.',
-    style: getUIStyleById('korea_style'),
+    style: getUIStyleById('editorial_luxury'),
     color: PALETTE[9],
     active: true
   }
@@ -1170,7 +1517,10 @@ class TopicEngine {
         // Force normalize style to current country style
         const currentStyleName = t.style?.name || '';
         const currentStyleId = t.style?.id || t.styleId || '';
-        const isUpToDate = t.style && GLOBAL_UI_STYLES.some(s => s.id === currentStyleId && s.name === currentStyleName && s.figmaGuide);
+        const isUpToDate = t.style && (
+          t.style.isCustom || 
+          GLOBAL_UI_STYLES.some(s => s.id === currentStyleId && s.name === currentStyleName && s.figmaGuide)
+        );
         if (!isUpToDate) {
           t.style = getUIStyleById(currentStyleId || currentStyleName || t.styleId);
           needsPersist = true;

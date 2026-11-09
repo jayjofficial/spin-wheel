@@ -45,26 +45,39 @@ class UXCaseStudyEngine {
     const tags = Array.isArray(design.tags) ? design.tags : [];
 
     // Resolve assigned UI Style
+    const rawStyleQuery = design.uiStyle || design.style?.name || design.style || '';
     let styleObj = null;
-    if (window.getUIStyleById) {
-      styleObj = window.getUIStyleById(design.uiStyle || design.style?.name || design.style);
+    if (window.getUIStyleById && rawStyleQuery) {
+      styleObj = window.getUIStyleById(rawStyleQuery);
     }
-    const styleName = styleObj ? styleObj.name : (design.uiStyle || design.style?.name || 'Ghana Style');
-    const styleRegion = styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : (design.uiStyleRegion || 'West Africa • Ghana');
-    const styleVibe = styleObj ? styleObj.vibe : (design.uiStyleVibe || 'Warm, vibrant, and proud modern aesthetic with high contrast surfaces.');
-    const stylePrinciples = styleObj ? styleObj.principles : (design.uiStylePrinciples || 'Structured grid alignment, accessible touch targets, and balanced color emphasis.');
-    const styleTypography = styleObj ? styleObj.typography : (design.uiStyleTypography || 'Modern clean geometric sans-serif');
-    const palette = (styleObj && Array.isArray(styleObj.palette) && styleObj.palette.length)
-      ? styleObj.palette
-      : ((design.uiStylePalette && Array.isArray(design.uiStylePalette) && design.uiStylePalette.length)
-        ? design.uiStylePalette
-        : ['#0f1015', '#1a1d26', '#f59e0b', '#10b981', '#ef4444', '#ffffff']);
+
+    // Style Name: prioritize design.uiStyle if specified, then styleObj.name, then neutral default
+    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'International, Diplomatic and Professional');
+
+    // Region: prioritize design.uiStyleRegion, then styleObj, then neutral global default
+    const styleRegion = design.uiStyleRegion || (styleObj ? (styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region) : 'Global • Diplomatic & Civic Affairs');
+
+    // Vibe: prioritize design.uiStyleVibe, then styleObj, then neutral default
+    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Dignified, prestigious, and high-trust aesthetic with accessible contrast.');
+
+    // Principles: prioritize design.uiStylePrinciples, then styleObj, then neutral default
+    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Clear typography hierarchy, accessible touch targets, and balanced color emphasis.');
+
+    // Typography: prioritize design.uiStyleTypography, then styleObj, then neutral default
+    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Stately Editorial Serif headlines paired with clean Grotesque body');
+
+    // Palette: prioritize design.uiStylePalette
+    const palette = (design.uiStylePalette && Array.isArray(design.uiStylePalette) && design.uiStylePalette.length)
+      ? design.uiStylePalette
+      : ((styleObj && Array.isArray(styleObj.palette) && styleObj.palette.length)
+        ? styleObj.palette
+        : ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff']);
     
-    const figmaGuide = (styleObj && styleObj.figmaGuide) || design.figmaGuide || {
-      buttons: '48px minimum touch height, 12px rounded corners, bold contrast',
-      cards: 'Dark surface elevation, 14px rounded corners, subtle 1px border stroke',
-      layout: 'Mobile-first single-column or multi-column grid with thumb reachability',
-      signature: 'Distinctive accent highlights paired with structured visual hierarchy'
+    const figmaGuide = design.figmaGuide || (styleObj && styleObj.figmaGuide) || {
+      buttons: 'Diplomatic Azure (#1d70b8) or Stately Gold (#c59b27) CTA, 8px restrained radius',
+      cards: 'Deep embassy slate cards (#14213d) with 10px rounded corners and subtle border',
+      layout: 'Formal structured column layout with official document summary headers and delegate action bars',
+      signature: 'Stately editorial serif typography, diplomatic azure action triggers, and gold seal status indicators'
     };
 
     // Synthesize UX Personas based on category/title
@@ -171,11 +184,57 @@ class UXCaseStudyEngine {
    * Synthesize Primary User Persona
    */
   static synthesizePersona(title, category, platform, problem) {
+    const combined = `${title} ${category}`.toLowerCase();
+
+    // Context-Aware Persona for Model UN, Civic, and Diplomatic Projects
+    if (/diplomat|international|mun|united nations|embassy|civic|council|treaty|smcp/i.test(combined)) {
+      return {
+        name: 'Elena Rostova',
+        age: '24',
+        occupation: 'Head Delegate & Committee Secretariat (SMCP MUN)',
+        techComfort: 'High',
+        deviceContext: `${platform} used during active committee sessions, moderated caucuses, and resolution drafting.`,
+        coreGoal: `Rapidly review draft resolutions, verify delegate credentials, manage committee speaker lists, and track caucus amendments without delay.`,
+        primaryFrustration: problem || 'Cluttered resolution portals, unreadable PDF attachments on mobile screens during unmoderated caucuses, and confusing voting quorum procedures.',
+        mentalModel: 'Expects institutional trust, dignified aesthetic clarity, immediate searchability across resolution clauses, and accessible contrast under bright conference hall lighting.'
+      };
+    }
+
+    // Context-Aware Persona for Enterprise SaaS & Productivity
+    if (/saas|enterprise|b2b|dashboard|analytics|workflow|project/i.test(combined)) {
+      return {
+        name: 'Rachel Chen',
+        age: '32',
+        occupation: 'Senior Product Operations Lead',
+        techComfort: 'Very High',
+        deviceContext: `${platform} on desktop and high-density tablet workstation.`,
+        coreGoal: `Monitor cross-team sprint telemetry, analyze workflow bottlenecks, and export executive reports in seconds.`,
+        primaryFrustration: problem || 'Cognitive overload from cluttered unsegmented tables and slow filter transitions.',
+        mentalModel: 'Expects high information density, instant keyboard navigation, and clear visual state hierarchies.'
+      };
+    }
+
+    // Context-Aware Persona for Developer Tools & Telemetry
+    if (/developer|api|terminal|hud|telemetry|code/i.test(combined)) {
+      return {
+        name: 'Julian Vance',
+        age: '28',
+        occupation: 'DevOps & Systems Infrastructure Engineer',
+        techComfort: 'Expert',
+        deviceContext: `${platform} on dual high-resolution OLED monitors and terminal command line.`,
+        coreGoal: `Diagnose production latency spikes and inspect real-time log streams without context switching.`,
+        primaryFrustration: problem || 'Excessive visual clutter and unparsable log dumps.',
+        mentalModel: 'Demands monospace fidelity, high-contrast dark surfaces, and hotkey-driven actions.'
+      };
+    }
+
     const names = {
+      'Civic & Diplomacy': { name: 'Elena Rostova', age: '24', role: 'Head Delegate & Secretariat', tech: 'High' },
       'FinTech': { name: 'Amara Okafor', age: '29', role: 'Freelance Operations Specialist', tech: 'High' },
       'Travel': { name: 'Kofi Mensah', age: '34', role: 'Regional Project Consultant', tech: 'Medium-High' },
       'Logistics': { name: 'Eleni Berhane', age: '26', role: 'Supply Chain Coordinator', tech: 'High' },
       'Health': { name: 'Farai Moyo', age: '31', role: 'Community Health Program Officer', tech: 'Medium' },
+      'Healthcare & Civic': { name: 'Marcus Vance', age: '33', role: 'Patient Advocate & Clinic Lead', tech: 'High' },
       'E-Commerce': { name: 'Zara Al-Mansoor', age: '27', role: 'Boutique Store Founder', tech: 'High' },
       'Food & E-Commerce': { name: 'Zara Al-Mansoor', age: '27', role: 'Artisan Food Entrepreneur', tech: 'High' },
       'Productivity': { name: 'David Kimani', age: '33', role: 'Senior Remote Software Engineer', tech: 'Very High' },
@@ -184,6 +243,7 @@ class UXCaseStudyEngine {
       'Entertainment': { name: 'Kwame Asante', age: '28', role: 'Digital Media Creator', tech: 'High' },
       'Lifestyle': { name: 'Maya Osei', age: '30', role: 'Creative Director & Consultant', tech: 'High' },
       'Smart Home': { name: 'Tariq Benali', age: '35', role: 'Systems Engineer & Connected Home Lead', tech: 'Very High' },
+      'CleanTech & Hardware': { name: 'Tariq Benali', age: '35', role: 'Systems Engineer & Connected Home Lead', tech: 'Very High' },
       'Social': { name: 'Nia Adebayo', age: '25', role: 'Community Architect & Content Strategist', tech: 'High' }
     };
 

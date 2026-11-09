@@ -184,20 +184,43 @@ class StorageManager {
     }
   }
 
-  // --- Auto-Migration for Legacy Design UI Styles & Next-Week Deadlines ---
+  // --- Auto-Migration for Legacy Design UI Styles & Preservation of Custom Styles ---
   static normalizeDesignStyle(design) {
     if (!design) return design;
     const rawStyle = design.uiStyle || '';
+    if (!rawStyle) return design;
+
     if (window.getUIStyleById) {
       const styleObj = window.getUIStyleById(rawStyle);
       if (styleObj) {
-        design.uiStyle = styleObj.name;
-        design.uiStyleRegion = `${styleObj.region} • ${styleObj.subRegion}`;
-        design.uiStyleVibe = styleObj.vibe;
-        design.uiStylePrinciples = styleObj.principles;
-        design.uiStyleTypography = styleObj.typography;
-        design.uiStylePalette = styleObj.palette;
-        design.figmaGuide = styleObj.figmaGuide;
+        // If it's a known preset or mapped legacy style, update the display name
+        if (!styleObj.isCustom) {
+          design.uiStyle = styleObj.name;
+        } else {
+          // Custom user-entered style: strictly preserve user's custom style name
+          design.uiStyle = rawStyle.trim();
+        }
+
+        // Preserve any custom user inputs for region, vibe, principles, typography, palette, figmaGuide
+        // Only fill missing metadata from styleObj
+        if (!design.uiStyleRegion) {
+          design.uiStyleRegion = styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region;
+        }
+        if (!design.uiStyleVibe) {
+          design.uiStyleVibe = styleObj.vibe;
+        }
+        if (!design.uiStylePrinciples) {
+          design.uiStylePrinciples = styleObj.principles;
+        }
+        if (!design.uiStyleTypography) {
+          design.uiStyleTypography = styleObj.typography;
+        }
+        if (!design.uiStylePalette || !Array.isArray(design.uiStylePalette) || design.uiStylePalette.length === 0) {
+          design.uiStylePalette = styleObj.palette;
+        }
+        if (!design.figmaGuide) {
+          design.figmaGuide = styleObj.figmaGuide;
+        }
       }
     }
     return design;

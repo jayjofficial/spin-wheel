@@ -510,19 +510,19 @@
 
       <!-- Card 3: Design in this UI style -->
       <div class="winner-style-card" id="winner-style-card">
-        <div class="style-badge-label">DESIGN IN THIS UI STYLE</div>
-        <h4 class="style-name-heading" id="winner-style-name">Ghana Style</h4>
+        <div class="style-badge-label">ASSIGNED UI STYLE</div>
+        <h4 class="style-name-heading" id="winner-style-name">International, Diplomatic and Professional</h4>
         
         <div class="style-tag-row">
-          <span class="style-region-pill" id="winner-style-region">West Africa • Ghana</span>
-          <button class="btn-reroll-style" id="btn-winner-reroll-style" type="button" title="Swap to another country UI style">
+          <span class="style-region-pill" id="winner-style-region">Global • Diplomatic &amp; Civic Affairs</span>
+          <button class="btn-reroll-style" id="btn-winner-reroll-style" type="button" title="Swap to another UI style (International, SaaS, FinTech, Regional, etc.)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
             <span>Swap Style</span>
           </button>
         </div>
 
         <p class="style-vibe-text" id="winner-style-vibe">
-          Warm, vibrant, and proud. Inspired by Ghanaian Kente patterns, featuring structured cards with bold golden-yellow, forest green, and rich crimson accents over a crisp dark background.
+          Prestigious, dignified, and authoritative. Deep diplomatic navy foundations, United Nations azure and sovereign gold accents, and formal institutional clarity.
         </p>
 
         <div class="style-palette-row">
@@ -766,9 +766,37 @@
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label" for="input-design-style">
-              <span>Assigned UI Style</span>
+              <span>UI Style (Preset or Custom)</span>
+              <span id="style-type-indicator" style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 600;">Custom / Preset</span>
             </label>
-            <input type="text" id="input-design-style" class="form-input" placeholder="e.g. Ghana Style">
+            <input type="text" id="input-design-style" list="preset-styles-list" class="form-input" placeholder="e.g. International, Diplomatic and Professional" autocomplete="off">
+            <datalist id="preset-styles-list">
+              <option value="International, Diplomatic and Professional"></option>
+              <option value="Clean Enterprise SaaS"></option>
+              <option value="High-Trust FinTech"></option>
+              <option value="Minimalist Design System"></option>
+              <option value="Accessible Civic & GovTech"></option>
+              <option value="Dark Pro HUD & Developer Tools"></option>
+              <option value="Modern Bento Grid"></option>
+              <option value="Editorial Serif & Luxury"></option>
+              <option value="Ghana Style"></option>
+              <option value="Nigeria Style"></option>
+              <option value="Kenya Style"></option>
+              <option value="South Africa Style"></option>
+              <option value="Rwanda Style"></option>
+              <option value="Morocco Style"></option>
+              <option value="Japan Style"></option>
+              <option value="South Korea Style"></option>
+              <option value="Switzerland Style"></option>
+              <option value="Germany Style"></option>
+              <option value="France Style"></option>
+              <option value="Scandinavia Style"></option>
+              <option value="Brazil Style"></option>
+              <option value="Indie Web Style"></option>
+            </datalist>
+            <span style="font-size: 0.74rem; color: var(--text-dim); display: block; margin-top: 0.25rem;">
+              Type your own custom style (e.g. SMCP MUN Diplomatic) or select a preset. Custom styles are 100% preserved.
+            </span>
           </div>
 
           <div class="form-group">
@@ -776,14 +804,50 @@
               <span>Deliverable Platform</span>
             </label>
             <select id="select-design-platform" class="form-select">
-              <option value="Mobile App">Mobile App</option>
               <option value="Web / Dashboard">Web / Dashboard</option>
-              <option value="Smartwatch">Smartwatch</option>
+              <option value="Mobile App">Mobile App</option>
               <option value="Tablet">Tablet</option>
+              <option value="Smartwatch">Smartwatch</option>
               <option value="Spatial / AR">Spatial / AR</option>
             </select>
           </div>
         </div>
+
+        <!-- Optional Custom Style Details Accordion -->
+        <details class="custom-style-details-accordion" id="details-custom-style" style="margin-bottom: 1.15rem; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 0.65rem 0.9rem;">
+          <summary style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between;">
+            <span>Customize Style Palette, Vibe &amp; Typography (Optional)</span>
+            <span style="font-size: 0.74rem; color: var(--accent-cyan);">Click to view / tweak</span>
+          </summary>
+          <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="input-design-style-vibe" style="font-size: 0.78rem;">
+                <span>Style Vibe / Visual Tone</span>
+              </label>
+              <input type="text" id="input-design-style-vibe" class="form-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem;" placeholder="e.g. Stately, high-trust, and prestigious with deep navy surfaces and gold accents">
+            </div>
+            <div class="form-row-2">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="input-design-style-palette" style="font-size: 0.78rem;">
+                  <span>Color Palette (Comma-separated Hex)</span>
+                </label>
+                <input type="text" id="input-design-style-palette" class="form-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem;" placeholder="e.g. #0a1128, #14213d, #1d70b8, #c59b27, #475569, #ffffff">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="input-design-style-typography" style="font-size: 0.78rem;">
+                  <span>Typography</span>
+                </label>
+                <input type="text" id="input-design-style-typography" class="form-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem;" placeholder="e.g. Editorial Serif headlines paired with clean Grotesque body">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="input-design-style-region" style="font-size: 0.78rem;">
+                <span>Style Domain / Region</span>
+              </label>
+              <input type="text" id="input-design-style-region" class="form-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem;" placeholder="e.g. Global • Diplomatic & Civic Affairs">
+            </div>
+          </div>
+        </details>
 
         <!-- Date & Week Indicator -->
         <div class="form-row-2">

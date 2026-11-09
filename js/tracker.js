@@ -271,8 +271,8 @@ class DesignTracker {
 
           ${design.uiStyle ? (() => {
             const styleObj = window.getUIStyleById ? window.getUIStyleById(design.uiStyle) : null;
-            const styleName = styleObj ? styleObj.name : design.uiStyle;
-            const guideHint = (styleObj && styleObj.figmaGuide?.signature) || design.uiStylePrinciples || '';
+            const styleName = design.uiStyle || (styleObj ? styleObj.name : 'Custom Style');
+            const guideHint = (styleObj && styleObj.figmaGuide?.signature) || design.uiStylePrinciples || design.uiStyleVibe || '';
             return `
               <div class="archive-style-tag">
                 <span class="style-badge-pill">

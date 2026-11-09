@@ -848,12 +848,14 @@ class App {
       styleObj = window.getUIStyleById(design.uiStyle);
     }
 
-    const styleName = styleObj ? styleObj.name : (design.uiStyle || 'Ghana Style');
-    const styleRegion = styleObj ? `${styleObj.region} • ${styleObj.subRegion}` : (design.uiStyleRegion || 'West Africa • Ghana');
-    const styleVibe = styleObj ? styleObj.vibe : (design.uiStyleVibe || 'Warm, vibrant, and proud. Inspired by Ghanaian modernism & Kente geometry. Rich gold and emerald accents over clean obsidian dark surfaces.');
-    const styleTypography = styleObj ? styleObj.typography : (design.uiStyleTypography || 'Bold modern headings paired with clear, friendly body text');
-    const stylePalette = (styleObj && styleObj.palette) ? styleObj.palette : ((design.uiStylePalette && design.uiStylePalette.length) ? design.uiStylePalette : ['#0f1015', '#1a1d26', '#f59e0b', '#10b981', '#ef4444', '#ffffff']);
-    const guide = (styleObj && styleObj.figmaGuide) || design.figmaGuide || {};
+    const styleName = design.uiStyle || (styleObj ? styleObj.name : 'International, Diplomatic and Professional');
+    const styleRegion = design.uiStyleRegion || (styleObj ? (styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region) : 'Global • Diplomatic & Civic Affairs');
+    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Dignified, prestigious, and high-trust aesthetic with accessible contrast.');
+    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Stately Editorial Serif headlines paired with clean Grotesque body');
+    const stylePalette = (design.uiStylePalette && Array.isArray(design.uiStylePalette) && design.uiStylePalette.length)
+      ? design.uiStylePalette
+      : ((styleObj && styleObj.palette) ? styleObj.palette : ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff']);
+    const guide = design.figmaGuide || (styleObj && styleObj.figmaGuide) || {};
 
     const styleNameEl = document.getElementById('archive-detail-style-name');
     const styleRegionEl = document.getElementById('archive-detail-style-region');
@@ -955,6 +957,62 @@ class App {
       });
     }
 
+    // Dynamic UI Style Input & Presets Auto-Fill Listener
+    const styleInput = document.getElementById('input-design-style');
+    const styleTypeIndicator = document.getElementById('style-type-indicator');
+    const styleVibeInput = document.getElementById('input-design-style-vibe');
+    const styleRegionInput = document.getElementById('input-design-style-region');
+    const stylePaletteInput = document.getElementById('input-design-style-palette');
+    const styleTypoInput = document.getElementById('input-design-style-typography');
+
+    if (styleInput) {
+      styleInput.addEventListener('input', () => {
+        const val = styleInput.value.trim();
+        if (!val) {
+          if (styleTypeIndicator) {
+            styleTypeIndicator.textContent = 'Custom / Preset';
+            styleTypeIndicator.style.color = 'var(--accent-cyan)';
+          }
+          return;
+        }
+        if (window.getUIStyleById) {
+          const resolved = window.getUIStyleById(val);
+          if (resolved) {
+            if (styleTypeIndicator) {
+              styleTypeIndicator.textContent = resolved.isCustom ? 'Custom Style (Preserved)' : 'Preset Style';
+              styleTypeIndicator.style.color = resolved.isCustom ? '#10b981' : 'var(--accent-cyan)';
+            }
+            // Auto-seed custom fields if user hasn't typed in them yet
+            if (styleVibeInput && (!styleVibeInput.value || styleVibeInput.dataset.autofilled === 'true')) {
+              styleVibeInput.value = resolved.vibe || '';
+              styleVibeInput.dataset.autofilled = 'true';
+            }
+            if (styleRegionInput && (!styleRegionInput.value || styleRegionInput.dataset.autofilled === 'true')) {
+              styleRegionInput.value = resolved.subRegion ? `${resolved.region} • ${resolved.subRegion}` : (resolved.region || '');
+              styleRegionInput.dataset.autofilled = 'true';
+            }
+            if (stylePaletteInput && (!stylePaletteInput.value || stylePaletteInput.dataset.autofilled === 'true') && Array.isArray(resolved.palette)) {
+              stylePaletteInput.value = resolved.palette.join(', ');
+              stylePaletteInput.dataset.autofilled = 'true';
+            }
+            if (styleTypoInput && (!styleTypoInput.value || styleTypoInput.dataset.autofilled === 'true')) {
+              styleTypoInput.value = resolved.typography || '';
+              styleTypoInput.dataset.autofilled = 'true';
+            }
+          }
+        }
+      });
+
+      // Mark as manual override when user types directly in custom subfields
+      [styleVibeInput, styleRegionInput, stylePaletteInput, styleTypoInput].forEach(inp => {
+        if (inp) {
+          inp.addEventListener('input', () => {
+            inp.dataset.autofilled = 'false';
+          });
+        }
+      });
+    }
+
     // Toolbar Filters in Tracker
     const weekSelect = document.getElementById('filter-week-select');
     if (weekSelect) {
@@ -1023,8 +1081,42 @@ class App {
     }
 
     const styleInput = document.getElementById('input-design-style');
+    const styleTypeIndicator = document.getElementById('style-type-indicator');
+    const styleVibeInput = document.getElementById('input-design-style-vibe');
+    const styleRegionInput = document.getElementById('input-design-style-region');
+    const stylePaletteInput = document.getElementById('input-design-style-palette');
+    const styleTypoInput = document.getElementById('input-design-style-typography');
+
+    const activeStyleName = initialData?.uiStyle || (this.currentWinningTopic?.style?.name || '');
     if (styleInput) {
-      styleInput.value = initialData?.uiStyle || (this.currentWinningTopic?.style?.name || '');
+      styleInput.value = activeStyleName;
+    }
+
+    if (styleVibeInput) {
+      styleVibeInput.value = initialData?.uiStyleVibe || (this.currentWinningTopic?.style?.vibe || '');
+      styleVibeInput.dataset.autofilled = 'false';
+    }
+    if (styleRegionInput) {
+      styleRegionInput.value = initialData?.uiStyleRegion || (this.currentWinningTopic?.style?.region ? (this.currentWinningTopic.style.subRegion ? `${this.currentWinningTopic.style.region} • ${this.currentWinningTopic.style.subRegion}` : this.currentWinningTopic.style.region) : '');
+      styleRegionInput.dataset.autofilled = 'false';
+    }
+    if (stylePaletteInput) {
+      const pal = initialData?.uiStylePalette || this.currentWinningTopic?.style?.palette;
+      stylePaletteInput.value = Array.isArray(pal) ? pal.join(', ') : '';
+      stylePaletteInput.dataset.autofilled = 'false';
+    }
+    if (styleTypoInput) {
+      styleTypoInput.value = initialData?.uiStyleTypography || (this.currentWinningTopic?.style?.typography || '');
+      styleTypoInput.dataset.autofilled = 'false';
+    }
+
+    if (styleTypeIndicator && activeStyleName && window.getUIStyleById) {
+      const res = window.getUIStyleById(activeStyleName);
+      styleTypeIndicator.textContent = (res && res.isCustom) ? 'Custom Style (Preserved)' : 'Preset Style';
+      styleTypeIndicator.style.color = (res && res.isCustom) ? '#10b981' : 'var(--accent-cyan)';
+    } else if (styleTypeIndicator) {
+      styleTypeIndicator.textContent = 'Custom / Preset';
+      styleTypeIndicator.style.color = 'var(--accent-cyan)';
     }
 
     const autoDownloadCheckbox = document.getElementById('checkbox-auto-download-case-study');
@@ -1178,18 +1270,38 @@ class App {
       .map(t => t.trim().replace(/^#/, ''))
       .filter(t => t.length > 0);
 
+    const styleVal = document.getElementById('input-design-style')?.value.trim() || this.currentEditingDesign?.uiStyle || '';
+    const styleVibeVal = document.getElementById('input-design-style-vibe')?.value.trim() || this.currentEditingDesign?.uiStyleVibe || '';
+    const styleRegionVal = document.getElementById('input-design-style-region')?.value.trim() || this.currentEditingDesign?.uiStyleRegion || '';
+    const styleTypoVal = document.getElementById('input-design-style-typography')?.value.trim() || this.currentEditingDesign?.uiStyleTypography || '';
+
+    // Parse custom palette input
+    let stylePaletteVal = this.currentEditingDesign?.uiStylePalette || [];
+    const paletteRaw = document.getElementById('input-design-style-palette')?.value.trim();
+    if (paletteRaw) {
+      const parsedHexes = paletteRaw
+        .split(/[\s,]+/)
+        .map(h => h.trim())
+        .filter(h => /^#?[0-9a-fA-F]{3,8}$/.test(h))
+        .map(h => h.startsWith('#') ? h : `#${h}`);
+      if (parsedHexes.length > 0) {
+        stylePaletteVal = parsedHexes;
+      }
+    }
+
     const designRecord = {
       id: this.currentEditingDesign?.id,
       title,
       prompt: document.getElementById('input-design-prompt').value.trim(),
       about: document.getElementById('input-design-prompt').value.trim() || this.currentEditingDesign?.about || '',
       problem: document.getElementById('input-design-problem')?.value.trim() || this.currentEditingDesign?.problem || '',
-      uiStyle: document.getElementById('input-design-style')?.value.trim() || this.currentEditingDesign?.uiStyle || '',
-      uiStyleRegion: this.currentEditingDesign?.uiStyleRegion || '',
-      uiStyleVibe: this.currentEditingDesign?.uiStyleVibe || '',
+      uiStyle: styleVal,
+      uiStyleRegion: styleRegionVal,
+      uiStyleVibe: styleVibeVal,
       uiStylePrinciples: this.currentEditingDesign?.uiStylePrinciples || '',
-      uiStyleTypography: this.currentEditingDesign?.uiStyleTypography || '',
-      uiStylePalette: this.currentEditingDesign?.uiStylePalette || [],
+      uiStyleTypography: styleTypoVal,
+      uiStylePalette: stylePaletteVal,
+      figmaGuide: this.currentEditingDesign?.figmaGuide || null,
       date: dateVal,
       week: weekData.week,
       year: weekData.year,
