@@ -578,11 +578,47 @@ class App {
           const existing = designs.find(d => d.id === this.currentWinningTopic.archivedDesignId);
           if (existing) {
             existing.uiStyle = newStyle.name;
-            existing.uiStyleRegion = `${newStyle.region} • ${newStyle.subRegion}`;
+            existing.uiStyleRegion = newStyle.subRegion ? `${newStyle.region} • ${newStyle.subRegion}` : newStyle.region;
             existing.uiStyleVibe = newStyle.vibe;
             existing.uiStylePrinciples = newStyle.principles;
             existing.uiStyleTypography = newStyle.typography;
-            existing.uiStylePalette = newStyle.palette;
+            existing.uiStylePalette = Array.isArray(newStyle.palette) ? [...newStyle.palette] : newStyle.palette;
+            existing.figmaGuide = newStyle.figmaGuide;
+            await window.storageManager.saveDesign(existing);
+            this.currentWinningTopic.savedDesign = existing;
+            if (window.designTracker) await window.designTracker.refresh();
+          }
+        }
+      });
+    }
+
+    // Direct UI Style Picker Dropdown in Winner Modal
+    const selectWinnerStyle = document.getElementById('select-winner-style');
+    if (selectWinnerStyle && window.GLOBAL_UI_STYLES) {
+      selectWinnerStyle.innerHTML = window.GLOBAL_UI_STYLES.map(s =>
+        `<option value="${s.id}">${s.name}</option>`
+      ).join('');
+
+      selectWinnerStyle.addEventListener('change', async () => {
+        if (!this.currentWinningTopic) return;
+        const newStyle = window.getUIStyleById(selectWinnerStyle.value);
+        if (!newStyle) return;
+        this.currentWinningTopic.style = newStyle;
+        this.renderWinnerStyleCard(newStyle);
+        if (window.soundEngine) window.soundEngine.playPop();
+        this.showToast(`Selected UI style: ${newStyle.name}`, 'info');
+
+        // Sync with archived entry immediately
+        if (this.currentWinningTopic.archivedDesignId) {
+          const designs = await window.storageManager.getAllDesigns();
+          const existing = designs.find(d => d.id === this.currentWinningTopic.archivedDesignId);
+          if (existing) {
+            existing.uiStyle = newStyle.name;
+            existing.uiStyleRegion = newStyle.subRegion ? `${newStyle.region} • ${newStyle.subRegion}` : newStyle.region;
+            existing.uiStyleVibe = newStyle.vibe;
+            existing.uiStylePrinciples = newStyle.principles;
+            existing.uiStyleTypography = newStyle.typography;
+            existing.uiStylePalette = Array.isArray(newStyle.palette) ? [...newStyle.palette] : newStyle.palette;
             existing.figmaGuide = newStyle.figmaGuide;
             await window.storageManager.saveDesign(existing);
             this.currentWinningTopic.savedDesign = existing;
@@ -646,10 +682,15 @@ class App {
     const regionEl = document.getElementById('winner-style-region');
     const vibeEl = document.getElementById('winner-style-vibe');
     const paletteEl = document.getElementById('winner-style-palette');
+    const selectWinnerStyle = document.getElementById('select-winner-style');
 
     if (nameEl) nameEl.textContent = style.name;
-    if (regionEl) regionEl.textContent = `${style.region} • ${style.subRegion}`;
+    if (regionEl) regionEl.textContent = style.subRegion ? `${style.region} • ${style.subRegion}` : style.region;
     if (vibeEl) vibeEl.textContent = style.vibe;
+
+    if (selectWinnerStyle && style.id) {
+      selectWinnerStyle.value = style.id;
+    }
 
     if (paletteEl && Array.isArray(style.palette)) {
       paletteEl.innerHTML = style.palette.map(hex => 
@@ -708,6 +749,35 @@ class App {
             await window.designTracker.refresh();
           }
         }
+      });
+    }
+
+    // Direct UI Style Selector in Archive Challenge Details Viewer
+    const selectArchiveStyle = document.getElementById('select-archive-detail-style');
+    if (selectArchiveStyle && window.GLOBAL_UI_STYLES) {
+      selectArchiveStyle.innerHTML = window.GLOBAL_UI_STYLES.map(s =>
+        `<option value="${s.id}">${s.name}</option>`
+      ).join('');
+
+      selectArchiveStyle.addEventListener('change', async () => {
+        if (!this.currentInspectingDesign) return;
+        const newStyle = window.getUIStyleById(selectArchiveStyle.value);
+        if (!newStyle) return;
+
+        this.currentInspectingDesign.uiStyle = newStyle.name;
+        this.currentInspectingDesign.uiStyleRegion = newStyle.subRegion ? `${newStyle.region} • ${newStyle.subRegion}` : newStyle.region;
+        this.currentInspectingDesign.uiStyleVibe = newStyle.vibe;
+        this.currentInspectingDesign.uiStylePrinciples = newStyle.principles;
+        this.currentInspectingDesign.uiStyleTypography = newStyle.typography;
+        this.currentInspectingDesign.uiStylePalette = Array.isArray(newStyle.palette) ? [...newStyle.palette] : newStyle.palette;
+        this.currentInspectingDesign.figmaGuide = newStyle.figmaGuide;
+
+        // Persist change and re-render viewer immediately
+        await window.storageManager.saveDesign(this.currentInspectingDesign);
+        this.openChallengeDetailsModal(this.currentInspectingDesign);
+        if (window.designTracker) await window.designTracker.refresh();
+        if (window.soundEngine) window.soundEngine.playPop();
+        this.showToast(`Updated challenge UI style to: ${newStyle.name}`, 'info');
       });
     }
   }
@@ -842,6 +912,11 @@ class App {
       deadlineBadgeEl.className = `deadline-countdown-badge ${statusInfo.urgency}`;
     }
 
+    // Normalize design to ensure styles and deadlines are synchronized
+    if (typeof StorageManager !== 'undefined' && StorageManager.normalizeDesign) {
+      StorageManager.normalizeDesign(design);
+    }
+
     // Resolve UI Style using robust mapping
     let styleObj = null;
     if (design.uiStyle && window.getUIStyleById) {
@@ -863,11 +938,16 @@ class App {
     const stylePaletteEl = document.getElementById('archive-detail-palette');
     const styleTypoEl = document.getElementById('archive-detail-typography');
     const specsEl = document.getElementById('archive-detail-figma-specs');
+    const selectArchiveStyle = document.getElementById('select-archive-detail-style');
 
     if (styleNameEl) styleNameEl.textContent = styleName;
     if (styleRegionEl) styleRegionEl.textContent = styleRegion;
     if (styleVibeEl) styleVibeEl.textContent = styleVibe;
     if (styleTypoEl) styleTypoEl.textContent = styleTypography;
+
+    if (selectArchiveStyle && styleObj && styleObj.id) {
+      selectArchiveStyle.value = styleObj.id;
+    }
 
     if (stylePaletteEl) {
       stylePaletteEl.innerHTML = stylePalette.map(hex =>
@@ -982,20 +1062,27 @@ class App {
               styleTypeIndicator.textContent = resolved.isCustom ? 'Custom Style (Preserved)' : 'Preset Style';
               styleTypeIndicator.style.color = resolved.isCustom ? '#10b981' : 'var(--accent-cyan)';
             }
-            // Auto-seed custom fields if user hasn't typed in them yet
-            if (styleVibeInput && (!styleVibeInput.value || styleVibeInput.dataset.autofilled === 'true')) {
+            // Auto-seed custom fields when style changes or if previous fields contain stale Ghana text
+            const isGhanaNow = resolved.id === 'ghana_style' || val.toLowerCase().includes('ghana');
+            const hasStaleGhanaInInputs = !isGhanaNow && (
+              (styleVibeInput && (styleVibeInput.value.includes('Ghana') || styleVibeInput.value.includes('Kente'))) ||
+              (styleRegionInput && (styleRegionInput.value.includes('Ghana') || styleRegionInput.value.includes('Accra') || styleRegionInput.value.includes('West Africa'))) ||
+              (stylePaletteInput && (stylePaletteInput.value.includes('#f59e0b') && stylePaletteInput.value.includes('#ef4444')))
+            );
+
+            if (styleVibeInput && (!styleVibeInput.value || styleVibeInput.dataset.autofilled === 'true' || hasStaleGhanaInInputs)) {
               styleVibeInput.value = resolved.vibe || '';
               styleVibeInput.dataset.autofilled = 'true';
             }
-            if (styleRegionInput && (!styleRegionInput.value || styleRegionInput.dataset.autofilled === 'true')) {
+            if (styleRegionInput && (!styleRegionInput.value || styleRegionInput.dataset.autofilled === 'true' || hasStaleGhanaInInputs)) {
               styleRegionInput.value = resolved.subRegion ? `${resolved.region} • ${resolved.subRegion}` : (resolved.region || '');
               styleRegionInput.dataset.autofilled = 'true';
             }
-            if (stylePaletteInput && (!stylePaletteInput.value || stylePaletteInput.dataset.autofilled === 'true') && Array.isArray(resolved.palette)) {
+            if (stylePaletteInput && (!stylePaletteInput.value || stylePaletteInput.dataset.autofilled === 'true' || hasStaleGhanaInInputs) && Array.isArray(resolved.palette)) {
               stylePaletteInput.value = resolved.palette.join(', ');
               stylePaletteInput.dataset.autofilled = 'true';
             }
-            if (styleTypoInput && (!styleTypoInput.value || styleTypoInput.dataset.autofilled === 'true')) {
+            if (styleTypoInput && (!styleTypoInput.value || styleTypoInput.dataset.autofilled === 'true' || hasStaleGhanaInInputs)) {
               styleTypoInput.value = resolved.typography || '';
               styleTypoInput.dataset.autofilled = 'true';
             }
@@ -1088,26 +1175,44 @@ class App {
     const styleTypoInput = document.getElementById('input-design-style-typography');
 
     const activeStyleName = initialData?.uiStyle || (this.currentWinningTopic?.style?.name || '');
+    const activeStyleObj = activeStyleName && window.getUIStyleById ? window.getUIStyleById(activeStyleName) : null;
+    const isGhanaStyle = activeStyleObj ? activeStyleObj.id === 'ghana_style' : activeStyleName.toLowerCase().includes('ghana');
+
+    // Check if initialData has stale Ghana data while the current style is NOT Ghana
+    const hasStaleGhanaInitial = !isGhanaStyle && (
+      Boolean(initialData?.uiStyleRegion && (initialData.uiStyleRegion.includes('Ghana') || initialData.uiStyleRegion.includes('Accra') || initialData.uiStyleRegion.includes('West Africa'))) ||
+      Boolean(initialData?.uiStyleVibe && (initialData.uiStyleVibe.includes('Ghana') || initialData.uiStyleVibe.includes('Ghanaian') || initialData.uiStyleVibe.includes('Kente'))) ||
+      Boolean(Array.isArray(initialData?.uiStylePalette) && initialData.uiStylePalette.includes('#f59e0b') && initialData.uiStylePalette.includes('#ef4444'))
+    );
+
     if (styleInput) {
       styleInput.value = activeStyleName;
     }
 
     if (styleVibeInput) {
-      styleVibeInput.value = initialData?.uiStyleVibe || (this.currentWinningTopic?.style?.vibe || '');
-      styleVibeInput.dataset.autofilled = 'false';
+      const defaultVibe = activeStyleObj?.vibe || (this.currentWinningTopic?.style?.vibe || '');
+      styleVibeInput.value = (!hasStaleGhanaInitial && initialData?.uiStyleVibe) ? initialData.uiStyleVibe : defaultVibe;
+      styleVibeInput.dataset.autofilled = 'true';
     }
     if (styleRegionInput) {
-      styleRegionInput.value = initialData?.uiStyleRegion || (this.currentWinningTopic?.style?.region ? (this.currentWinningTopic.style.subRegion ? `${this.currentWinningTopic.style.region} • ${this.currentWinningTopic.style.subRegion}` : this.currentWinningTopic.style.region) : '');
-      styleRegionInput.dataset.autofilled = 'false';
+      const defaultRegion = activeStyleObj
+        ? (activeStyleObj.subRegion ? `${activeStyleObj.region} • ${activeStyleObj.subRegion}` : activeStyleObj.region)
+        : (this.currentWinningTopic?.style?.region ? (this.currentWinningTopic.style.subRegion ? `${this.currentWinningTopic.style.region} • ${this.currentWinningTopic.style.subRegion}` : this.currentWinningTopic.style.region) : '');
+      styleRegionInput.value = (!hasStaleGhanaInitial && initialData?.uiStyleRegion) ? initialData.uiStyleRegion : defaultRegion;
+      styleRegionInput.dataset.autofilled = 'true';
     }
     if (stylePaletteInput) {
-      const pal = initialData?.uiStylePalette || this.currentWinningTopic?.style?.palette;
+      const defaultPalette = activeStyleObj?.palette || this.currentWinningTopic?.style?.palette;
+      const pal = (!hasStaleGhanaInitial && Array.isArray(initialData?.uiStylePalette) && initialData.uiStylePalette.length)
+        ? initialData.uiStylePalette
+        : defaultPalette;
       stylePaletteInput.value = Array.isArray(pal) ? pal.join(', ') : '';
-      stylePaletteInput.dataset.autofilled = 'false';
+      stylePaletteInput.dataset.autofilled = 'true';
     }
     if (styleTypoInput) {
-      styleTypoInput.value = initialData?.uiStyleTypography || (this.currentWinningTopic?.style?.typography || '');
-      styleTypoInput.dataset.autofilled = 'false';
+      const defaultTypo = activeStyleObj?.typography || (this.currentWinningTopic?.style?.typography || '');
+      styleTypoInput.value = (!hasStaleGhanaInitial && initialData?.uiStyleTypography) ? initialData.uiStyleTypography : defaultTypo;
+      styleTypoInput.dataset.autofilled = 'true';
     }
 
     if (styleTypeIndicator && activeStyleName && window.getUIStyleById) {
@@ -1271,9 +1376,33 @@ class App {
       .filter(t => t.length > 0);
 
     const styleVal = document.getElementById('input-design-style')?.value.trim() || this.currentEditingDesign?.uiStyle || '';
-    const styleVibeVal = document.getElementById('input-design-style-vibe')?.value.trim() || this.currentEditingDesign?.uiStyleVibe || '';
-    const styleRegionVal = document.getElementById('input-design-style-region')?.value.trim() || this.currentEditingDesign?.uiStyleRegion || '';
-    const styleTypoVal = document.getElementById('input-design-style-typography')?.value.trim() || this.currentEditingDesign?.uiStyleTypography || '';
+    const resolvedStyleObj = styleVal && window.getUIStyleById ? window.getUIStyleById(styleVal) : null;
+    const isGhana = resolvedStyleObj ? resolvedStyleObj.id === 'ghana_style' : styleVal.toLowerCase().includes('ghana');
+
+    let styleVibeVal = document.getElementById('input-design-style-vibe')?.value.trim() || '';
+    let styleRegionVal = document.getElementById('input-design-style-region')?.value.trim() || '';
+    let styleTypoVal = document.getElementById('input-design-style-typography')?.value.trim() || '';
+    let figmaGuideVal = this.currentEditingDesign?.figmaGuide || (resolvedStyleObj?.figmaGuide || null);
+    let stylePrinciplesVal = this.currentEditingDesign?.uiStylePrinciples || (resolvedStyleObj?.principles || '');
+
+    // If style is NOT Ghana, purge any stale Ghana properties from previous challenge state
+    if (!isGhana) {
+      if (!styleVibeVal || styleVibeVal.includes('Ghana') || styleVibeVal.includes('Kente')) {
+        styleVibeVal = resolvedStyleObj?.vibe || '';
+      }
+      if (!styleRegionVal || styleRegionVal.includes('Ghana') || styleRegionVal.includes('Accra') || styleRegionVal.includes('West Africa')) {
+        styleRegionVal = resolvedStyleObj ? (resolvedStyleObj.subRegion ? `${resolvedStyleObj.region} • ${resolvedStyleObj.subRegion}` : resolvedStyleObj.region) : '';
+      }
+      if (!styleTypoVal || styleTypoVal.includes('Ghana')) {
+        styleTypoVal = resolvedStyleObj?.typography || '';
+      }
+      if (!stylePrinciplesVal || stylePrinciplesVal.includes('Ghana') || stylePrinciplesVal.includes('Adinkra') || stylePrinciplesVal.includes('Kente')) {
+        stylePrinciplesVal = resolvedStyleObj?.principles || '';
+      }
+      if (figmaGuideVal && (JSON.stringify(figmaGuideVal).includes('Ghana') || JSON.stringify(figmaGuideVal).includes('Kente'))) {
+        figmaGuideVal = resolvedStyleObj?.figmaGuide || null;
+      }
+    }
 
     // Parse custom palette input
     let stylePaletteVal = this.currentEditingDesign?.uiStylePalette || [];
@@ -1289,6 +1418,11 @@ class App {
       }
     }
 
+    // If palette is stale Ghana but style is not Ghana, use resolved style palette
+    if (!isGhana && Array.isArray(stylePaletteVal) && stylePaletteVal.includes('#f59e0b') && stylePaletteVal.includes('#ef4444')) {
+      stylePaletteVal = resolvedStyleObj?.palette ? [...resolvedStyleObj.palette] : [];
+    }
+
     const designRecord = {
       id: this.currentEditingDesign?.id,
       title,
@@ -1298,10 +1432,10 @@ class App {
       uiStyle: styleVal,
       uiStyleRegion: styleRegionVal,
       uiStyleVibe: styleVibeVal,
-      uiStylePrinciples: this.currentEditingDesign?.uiStylePrinciples || '',
+      uiStylePrinciples: stylePrinciplesVal,
       uiStyleTypography: styleTypoVal,
       uiStylePalette: stylePaletteVal,
-      figmaGuide: this.currentEditingDesign?.figmaGuide || null,
+      figmaGuide: figmaGuideVal,
       date: dateVal,
       week: weekData.week,
       year: weekData.year,

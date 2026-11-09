@@ -513,7 +513,7 @@ const OLD_TO_NEW_STYLE_MAP = {
   
   // Legacy Style Names
   'Afro-Modernist Tech': 'ghana_style',
-  'Geometric Modular Bento': 'ghana_style',
+  'Geometric Modular Bento': 'bento_consumer',
   'Lagos FinTech Neo-Bank': 'nigeria_style',
   'Swahili Glassmorphism': 'kenya_style',
   'Joburg Industrial Modern': 'south_africa_style',

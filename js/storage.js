@@ -201,25 +201,53 @@ class StorageManager {
           design.uiStyle = rawStyle.trim();
         }
 
-        // Preserve any custom user inputs for region, vibe, principles, typography, palette, figmaGuide
-        // Only fill missing metadata from styleObj
-        if (!design.uiStyleRegion) {
+        // Detect if existing properties contain stale Ghana Style data while the new style is NOT Ghana
+        const isGhana = (styleObj.id === 'ghana_style') || (design.uiStyle && design.uiStyle.toLowerCase().includes('ghana'));
+        const isGhanaPalette = Array.isArray(design.uiStylePalette) &&
+          design.uiStylePalette.includes('#f59e0b') &&
+          design.uiStylePalette.includes('#ef4444') &&
+          design.uiStylePalette.includes('#10b981');
+
+        const hasStaleGhana = !isGhana && (
+          Boolean(design.uiStyleRegion && (design.uiStyleRegion.includes('Ghana') || design.uiStyleRegion.includes('Accra') || design.uiStyleRegion.includes('West Africa'))) ||
+          Boolean(design.uiStyleVibe && (design.uiStyleVibe.includes('Ghana') || design.uiStyleVibe.includes('Ghanaian') || design.uiStyleVibe.includes('Kente'))) ||
+          Boolean(design.uiStylePrinciples && (design.uiStylePrinciples.includes('Ghana') || design.uiStylePrinciples.includes('Adinkra') || design.uiStylePrinciples.includes('Kente'))) ||
+          Boolean(design.figmaGuide && (
+            (typeof design.figmaGuide === 'object' && JSON.stringify(design.figmaGuide).includes('Ghana')) ||
+            (typeof design.figmaGuide === 'string' && design.figmaGuide.includes('Ghana'))
+          )) ||
+          isGhanaPalette
+        );
+
+        if (hasStaleGhana) {
+          // Purge stale Ghana properties and replace with the active style's properties
           design.uiStyleRegion = styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region;
-        }
-        if (!design.uiStyleVibe) {
           design.uiStyleVibe = styleObj.vibe;
-        }
-        if (!design.uiStylePrinciples) {
           design.uiStylePrinciples = styleObj.principles;
-        }
-        if (!design.uiStyleTypography) {
           design.uiStyleTypography = styleObj.typography;
-        }
-        if (!design.uiStylePalette || !Array.isArray(design.uiStylePalette) || design.uiStylePalette.length === 0) {
-          design.uiStylePalette = styleObj.palette;
-        }
-        if (!design.figmaGuide) {
+          design.uiStylePalette = Array.isArray(styleObj.palette) ? [...styleObj.palette] : styleObj.palette;
           design.figmaGuide = styleObj.figmaGuide;
+        } else {
+          // Preserve custom user inputs for region, vibe, principles, typography, palette, figmaGuide
+          // Only fill missing metadata from styleObj
+          if (!design.uiStyleRegion) {
+            design.uiStyleRegion = styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region;
+          }
+          if (!design.uiStyleVibe) {
+            design.uiStyleVibe = styleObj.vibe;
+          }
+          if (!design.uiStylePrinciples) {
+            design.uiStylePrinciples = styleObj.principles;
+          }
+          if (!design.uiStyleTypography) {
+            design.uiStyleTypography = styleObj.typography;
+          }
+          if (!design.uiStylePalette || !Array.isArray(design.uiStylePalette) || design.uiStylePalette.length === 0) {
+            design.uiStylePalette = Array.isArray(styleObj.palette) ? [...styleObj.palette] : styleObj.palette;
+          }
+          if (!design.figmaGuide) {
+            design.figmaGuide = styleObj.figmaGuide;
+          }
         }
       }
     }

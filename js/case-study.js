@@ -54,31 +54,52 @@ class UXCaseStudyEngine {
     // Style Name: prioritize design.uiStyle if specified, then styleObj.name, then neutral default
     const styleName = design.uiStyle || (styleObj ? styleObj.name : 'International, Diplomatic and Professional');
 
-    // Region: prioritize design.uiStyleRegion, then styleObj, then neutral global default
-    const styleRegion = design.uiStyleRegion || (styleObj ? (styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region) : 'Global • Diplomatic & Civic Affairs');
+    // Detect if existing design metadata has stale Ghana data while the current style is NOT Ghana
+    const isGhana = (styleObj && styleObj.id === 'ghana_style') || (styleName && styleName.toLowerCase().includes('ghana'));
+    const isGhanaPalette = Array.isArray(design.uiStylePalette) &&
+      design.uiStylePalette.includes('#f59e0b') &&
+      design.uiStylePalette.includes('#ef4444') &&
+      design.uiStylePalette.includes('#10b981');
 
-    // Vibe: prioritize design.uiStyleVibe, then styleObj, then neutral default
-    const styleVibe = design.uiStyleVibe || (styleObj ? styleObj.vibe : 'Dignified, prestigious, and high-trust aesthetic with accessible contrast.');
+    const hasStaleGhana = !isGhana && (
+      Boolean(design.uiStyleRegion && (design.uiStyleRegion.includes('Ghana') || design.uiStyleRegion.includes('Accra') || design.uiStyleRegion.includes('West Africa'))) ||
+      Boolean(design.uiStyleVibe && (design.uiStyleVibe.includes('Ghana') || design.uiStyleVibe.includes('Ghanaian') || design.uiStyleVibe.includes('Kente'))) ||
+      Boolean(design.uiStylePrinciples && (design.uiStylePrinciples.includes('Ghana') || design.uiStylePrinciples.includes('Adinkra') || design.uiStylePrinciples.includes('Kente'))) ||
+      Boolean(design.figmaGuide && (
+        (typeof design.figmaGuide === 'object' && JSON.stringify(design.figmaGuide).includes('Ghana')) ||
+        (typeof design.figmaGuide === 'string' && design.figmaGuide.includes('Ghana'))
+      )) ||
+      isGhanaPalette
+    );
 
-    // Principles: prioritize design.uiStylePrinciples, then styleObj, then neutral default
-    const stylePrinciples = design.uiStylePrinciples || (styleObj ? styleObj.principles : 'Clear typography hierarchy, accessible touch targets, and balanced color emphasis.');
+    // Region: prioritize design.uiStyleRegion (if not stale Ghana), then styleObj, then neutral global default
+    const styleRegion = (!hasStaleGhana && design.uiStyleRegion) || (styleObj ? (styleObj.subRegion ? `${styleObj.region} • ${styleObj.subRegion}` : styleObj.region) : 'Global • Diplomatic & Civic Affairs');
 
-    // Typography: prioritize design.uiStyleTypography, then styleObj, then neutral default
-    const styleTypography = design.uiStyleTypography || (styleObj ? styleObj.typography : 'Stately Editorial Serif headlines paired with clean Grotesque body');
+    // Vibe: prioritize design.uiStyleVibe (if not stale Ghana), then styleObj, then neutral default
+    const styleVibe = (!hasStaleGhana && design.uiStyleVibe) || (styleObj ? styleObj.vibe : 'Dignified, prestigious, and high-trust aesthetic with accessible contrast.');
 
-    // Palette: prioritize design.uiStylePalette
-    const palette = (design.uiStylePalette && Array.isArray(design.uiStylePalette) && design.uiStylePalette.length)
+    // Principles: prioritize design.uiStylePrinciples (if not stale Ghana), then styleObj, then neutral default
+    const stylePrinciples = (!hasStaleGhana && design.uiStylePrinciples) || (styleObj ? styleObj.principles : 'Clear typography hierarchy, accessible touch targets, and balanced color emphasis.');
+
+    // Typography: prioritize design.uiStyleTypography (if not stale Ghana), then styleObj, then neutral default
+    const styleTypography = (!hasStaleGhana && design.uiStyleTypography) || (styleObj ? styleObj.typography : 'Stately Editorial Serif headlines paired with clean Grotesque body');
+
+    // Palette: prioritize design.uiStylePalette (if not stale Ghana)
+    const palette = (!hasStaleGhana && !isGhanaPalette && design.uiStylePalette && Array.isArray(design.uiStylePalette) && design.uiStylePalette.length)
       ? design.uiStylePalette
       : ((styleObj && Array.isArray(styleObj.palette) && styleObj.palette.length)
         ? styleObj.palette
         : ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff']);
     
-    const figmaGuide = design.figmaGuide || (styleObj && styleObj.figmaGuide) || {
+    const figmaGuide = (!hasStaleGhana && design.figmaGuide) || (styleObj && styleObj.figmaGuide) || {
       buttons: 'Diplomatic Azure (#1d70b8) or Stately Gold (#c59b27) CTA, 8px restrained radius',
       cards: 'Deep embassy slate cards (#14213d) with 10px rounded corners and subtle border',
       layout: 'Formal structured column layout with official document summary headers and delegate action bars',
       signature: 'Stately editorial serif typography, diplomatic azure action triggers, and gold seal status indicators'
     };
+
+    // Dynamically resolve document theme (colors, fonts, layout styling)
+    const theme = this.resolveDocumentTheme(styleName, styleTypography, palette);
 
     // Synthesize UX Personas based on category/title
     const persona = this.synthesizePersona(title, category, platform, problem);
@@ -135,6 +156,7 @@ class UXCaseStudyEngine {
       palette,
       paletteSpecs,
       figmaGuide,
+      theme,
       persona,
       jtbd,
       researchFindings,
@@ -376,6 +398,104 @@ class UXCaseStudyEngine {
   }
 
   /**
+   * Resolves typography font stacks, color tokens, and layout themes for Word & In-App Case Studies
+   */
+  static resolveDocumentTheme(styleName = '', styleTypography = '', palette = []) {
+    const pal = Array.isArray(palette) && palette.length >= 6
+      ? palette
+      : ['#0a1128', '#14213d', '#1d70b8', '#c59b27', '#475569', '#ffffff'];
+
+    const darkBase = pal[0] || '#0a1128';
+    const darkCard = pal[1] || '#14213d';
+    const primaryAccent = pal[2] || '#1d70b8';
+    const secondaryAccent = pal[3] || '#c59b27';
+    const neutralTone = pal[4] || '#475569';
+    const lightText = pal[5] || '#ffffff';
+
+    const lower = `${styleName} ${styleTypography}`.toLowerCase();
+
+    let headingFont = "'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif";
+    let bodyFont = "'Segoe UI', Calibri, Arial, sans-serif";
+    let headingFontCSS = "'Segoe UI Semibold', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    let bodyFontCSS = "'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+    let fontPhilosophy = 'Clean modern sans-serif with accessible contrast';
+    let fontCategory = 'sans-serif';
+
+    if (/diplomat|international|mun|united nations|embassy|civic|council|treaty|smcp|editorial serif/i.test(lower)) {
+      headingFont = "'Merriweather', 'Georgia', 'Times New Roman', 'Palatino Linotype', serif";
+      bodyFont = "'Calibri', 'Segoe UI', Arial, sans-serif";
+      headingFontCSS = "'Merriweather', Georgia, 'Times New Roman', serif";
+      bodyFontCSS = "Calibri, 'Segoe UI', Arial, sans-serif";
+      fontPhilosophy = 'Stately Editorial Serif for formal institutional authority paired with crisp readable Grotesque body';
+      fontCategory = 'serif';
+    } else if (/luxury|editorial|journal|fashion/i.test(lower)) {
+      headingFont = "'Playfair Display', 'Bodoni MT', 'Didot', 'Georgia', serif";
+      bodyFont = "'Garamond', 'Georgia', 'Calibri', serif";
+      headingFontCSS = "'Playfair Display', 'Bodoni MT', Georgia, serif";
+      bodyFontCSS = "'Garamond', Georgia, serif";
+      fontPhilosophy = 'High-contrast Display Serif for luxury elegance paired with classical Garamond body';
+      fontCategory = 'serif';
+    } else if (/saas|enterprise|b2b|dashboard|analytics/i.test(lower)) {
+      headingFont = "'Inter', 'Segoe UI Semibold', 'Helvetica Neue', Arial, sans-serif";
+      bodyFont = "'Inter', 'Segoe UI', Arial, sans-serif";
+      headingFontCSS = "'Inter', 'Segoe UI Semibold', -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+      bodyFontCSS = "'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif";
+      fontPhilosophy = 'Clean geometric Grotesque engineered for high information density and glanceability';
+      fontCategory = 'sans-serif';
+    } else if (/hud|terminal|developer|code|telemetry/i.test(lower)) {
+      headingFont = "'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace";
+      bodyFont = "'Segoe UI', 'Consolas', monospace";
+      headingFontCSS = "'JetBrains Mono', 'Fira Code', Consolas, monospace";
+      bodyFontCSS = "'Segoe UI', Consolas, monospace";
+      fontPhilosophy = 'Technical Monospace terminal typography for engineering precision and telemetry clarity';
+      fontCategory = 'monospace';
+    } else if (/fintech|bank|pay|crypto|wallet/i.test(lower)) {
+      headingFont = "'Segoe UI Semibold', 'Helvetica Neue', Arial, sans-serif";
+      bodyFont = "'Segoe UI', 'Arial', sans-serif";
+      headingFontCSS = "'Segoe UI Semibold', 'Helvetica Neue', Arial, sans-serif";
+      bodyFontCSS = "'Segoe UI', Arial, sans-serif";
+      fontPhilosophy = 'High-trust Grotesque with bold tabular figures for financial confidence';
+      fontCategory = 'sans-serif';
+    } else if (/minimal|clean|swiss/i.test(lower)) {
+      headingFont = "'Helvetica Neue', 'Arial', sans-serif";
+      bodyFont = "'Helvetica Neue', 'Arial', sans-serif";
+      headingFontCSS = "'Helvetica Neue', Arial, sans-serif";
+      bodyFontCSS = "'Helvetica Neue', Arial, sans-serif";
+      fontPhilosophy = 'Strict utilitarian Swiss grotesque with disciplined whitespace';
+      fontCategory = 'sans-serif';
+    } else if (/ghana|nigeria|kenya|africa/i.test(lower)) {
+      headingFont = "'Segoe UI Semibold', 'Arial', sans-serif";
+      bodyFont = "'Segoe UI', Arial, sans-serif";
+      headingFontCSS = "'Segoe UI Semibold', Arial, sans-serif";
+      bodyFontCSS = "'Segoe UI', Arial, sans-serif";
+      fontPhilosophy = 'Bold modern headings with warm cultural geometry';
+      fontCategory = 'sans-serif';
+    } else if (styleTypography.toLowerCase().includes('serif')) {
+      headingFont = "'Georgia', 'Times New Roman', serif";
+      bodyFont = "'Calibri', 'Segoe UI', Arial, sans-serif";
+      headingFontCSS = "Georgia, 'Times New Roman', serif";
+      bodyFontCSS = "Calibri, 'Segoe UI', Arial, sans-serif";
+      fontPhilosophy = 'Editorial Serif headings paired with clean legible body text';
+      fontCategory = 'serif';
+    }
+
+    return {
+      darkBase,
+      darkCard,
+      primaryAccent,
+      secondaryAccent,
+      neutralTone,
+      lightText,
+      headingFont,
+      bodyFont,
+      headingFontCSS,
+      bodyFontCSS,
+      fontPhilosophy,
+      fontCategory
+    };
+  }
+
+  /**
    * Generates a Microsoft Word document (.doc) in full HTML format with Office XML markup.
    * Opens natively in Microsoft Word, Word 365, Word for Mobile, LibreOffice, Apple Pages, etc.
    */
@@ -391,6 +511,8 @@ class UXCaseStudyEngine {
     const safeAbout = this.escapeHTML(data.about);
     const safeProblem = this.escapeHTML(data.problem);
     const safeDeadline = this.escapeHTML(data.deadline);
+
+    const theme = data.theme || this.resolveDocumentTheme(data.styleName, data.styleTypography, data.palette);
 
     // Build Palette Table Rows
     const paletteTableRows = data.paletteSpecs.map(p => `
@@ -412,33 +534,33 @@ class UXCaseStudyEngine {
 
     // Build Screen Flow Rows
     const screenRows = data.screenFlows.map(s => `
-      <div style="margin-bottom: 14pt; padding: 10pt; background-color: #f8fafc; border-left: 4pt solid #3b82f6; border-radius: 4pt;">
-        <h4 style="margin: 0 0 4pt 0; font-size: 11pt; color: #1e3a8a; font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif;">
+      <div style="margin-bottom: 14pt; padding: 10pt; background-color: #f8fafc; border-left: 4pt solid ${theme.primaryAccent}; border-radius: 4pt;">
+        <h4 style="margin: 0 0 4pt 0; font-size: 11pt; color: ${theme.primaryAccent}; font-family: ${theme.headingFont}; font-weight: bold;">
           ${this.escapeHTML(s.screenNumber)}: ${this.escapeHTML(s.name)}
         </h4>
         <p style="margin: 0 0 6pt 0; font-size: 10pt; color: #334155;"><strong>Purpose:</strong> ${this.escapeHTML(s.purpose)}</p>
         <p style="margin: 0 0 4pt 0; font-size: 9.5pt; color: #475569;"><strong>Key Interface Components:</strong> ${s.components.map(c => this.escapeHTML(c)).join(' • ')}</p>
-        <p style="margin: 0; font-size: 9.5pt; color: #0369a1;"><strong>Figma Implementation Spec:</strong> ${this.escapeHTML(s.keyFigmaSpec)}</p>
+        <p style="margin: 0; font-size: 9.5pt; color: ${theme.primaryAccent};"><strong>Figma Implementation Spec:</strong> ${this.escapeHTML(s.keyFigmaSpec)}</p>
       </div>
     `).join('');
 
     // Build Research Findings Rows
     const findingsRows = data.researchFindings.map(f => `
       <tr>
-        <td style="font-weight: bold; color: #4338ca; width: 60px;">${this.escapeHTML(f.id)}</td>
+        <td style="font-weight: bold; color: ${theme.primaryAccent}; width: 60px;">${this.escapeHTML(f.id)}</td>
         <td style="font-weight: 600; color: #0f172a; width: 180px;">${this.escapeHTML(f.title)}</td>
-        <td style="font-weight: bold; color: #b91c1c; width: 140px;">${this.escapeHTML(f.metric)}</td>
+        <td style="font-weight: bold; color: ${theme.secondaryAccent}; width: 140px;">${this.escapeHTML(f.metric)}</td>
         <td style="color: #334155;">${this.escapeHTML(f.detail)}</td>
       </tr>
     `).join('');
 
     // Build Defense Q&A
     const defenseRows = data.defenseQA.map((item, idx) => `
-      <div style="margin-bottom: 12pt; padding: 10pt; background-color: #f8fafc; border-left: 3pt solid #6366f1;">
-        <p style="margin: 0 0 4pt 0; font-weight: bold; color: #1e1b4b; font-size: 10.5pt;">
+      <div style="margin-bottom: 12pt; padding: 10pt; background-color: #f8fafc; border-left: 4pt solid ${theme.secondaryAccent}; border-radius: 3pt;">
+        <p style="margin: 0 0 4pt 0; font-weight: bold; color: ${theme.darkBase}; font-family: ${theme.headingFont}; font-size: 10.5pt;">
           Q${idx + 1}: ${this.escapeHTML(item.question)}
         </p>
-        <p style="margin: 0; color: #334155; font-size: 10pt; line-height: 1.5;">
+        <p style="margin: 0; color: #334155; font-size: 10pt; line-height: 1.55;">
           <strong>Model Rationale:</strong> ${this.escapeHTML(item.answer)}
         </p>
       </div>
@@ -448,7 +570,7 @@ class UXCaseStudyEngine {
     const metricsRows = data.testingPlan.successMetrics.map(m => `
       <tr>
         <td style="font-weight: 600; color: #0f172a;">${this.escapeHTML(m.metric)}</td>
-        <td style="font-weight: bold; color: #15803d;">${this.escapeHTML(m.target)}</td>
+        <td style="font-weight: bold; color: ${theme.primaryAccent};">${this.escapeHTML(m.target)}</td>
         <td style="color: #475569;">${this.escapeHTML(m.rationale)}</td>
       </tr>
     `).join('');
@@ -479,36 +601,36 @@ class UXCaseStudyEngine {
           }
           div.Section1 { page: Section1; }
           body {
-            font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+            font-family: ${theme.bodyFont};
             font-size: 11pt;
             line-height: 1.55;
             color: #1f2937;
             background-color: #ffffff;
           }
           h1 {
-            font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif;
+            font-family: ${theme.headingFont};
             font-size: 22pt;
-            color: #0f172a;
+            color: ${theme.primaryAccent};
             margin-top: 0;
             margin-bottom: 6pt;
-            border-bottom: 3pt solid #6366f1;
+            border-bottom: 3.5pt solid ${theme.primaryAccent};
             padding-bottom: 6pt;
           }
           h2 {
-            font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif;
-            font-size: 14pt;
-            color: #1e293b;
-            margin-top: 20pt;
+            font-family: ${theme.headingFont};
+            font-size: 13.5pt;
+            color: ${theme.darkBase};
+            margin-top: 18pt;
             margin-bottom: 8pt;
-            border-bottom: 1.5pt solid #cbd5e1;
+            border-bottom: 1.5pt solid ${theme.primaryAccent};
             padding-bottom: 4pt;
             text-transform: uppercase;
             letter-spacing: 0.5pt;
           }
           h3 {
-            font-family: 'Segoe UI Semibold', 'Segoe UI', Arial, sans-serif;
-            font-size: 12pt;
-            color: #334155;
+            font-family: ${theme.headingFont};
+            font-size: 11.5pt;
+            color: ${theme.darkCard};
             margin-top: 14pt;
             margin-bottom: 6pt;
           }
@@ -523,12 +645,13 @@ class UXCaseStudyEngine {
             font-size: 10pt;
           }
           th {
-            background-color: #f1f5f9;
-            color: #0f172a;
+            background-color: ${theme.primaryAccent};
+            color: #ffffff;
+            font-family: ${theme.headingFont};
             font-weight: 600;
             text-align: left;
             padding: 7pt 9pt;
-            border: 1pt solid #cbd5e1;
+            border: 1pt solid ${theme.primaryAccent};
           }
           td {
             padding: 6pt 9pt;
@@ -537,13 +660,13 @@ class UXCaseStudyEngine {
           }
           .callout-box {
             background-color: #f8fafc;
-            border-left: 4pt solid #6366f1;
+            border-left: 4pt solid ${theme.primaryAccent};
             padding: 10pt 14pt;
             margin: 10pt 0;
           }
           .spec-box {
-            background-color: #f0fdf4;
-            border-left: 4pt solid #10b981;
+            background-color: #f8fafc;
+            border-left: 4pt solid ${theme.secondaryAccent};
             padding: 10pt 14pt;
             margin: 10pt 0;
           }
@@ -558,25 +681,30 @@ class UXCaseStudyEngine {
             padding: 3pt 8pt;
             font-size: 9pt;
             font-weight: 600;
-            background-color: #e0e7ff;
-            color: #3730a3;
+            background-color: #f1f5f9;
+            color: ${theme.darkBase};
+            border: 1pt solid ${theme.neutralTone};
             border-radius: 3pt;
             margin-right: 6pt;
             margin-bottom: 4pt;
           }
           .meta-pill-accent {
-            background-color: #fef3c7;
-            color: #92400e;
+            background-color: ${theme.primaryAccent};
+            color: #ffffff;
+            border-color: ${theme.primaryAccent};
           }
         </style>
       </head>
       <body>
         <div class="Section1">
-          <!-- Document Header -->
-          <p style="font-size: 9.5pt; color: #64748b; text-transform: uppercase; margin-bottom: 4pt; font-weight: 600;">
-            UX Portfolio Case Study &bull; Product Design &amp; Research Dossier
-          </p>
-          <h1>${safeTitle}</h1>
+          <!-- Document Header Banner Styled with Assigned UI Theme -->
+          <div style="background-color: ${theme.darkBase}; border-left: 6pt solid ${theme.primaryAccent}; padding: 14pt 18pt; margin-bottom: 16pt; border-radius: 4pt;">
+            <p style="font-size: 9.5pt; color: ${theme.secondaryAccent}; text-transform: uppercase; margin-bottom: 4pt; font-weight: bold; letter-spacing: 1.5pt;">
+              OFFICIAL DESIGN DOSSIER &bull; ${safeStyle.toUpperCase()} &bull; PRODUCT DESIGN &amp; RESEARCH
+            </p>
+            <h1 style="color: #ffffff; font-family: ${theme.headingFont}; font-size: 22pt; margin: 0 0 6pt 0; border-bottom: none; padding-bottom: 0;">${safeTitle}</h1>
+            <p style="color: #cbd5e1; font-size: 10pt; margin: 0;">Assigned UI Style: <strong style="color: ${theme.secondaryAccent};">${safeStyle}</strong> &bull; ${safeRegion} &bull; ${safePlatform}</p>
+          </div>
 
           <!-- Meta Badges -->
           <div style="margin-bottom: 14pt;">
@@ -611,18 +739,18 @@ class UXCaseStudyEngine {
           <h3>Master UI Style Specifications for ${safeStyle}</h3>
           <table style="border-collapse: collapse; width: 100%; margin-bottom: 14pt;">
             <thead>
-              <tr style="background-color: #e0e7ff;">
-                <th style="width: 22%; color: #1e1b4b; font-size: 10.5pt;">UI Style Pillar</th>
-                <th style="color: #1e1b4b; font-size: 10.5pt;">Design Specification &amp; Implementation Rules</th>
+              <tr style="background-color: ${theme.primaryAccent};">
+                <th style="width: 22%; color: #ffffff; font-family: ${theme.headingFont}; font-size: 10.5pt;">UI Style Pillar</th>
+                <th style="color: #ffffff; font-family: ${theme.headingFont}; font-size: 10.5pt;">Design Specification &amp; Implementation Rules</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   1. PALETTE
                 </td>
                 <td>
-                  <p style="margin: 0 0 6pt 0; font-family: 'Consolas', monospace; font-weight: bold; font-size: 10pt; color: #2563eb;">
+                  <p style="margin: 0 0 6pt 0; font-family: 'Consolas', monospace; font-weight: bold; font-size: 10pt; color: ${theme.primaryAccent};">
                     ${data.palette.join(' &bull; ')}
                   </p>
                   <table style="width: 100%; border-collapse: collapse; margin-bottom: 6pt;">
@@ -636,7 +764,7 @@ class UXCaseStudyEngine {
                 </td>
               </tr>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   2. BUTTONS
                 </td>
                 <td>
@@ -649,7 +777,7 @@ class UXCaseStudyEngine {
                 </td>
               </tr>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   3. CARDS
                 </td>
                 <td>
@@ -662,7 +790,7 @@ class UXCaseStudyEngine {
                 </td>
               </tr>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   4. LAYOUT
                 </td>
                 <td>
@@ -675,20 +803,20 @@ class UXCaseStudyEngine {
                 </td>
               </tr>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   5. SIGNATURE
                 </td>
                 <td>
-                  <p style="margin: 0 0 4pt 0; font-weight: 600; color: #d97706; font-size: 10pt;">
+                  <p style="margin: 0 0 4pt 0; font-weight: 600; color: ${theme.secondaryAccent}; font-size: 10pt;">
                     ${this.escapeHTML(data.figmaGuide.signature)}
                   </p>
                   <p style="margin: 0; font-size: 9pt; color: #475569;">
-                    Authentic visual signature inspired by ${safeRegion}, establishing instant brand recognition and cultural warmth.
+                    Authentic visual signature for ${safeStyle} (${safeRegion}), establishing instant product recognition and cohesive interface trust.
                   </p>
                 </td>
               </tr>
               <tr>
-                <td style="font-weight: bold; background-color: #f8fafc; color: #1e3a8a; vertical-align: top;">
+                <td style="font-weight: bold; background-color: #f8fafc; color: ${theme.primaryAccent}; vertical-align: top; font-family: ${theme.headingFont};">
                   6. TYPOGRAPHY
                 </td>
                 <td>
@@ -696,7 +824,7 @@ class UXCaseStudyEngine {
                     ${this.escapeHTML(data.styleTypography)}
                   </p>
                   <p style="margin: 0; font-size: 9pt; color: #475569;">
-                    Hierarchy: Display (32pt+ Bold), H1 (24pt), H2 (18pt), Body (11pt / 1.55 line-height), Caption/Badge (9pt Semibold). Recommended Google Fonts: Plus Jakarta Sans, Outfit, Inter, or DM Sans.
+                    Headings: <strong>${theme.headingFont}</strong> &bull; Body: <strong>${theme.bodyFont}</strong>. ${theme.fontPhilosophy}. Hierarchy: Display (32pt+ Bold), H1 (24pt), H2 (18pt), Body (11pt / 1.55 line-height), Caption/Badge (9pt Semibold).
                   </p>
                 </td>
               </tr>
@@ -852,6 +980,8 @@ class UXCaseStudyEngine {
     const safeProblem = this.escapeHTML(data.problem);
     const safeDeadline = this.escapeHTML(data.deadline);
 
+    const theme = data.theme || this.resolveDocumentTheme(data.styleName, data.styleTypography, data.palette);
+
     // Build Palette Swatches HTML
     const paletteSwatchesHTML = data.paletteSpecs.map(p => `
       <div class="cs-palette-card">
@@ -866,7 +996,7 @@ class UXCaseStudyEngine {
 
     // Screen Flows HTML
     const screenFlowsHTML = data.screenFlows.map(s => `
-      <div class="cs-screen-card">
+      <div class="cs-screen-card" style="border-left: 3px solid ${theme.primaryAccent};">
         <div class="cs-screen-header">
           <span class="cs-screen-tag">${this.escapeHTML(s.screenNumber)}</span>
           <h4 class="cs-screen-title">${this.escapeHTML(s.name)}</h4>
@@ -909,6 +1039,79 @@ class UXCaseStudyEngine {
 
     return `
       <div class="case-study-document">
+        <style>
+          .case-study-document {
+            font-family: ${theme.bodyFontCSS};
+          }
+          .case-study-document .cs-doc-title,
+          .case-study-document .cs-sec-heading,
+          .case-study-document .cs-subheading,
+          .case-study-document .cs-style-name,
+          .case-study-document .cs-persona-name,
+          .case-study-document .cs-screen-title,
+          .case-study-document .cs-finding-title,
+          .case-study-document .cs-defense-q span {
+            font-family: ${theme.headingFontCSS} !important;
+          }
+          .case-study-document .cs-sec-num {
+            background: ${theme.primaryAccent}26 !important;
+            color: ${theme.primaryAccent} !important;
+            border-left: 3px solid ${theme.primaryAccent} !important;
+          }
+          .case-study-document .cs-section-header {
+            border-bottom: 1px solid ${theme.primaryAccent}33 !important;
+          }
+          .case-study-document .cs-pill.style {
+            background: ${theme.primaryAccent}26 !important;
+            color: ${theme.secondaryAccent} !important;
+            border-color: ${theme.primaryAccent}66 !important;
+          }
+          .case-study-document .cs-style-banner {
+            border-left: 4px solid ${theme.primaryAccent} !important;
+            background: linear-gradient(135deg, ${theme.darkCard}ee, ${theme.darkBase}ff) !important;
+            box-shadow: 0 4px 20px -2px ${theme.primaryAccent}22;
+          }
+          .case-study-document .cs-style-name {
+            color: ${theme.lightText} !important;
+          }
+          .case-study-document .cs-style-region {
+            color: ${theme.secondaryAccent} !important;
+          }
+          .case-study-document .cs-table th {
+            background: ${theme.darkCard} !important;
+            color: ${theme.lightText} !important;
+            border-bottom: 2px solid ${theme.primaryAccent} !important;
+          }
+          .case-study-document .cs-comp-name.signature {
+            color: ${theme.secondaryAccent} !important;
+            font-weight: 700;
+          }
+          .case-study-document .cs-highlight-box.primary {
+            border-left: 4px solid ${theme.primaryAccent} !important;
+          }
+          .case-study-document .cs-spec-badge {
+            background: ${theme.primaryAccent}26 !important;
+            color: ${theme.primaryAccent} !important;
+          }
+          .case-study-document .cs-defense-item {
+            border-left: 3px solid ${theme.secondaryAccent} !important;
+          }
+          .case-study-document .cs-defense-q .cs-q-num {
+            background: ${theme.primaryAccent}26 !important;
+            color: ${theme.primaryAccent} !important;
+          }
+          .case-study-document .cs-screen-tag {
+            background: ${theme.primaryAccent}22 !important;
+            color: ${theme.primaryAccent} !important;
+            border-color: ${theme.primaryAccent}44 !important;
+          }
+          .case-study-document .cs-finding-metric {
+            color: ${theme.secondaryAccent} !important;
+          }
+          .case-study-document .cs-metric-highlight {
+            color: ${theme.primaryAccent} !important;
+          }
+        </style>
         
         <!-- Header Ribbon -->
         <div class="cs-doc-header">
@@ -978,7 +1181,7 @@ class UXCaseStudyEngine {
               <tbody>
                 <tr>
                   <td><span class="cs-comp-name">1. Palette</span></td>
-                  <td><span style="font-family: 'Consolas', monospace; font-weight: 700; color: #38bdf8;">${data.palette.join(' &bull; ')}</span></td>
+                  <td><span style="font-family: 'Consolas', monospace; font-weight: 700; color: ${theme.primaryAccent};">${data.palette.join(' &bull; ')}</span></td>
                 </tr>
                 <tr>
                   <td><span class="cs-comp-name">2. Buttons</span></td>
@@ -994,11 +1197,16 @@ class UXCaseStudyEngine {
                 </tr>
                 <tr>
                   <td><span class="cs-comp-name signature">5. Signature</span></td>
-                  <td>${this.escapeHTML(data.figmaGuide.signature)}</td>
+                  <td><strong style="color: ${theme.secondaryAccent};">${this.escapeHTML(data.figmaGuide.signature)}</strong></td>
                 </tr>
                 <tr>
                   <td><span class="cs-comp-name">6. Typography</span></td>
-                  <td>${this.escapeHTML(data.styleTypography)}</td>
+                  <td>
+                    ${this.escapeHTML(data.styleTypography)}
+                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #94a3b8;">
+                      Headings: <strong style="color: #ffffff;">${theme.headingFontCSS}</strong> &bull; Body: <strong style="color: #cbd5e1;">${theme.bodyFontCSS}</strong> &bull; <em>${theme.fontPhilosophy}</em>
+                    </p>
+                  </td>
                 </tr>
               </tbody>
             </table>
