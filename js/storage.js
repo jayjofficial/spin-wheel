@@ -466,4 +466,5 @@ class StorageManager {
   }
 }
 
+window.StorageManager = StorageManager;
 window.storageManager = new StorageManager();

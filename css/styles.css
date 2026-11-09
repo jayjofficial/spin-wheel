@@ -3632,6 +3632,10 @@ body::before {
 }
 
 /* 3. Interactive Case Study Viewer Modal (#modal-case-study) */
+#modal-case-study {
+  z-index: 1200;
+}
+
 .modal-dialog-case-study {
   max-width: 960px;
   width: 95%;

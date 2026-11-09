@@ -91,12 +91,16 @@ class UXCaseStudyEngine {
     // Calculate 1-week deadline (exactly 7 days after selection date)
     const baseDate = design.date || design.createdAt || new Date().toISOString().split('T')[0];
     let deadlineFormatted = design.deadlineFormatted;
-    if (window.StorageManager) {
-      const dl = window.StorageManager.getNextWeekDeadline(baseDate);
+    if (typeof StorageManager !== 'undefined' && typeof StorageManager.getNextWeekDeadline === 'function') {
+      const dl = StorageManager.getNextWeekDeadline(baseDate);
+      deadlineFormatted = dl.deadlineFormatted;
+    } else if (window.storageManager && typeof window.storageManager.constructor?.getNextWeekDeadline === 'function') {
+      const dl = window.storageManager.constructor.getNextWeekDeadline(baseDate);
       deadlineFormatted = dl.deadlineFormatted;
     } else {
-      const [y, m, day] = baseDate.split('-').map(Number);
-      const target = new Date(y, m - 1, day + 7);
+      const datePart = (baseDate || '').split('T')[0];
+      const [y, m, day] = datePart.split('-').map(Number);
+      const target = new Date(y || new Date().getFullYear(), (m ? m - 1 : 0), (day || 1) + 7);
       deadlineFormatted = target.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
@@ -1123,15 +1127,19 @@ class UXCaseStudyEngine {
     const filename = `${cleanTitle || 'UX_Challenge'}_UX_Case_Study.doc`;
 
     // Download trigger
+    const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    link.href = blobUrl;
     link.download = filename;
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     setTimeout(() => {
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-    }, 400);
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+      URL.revokeObjectURL(blobUrl);
+    }, 1200);
 
     return true;
   }
@@ -1170,15 +1178,19 @@ class UXCaseStudyEngine {
       .slice(0, 45);
     const filename = `${cleanTitle || 'UX_Challenge'}_UX_Case_Study.html`;
 
+    const blobUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    link.href = blobUrl;
     link.download = filename;
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     setTimeout(() => {
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-    }, 400);
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+      URL.revokeObjectURL(blobUrl);
+    }, 1200);
 
     return true;
   }

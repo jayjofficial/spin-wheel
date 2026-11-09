@@ -728,7 +728,7 @@ class App {
     }
 
     const triggerDownload = () => {
-      const target = this.currentCaseStudyDesign || this.currentInspectingDesign;
+      const target = this.currentCaseStudyDesign || this.currentInspectingDesign || this.currentWinningTopic?.savedDesign || this.currentWinningTopic;
       if (target) {
         this.downloadCaseStudyWordDoc(target);
       }
@@ -752,7 +752,7 @@ class App {
     const contentEl = document.getElementById('case-study-modal-content');
 
     if (titleEl) {
-      titleEl.textContent = `${design.title} - UX Case Study`;
+      titleEl.textContent = `${design.title || design.text || 'UI/UX'} - UX Case Study`;
     }
 
     if (contentEl) {
@@ -764,6 +764,9 @@ class App {
   }
 
   downloadCaseStudyWordDoc(design) {
+    if (!design) {
+      design = this.currentCaseStudyDesign || this.currentInspectingDesign || this.currentWinningTopic?.savedDesign || this.currentWinningTopic;
+    }
     if (!design) return;
     if (!window.UXCaseStudyEngine) {
       this.showToast('Case study engine is loading...', 'info');
@@ -772,7 +775,7 @@ class App {
 
     const success = window.UXCaseStudyEngine.downloadWordDocument(design);
     if (success) {
-      this.showToast(`Word Document downloaded: ${design.title}`, 'success');
+      this.showToast(`Word Document downloaded: ${design.title || design.text || 'UX Challenge'}`, 'success');
     } else {
       this.showToast('Could not generate Word document', 'error');
     }
